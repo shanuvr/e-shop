@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-primary: #1a73e8;
+  --color-on-surface: #0f172a;
+  --color-on-surface-variant: #475569;
+  --color-outline-variant: #cbd5e1;
+  --color-surface-container-lowest: #ffffff;
+  --color-error: #ef4444;
+}
+
+body {
+  font-family: "Outfit", sans-serif;
+}
