@@ -101,7 +101,7 @@ export default function BecomeSeller() {
                 >
                   <Wrench className="w-3.5 h-3.5 text-primary" />
                   Offer Local Home Services
-                  <ArrowRight className="w-3.5 h-3.5 ml-auto text-slate-400" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                 </Link>
                 <Link
                   to="/admin/managed-sales-register"
