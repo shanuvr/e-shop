@@ -16,16 +16,26 @@ import {
   Store,
   Check,
   Zap,
-  Clock
+  Clock,
+  BatteryCharging,
+  Volume2,
+  Cpu,
+  Bluetooth
 } from 'lucide-react';
 
 export default function DetailedProduct() {
   const [selectedColor, setSelectedColor] = useState('black');
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('specs');
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [pincode, setPincode] = useState('');
   const [deliveryStatus, setDeliveryStatus] = useState(null);
+
+  const handleColorChange = (colorKey) => {
+    setSelectedColor(colorKey);
+    setActiveImageIndex(0);
+  };
 
   const product = {
     id: 'e1',
@@ -48,9 +58,24 @@ export default function DetailedProduct() {
       verified: true
     },
     images: {
-      black: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&h=600',
-      white: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=600&h=600',
-      blue: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=600&h=600'
+      black: [
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1000&q=80'
+      ],
+      white: [
+        'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1545127398-14699f92334b?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=1000&q=80'
+      ],
+      blue: [
+        'https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1000&q=80'
+      ]
     },
     colorNames: {
       black: 'Midnight Matte Black',
@@ -58,10 +83,10 @@ export default function DetailedProduct() {
       blue: 'Navy Blue & Brass'
     },
     quickFeatures: [
-      { label: 'Battery Life', value: '40 Hours' },
-      { label: 'Noise Control', value: 'Hybrid ANC -38dB' },
-      { label: 'Drivers', value: '40mm Dynamic' },
-      { label: 'Connectivity', value: 'BT 5.3 + AUX' }
+      { label: 'Battery Life', value: '40 Hours', icon: BatteryCharging, color: 'text-amber-600 bg-amber-50 border-amber-100' },
+      { label: 'Noise Control', value: 'Hybrid ANC -38dB', icon: Volume2, color: 'text-indigo-600 bg-indigo-50 border-indigo-100' },
+      { label: 'Drivers', value: '40mm Dynamic', icon: Cpu, color: 'text-blue-600 bg-blue-50 border-blue-100' },
+      { label: 'Connectivity', value: 'BT 5.3 + AUX', icon: Bluetooth, color: 'text-emerald-600 bg-emerald-50 border-emerald-100' }
     ],
     highlights: [
       'Adaptive Hybrid Active Noise Cancellation blocks up to 98% of background noise.',
@@ -194,57 +219,72 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
             {/* Left: Images */}
             <div className="flex flex-col gap-4">
               {/* Main Image */}
-              <div className="relative bg-gray-50 rounded-lg overflow-hidden" style={{ maxHeight: '340px' }}>
+              <div className="relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 group shadow-sm flex items-center justify-center p-3 h-[360px] sm:h-[380px]">
                 <img
-                  src={product.images[selectedColor]}
-                  alt={product.title}
-                  className="w-full h-full object-cover"
+                  src={product.images[selectedColor][activeImageIndex] || product.images[selectedColor][0]}
+                  alt={`${product.title} - ${product.colorNames[selectedColor]}`}
+                  className="w-full h-full object-cover rounded-xl transition-all duration-300 group-hover:scale-[1.02]"
                 />
                 {product.isAssured && (
-                  <span className="absolute top-4 left-4 bg-gray-900 text-white text-xs font-semibold px-3 py-1 rounded">
-                    Assured
+                  <span className="absolute top-4 left-4 bg-slate-900/90 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md backdrop-blur-md flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-400" /> Assured
                   </span>
                 )}
                 <div className="absolute top-4 right-4 flex gap-2">
                   <button
                     onClick={() => setIsWishlisted(!isWishlisted)}
-                    className={`w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center transition-colors ${
-                      isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500'
+                    className={`w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md flex items-center justify-center transition-all ${
+                      isWishlisted ? 'text-red-500 scale-110' : 'text-slate-500 hover:text-red-500 hover:scale-105'
                     }`}
                   >
                     <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
                   </button>
-                  <button className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors">
+                  <button className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md flex items-center justify-center text-slate-500 hover:text-slate-900 hover:scale-105 transition-all">
                     <Share2 className="w-5 h-5" />
                   </button>
                 </div>
               </div>
 
-              {/* Thumbnails */}
-              <div className="flex gap-3 justify-center">
-                {Object.keys(product.images).map((colorKey) => (
+              {/* Downside Thumbnails: Change angle / photo of current product */}
+              <div className="flex gap-3 justify-center items-center py-1">
+                {product.images[selectedColor].map((imgUrl, idx) => (
                   <button
-                    key={colorKey}
-                    onClick={() => setSelectedColor(colorKey)}
-                    className={`w-14 h-14 rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedColor === colorKey
-                        ? 'border-gray-900'
-                        : 'border-gray-200 opacity-60 hover:opacity-100'
+                    key={idx}
+                    onClick={() => setActiveImageIndex(idx)}
+                    className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                      activeImageIndex === idx
+                        ? 'border-slate-900 ring-2 ring-slate-900/20 scale-105 shadow-sm'
+                        : 'border-slate-200 opacity-60 hover:opacity-100 hover:border-slate-400'
                     }`}
                   >
-                    <img src={product.images[colorKey]} alt={colorKey} className="w-full h-full object-cover" />
+                    <img src={imgUrl} alt={`View angle ${idx + 1}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
 
-              {/* Quick Highlights */}
-              <div className="grid grid-cols-2 gap-2 mt-1">
-                {product.quickFeatures.map((feat, idx) => (
-                  <div key={idx} className="flex items-center gap-3 px-3 py-2.5 bg-gray-50 rounded-lg">
-                    <span className="text-xs text-gray-500">{feat.label}</span>
-                    <span className="text-sm font-semibold text-gray-900">{feat.value}</span>
-                  </div>
-                ))}
+              {/* Quick Highlights / Key Specifications */}
+              <div className="grid grid-cols-2 gap-3 mt-2">
+                {product.quickFeatures.map((feat, idx) => {
+                  const IconComponent = feat.icon;
+                  return (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-3 p-3 bg-slate-50/80 hover:bg-white rounded-xl border border-slate-200/60 hover:border-slate-300 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-sm transition-all duration-200 group"
+                    >
+                      <div className={`w-9 h-9 rounded-lg ${feat.color || 'bg-blue-50 text-blue-600 border-blue-100'} border flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
+                        {IconComponent && <IconComponent className="w-4.5 h-4.5" />}
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider truncate">
+                          {feat.label}
+                        </span>
+                        <span className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                          {feat.value}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Trust Bar */}
@@ -311,27 +351,27 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
 
               {/* Color Selection */}
               <div className="mb-6">
-                <p className="text-sm font-semibold text-gray-900 mb-3">
-                  Color — <span className="font-normal text-gray-600">{product.colorNames[selectedColor]}</span>
+                <p className="text-sm font-semibold text-slate-900 mb-3">
+                  Color Variant — <span className="font-normal text-slate-600">{product.colorNames[selectedColor]}</span>
                 </p>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   {[
-                    { id: 'black', label: 'Black', bg: 'bg-gray-900' },
-                    { id: 'white', label: 'White', bg: 'bg-gray-100 border border-gray-300' },
-                    { id: 'blue', label: 'Navy', bg: 'bg-indigo-900' }
+                    { id: 'black', label: 'Matte Black', bg: 'bg-slate-900' },
+                    { id: 'white', label: 'Silver White', bg: 'bg-slate-100 border border-slate-300' },
+                    { id: 'blue', label: 'Navy Blue', bg: 'bg-indigo-900' }
                   ].map((c) => (
                     <button
                       key={c.id}
-                      onClick={() => setSelectedColor(c.id)}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border transition-all ${
+                      onClick={() => handleColorChange(c.id)}
+                      className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold border transition-all ${
                         selectedColor === c.id
-                          ? 'border-gray-900 bg-gray-50'
-                          : 'border-gray-200 hover:border-gray-400'
+                          ? 'border-slate-900 bg-slate-900 text-white shadow-sm'
+                          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-400'
                       }`}
                     >
-                      <span className={`w-4 h-4 rounded-full ${c.bg}`} />
+                      <span className={`w-3.5 h-3.5 rounded-full ${c.bg} shrink-0`} />
                       {c.label}
-                      {selectedColor === c.id && <Check className="w-4 h-4 text-gray-900" />}
+                      {selectedColor === c.id && <Check className="w-4 h-4 text-white ml-0.5" />}
                     </button>
                   ))}
                 </div>
