@@ -209,15 +209,15 @@ export default function Home() {
         <Hero2 />
 
         {/* 2. Floating Categories Row */}
-        <div className="max-w-5xl mx-auto w-full px-3.5 sm:px-5 -mt-5 sm:-mt-7 relative z-20">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-100 p-2.5 sm:p-3.5 flex flex-nowrap items-center justify-start md:justify-center gap-3 md:gap-5 lg:gap-6 overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="max-w-5xl mx-auto w-full px-3.5 sm:px-5 -mt-5 sm:-mt-7 relative z-20 animate-fade-in-up-delay-3">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-slate-200/80 p-2.5 sm:p-3.5 flex flex-nowrap items-center justify-start md:justify-center gap-3 md:gap-5 lg:gap-6 overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {categories.map((cat, idx) => (
               <Link 
                 key={idx} 
                 to={cat.name === 'View All' ? '/categories' : `/${cat.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
-                className="flex flex-col items-center justify-center gap-1.5 group min-w-[68px] sm:min-w-[76px] text-center flex-shrink-0"
+                className="flex flex-col items-center justify-center gap-1.5 group min-w-[68px] sm:min-w-[76px] text-center flex-shrink-0 transition-all hover:-translate-y-1 hover:scale-105 active:scale-95 duration-300"
               >
-                <div className="w-10 h-10 sm:w-[46px] sm:h-[46px] bg-slate-50/80 rounded-xl flex items-center justify-center group-hover:bg-blue-50/80 transition-all duration-300 border border-slate-100/50">
+                <div className="w-10 h-10 sm:w-[46px] sm:h-[46px] bg-slate-50/90 rounded-xl flex items-center justify-center group-hover:bg-blue-50 group-hover:shadow-md group-hover:shadow-blue-500/15 group-hover:border-blue-200/80 transition-all duration-300 border border-slate-100">
                   {cat.icon}
                 </div>
                 <span className="text-[9px] sm:text-[11px] font-semibold text-slate-600 group-hover:text-blue-600 transition-colors whitespace-nowrap tracking-tight">
@@ -232,16 +232,16 @@ export default function Home() {
         <div className="max-w-5xl mx-auto w-full px-5 sm:px-6 mt-12 md:mt-20">
           <div className="flex justify-between items-end mb-6 md:mb-8">
             <div>
-              <div className="flex items-center gap-1.5 text-primary text-[11px] md:text-xs font-bold uppercase tracking-wider mb-1">
+              <div className="flex items-center gap-1.5 text-blue-600 text-[11px] md:text-xs font-bold uppercase tracking-wider mb-1">
                 <MapPin className="w-3.5 h-3.5" />
                 Local Marketplace
               </div>
-              <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-on-surface tracking-tight">Popular Shops in Thrissur</h2>
+              <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Popular Shops in Thrissur</h2>
             </div>
-            <Link className="text-primary font-semibold flex items-center hover:underline text-[13px] sm:text-sm gap-1" to="/shops">
+            <Link className="text-blue-600 font-semibold flex items-center hover:underline text-[13px] sm:text-sm gap-1 group" to="/shops">
               <span className="hidden sm:inline">View All Shops</span>
               <span className="sm:hidden">All</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
@@ -250,33 +250,34 @@ export default function Home() {
               <Link 
                 to={`/shop/${shop.id}`} 
                 key={shop.id} 
-                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group border border-outline-variant/30 flex flex-col justify-between"
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1.5 transition-all duration-300 ease-out group border border-slate-200/70 hover:border-blue-400/50 flex flex-col justify-between"
               >
                 <div>
                   <div className="h-[110px] sm:h-[160px] bg-slate-100 w-full overflow-hidden relative">
-                    <img src={shop.image} alt={shop.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={shop.image} alt={shop.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
                     
-                    <span className="absolute top-2.5 left-2.5 bg-slate-900/90 text-white text-[8px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded backdrop-blur-sm tracking-wider uppercase">
+                    <span className="absolute top-2.5 left-2.5 bg-slate-900/85 text-white text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-md backdrop-blur-md tracking-wider uppercase shadow-xs">
                       {shop.badge}
                     </span>
 
-                    <span className={`absolute bottom-2.5 right-2.5 text-[8px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full backdrop-blur-md ${
+                    <span className={`absolute bottom-2.5 right-2.5 text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur-md shadow-xs flex items-center gap-1 ${
                       shop.isOpen ? 'bg-emerald-500/90 text-white' : 'bg-slate-700/90 text-slate-200'
                     }`}>
+                      {shop.isOpen && <span className="w-1.5 h-1.5 bg-white rounded-full animate-ping" />}
                       {shop.isOpen ? 'OPEN' : 'CLOSED'}
                     </span>
                   </div>
 
                   <div className="p-3 sm:p-4">
                     <div className="flex items-center justify-between gap-1 mb-1">
-                      <span className="text-[9px] sm:text-[10px] font-bold text-primary uppercase tracking-wider truncate">{shop.category}</span>
+                      <span className="text-[9px] sm:text-[10px] font-bold text-blue-600 uppercase tracking-wider truncate">{shop.category}</span>
                       <div className="flex items-center gap-1 text-[11px] font-bold text-amber-500">
                         <Star className="w-3 h-3 fill-current" />
                         <span>{shop.rating}</span>
                       </div>
                     </div>
 
-                    <h3 className="font-bold text-[13px] sm:text-base text-on-surface group-hover:text-primary transition-colors line-clamp-1 mb-1.5">{shop.name}</h3>
+                    <h3 className="font-bold text-[13px] sm:text-base text-slate-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-1 mb-1.5">{shop.name}</h3>
 
                     <div className="flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-500 font-medium">
                       <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400 flex-shrink-0" />
@@ -285,9 +286,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-0 flex items-center justify-between text-[10px] sm:text-[11px] font-semibold text-slate-400 border-t border-slate-50 mt-2">
+                <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-2 flex items-center justify-between text-[10px] sm:text-[11px] font-semibold text-slate-400 border-t border-slate-100 mt-1">
                   <span className="hidden sm:inline">{shop.distance} away</span>
-                  <span className="text-primary group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                  <span className="text-blue-600 group-hover:translate-x-1 transition-transform duration-200 flex items-center gap-1">
                     Visit Store &rarr;
                   </span>
                 </div>
@@ -639,42 +640,6 @@ export default function Home() {
               </button>
             </form>
           </div>
-        </div>
-
-        {/* 11. Footer Features Ribbon */}
-        <div className="max-w-7xl mx-auto w-full px-6 mt-24 pt-8 border-t border-slate-200/60 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 select-none">
-          {[
-            {
-              title: 'Free Shipping',
-              desc: 'On orders above ₹499',
-              icon: <Truck className="w-5 h-5 text-blue-600" />
-            },
-            {
-              title: 'Easy Returns',
-              desc: 'Hassle-free 7-day returns',
-              icon: <RotateCcw className="w-5 h-5 text-blue-600" />
-            },
-            {
-              title: 'Secure Payments',
-              desc: '100% encrypted checkout',
-              icon: <ShieldCheck className="w-5 h-5 text-blue-600" />
-            },
-            {
-              title: '24/7 Support',
-              desc: "Expert help anytime you need",
-              icon: <Headphones className="w-5 h-5 text-blue-600" />
-            }
-          ].map((feat, idx) => (
-            <div key={idx} className="flex items-center gap-4 text-left p-3.5 rounded-2xl hover:bg-white hover:shadow-[0_8px_30px_rgba(0,0,0,0.02)] transition-all duration-300 border border-transparent hover:border-slate-100">
-              <div className="w-10 h-10 bg-blue-50/50 rounded-xl flex items-center justify-center text-blue-600 flex-shrink-0 border border-blue-100/20">
-                {feat.icon}
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs font-bold text-slate-800 leading-tight">{feat.title}</span>
-                <span className="text-[10px] text-slate-400 mt-0.5 font-medium">{feat.desc}</span>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </UserLayout>

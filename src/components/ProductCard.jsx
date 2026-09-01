@@ -11,12 +11,12 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
   return (
     <Link 
       to={targetLink} 
-      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group relative border border-outline-variant/30 flex flex-col justify-between cursor-pointer w-full"
+      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1.5 transition-all duration-300 ease-out group relative border border-slate-200/60 hover:border-blue-400/50 flex flex-col justify-between cursor-pointer w-full"
     >
       <div>
         {displayTag && (
-          <div className={`absolute top-2 left-2 z-10 text-[8px] sm:text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 rounded flex items-center gap-1 ${
-            isTopRated ? 'bg-emerald-800 text-white' : 'bg-primary text-white'
+          <div className={`absolute top-2.5 left-2.5 z-10 text-[8px] sm:text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg shadow-sm flex items-center gap-1 backdrop-blur-md transition-transform group-hover:scale-105 ${
+            isTopRated ? 'bg-emerald-800/90 text-white' : 'bg-blue-600/90 text-white'
           }`}>
             {isTopRated && (
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-2.5 h-2.5 sm:w-3 sm:h-3">
@@ -26,20 +26,29 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
             {displayTag}
           </div>
         )}
+        
+        {/* Wishlist Heart Button */}
         <button 
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} 
-          className="absolute top-2 right-2 z-10 w-7 h-7 sm:w-8 sm:h-8 bg-white/90 rounded-full flex items-center justify-center text-on-surface-variant hover:text-error shadow-sm transition-colors backdrop-blur-sm cursor-pointer"
+          className="absolute top-2.5 right-2.5 z-10 w-7 h-7 sm:w-8.5 sm:h-8.5 bg-white/90 rounded-full flex items-center justify-center text-slate-500 hover:text-rose-500 hover:bg-rose-50 hover:scale-110 active:scale-90 shadow-sm transition-all duration-200 backdrop-blur-sm cursor-pointer"
+          aria-label="Add to wishlist"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-4 h-4 sm:w-4.5 sm:h-4.5 transition-transform group-active:scale-125">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
           </svg>
         </button>
-        <div className="h-[120px] sm:h-[180px] bg-surface-container-lowest w-full overflow-hidden relative">
-          <img alt={item.title} className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-500" src={item.image || item.img} />
+
+        {/* Product Image Box */}
+        <div className="h-[130px] sm:h-[190px] bg-slate-50 w-full overflow-hidden relative">
+          <img 
+            alt={item.title} 
+            className="object-cover h-full w-full group-hover:scale-110 transition-transform duration-700 ease-out" 
+            src={item.image || item.img} 
+          />
           {/* Hover Overlay */}
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
-            <span className="bg-white text-primary text-[10px] sm:text-xs font-bold px-3 py-1.5 sm:px-4 sm:py-2 rounded-full shadow-lg flex items-center gap-1.5 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary">
+          <div className="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+            <span className="bg-white text-blue-600 text-[10px] sm:text-xs font-bold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full shadow-lg flex items-center gap-1.5 transform translate-y-3 group-hover:translate-y-0 transition-all duration-300 ease-out hover:scale-105 active:scale-95">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
@@ -47,14 +56,15 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
             </span>
           </div>
         </div>
-        <div className="p-2.5 sm:p-4">
+
+        <div className="p-3 sm:p-4">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 gap-1 sm:gap-2">
-            <h3 className="font-bold text-[11px] sm:text-base text-on-surface group-hover:text-primary transition-colors line-clamp-2 sm:line-clamp-1 leading-snug">{item.title}</h3>
-            <span className="text-[13px] sm:text-lg font-bold text-primary">{item.price}</span>
+            <h3 className="font-bold text-[11px] sm:text-base text-slate-800 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2 sm:line-clamp-1 leading-snug">{item.title}</h3>
+            <span className="text-[13px] sm:text-lg font-bold text-blue-600 shrink-0">{item.price}</span>
           </div>
           {item.location && (
-            <p className="text-on-surface-variant text-[10px] sm:text-xs mb-1 sm:mb-1.5 font-medium flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-3.5 sm:h-3.5">
+            <p className="text-slate-500 text-[10px] sm:text-xs mb-1 sm:mb-1.5 font-medium flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
               </svg>
@@ -67,8 +77,8 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
         </div>
       </div>
       {(item.shipping || item.tag2) && (
-        <div className="px-2.5 pb-2.5 sm:px-4 sm:pb-4 pt-0">
-          <span className="text-emerald-800 text-[8px] sm:text-[10px] font-bold uppercase tracking-tight bg-emerald-50 px-1.5 sm:px-2 py-0.5 rounded">
+        <div className="px-3 pb-3 sm:px-4 sm:pb-4 pt-0">
+          <span className="text-emerald-700 text-[8px] sm:text-[10px] font-bold uppercase tracking-tight bg-emerald-50 border border-emerald-200/50 px-2 py-0.5 rounded-md inline-block">
             {item.shipping || item.tag2}
           </span>
         </div>
@@ -76,3 +86,4 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
     </Link>
   );
 }
+
