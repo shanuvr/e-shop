@@ -6,6 +6,7 @@ import {
   CalendarCheck, 
   SlidersHorizontal, 
   DollarSign, 
+  Settings,
   LogOut, 
   ChevronRight,
   Menu,
@@ -21,7 +22,8 @@ export default function ServiceSidebar() {
     { to: '/admin/service-dashboard', label: 'Overview', icon: LayoutDashboard },
     { to: '/admin/service-bookings', label: 'Customer Bookings', icon: CalendarCheck, badge: '2 New' },
     { to: '/admin/service-manage', label: 'Service & Price Settings', icon: SlidersHorizontal },
-    { to: '/admin/service-earnings', label: 'Earnings & Payouts', icon: DollarSign }
+    { to: '/admin/service-earnings', label: 'Earnings & Payouts', icon: DollarSign },
+    { to: '/admin/service-settings', label: 'Settings', icon: Settings }
   ];
 
   return (

@@ -17,13 +17,17 @@ import ServiceDashboardPage from './admin/serviceProviders/pages/ServiceDashboar
 import BookingsPage from './admin/serviceProviders/pages/BookingsPage'
 import ServicesManagePage from './admin/serviceProviders/pages/ServicesManagePage'
 import ServiceEarningsPage from './admin/serviceProviders/pages/ServiceEarningsPage'
+import ServiceSettingsPage from './admin/serviceProviders/pages/ServiceSettingsPage'
 import DashboardPage from './admin/pages/DashboardPage'
 import ProductsPage from './admin/pages/ProductsPage'
 import CategoriesPage from './admin/pages/CategoriesPage'
 import OrdersPage from './admin/pages/OrdersPage'
 import PaymentPage from './admin/pages/PaymentPage'
+import SettingsPage from './admin/pages/SettingsPage'
 import ManagedSalesRegister from './admin/managedSales/ManagedSalesRegister'
 import ManagedDashboardPage from './admin/managedSales/pages/ManagedDashboardPage'
+import OrdersToPackPage from './admin/managedSales/pages/OrdersToPackPage'
+import EarningsPage from './admin/managedSales/pages/EarningsPage'
 import SuperAdminDashboard from './superAdmin/pages/SuperAdminDashboard'
 import ManagedRequestsPage from './superAdmin/pages/ManagedRequestsPage'
 import CatalogingUploadPage from './superAdmin/pages/CatalogingUploadPage'
@@ -47,16 +51,17 @@ function App() {
       <Route path="/admin/service-bookings" element={<BookingsPage />} />
       <Route path="/admin/service-manage" element={<ServicesManagePage />} />
       <Route path="/admin/service-earnings" element={<ServiceEarningsPage />} />
+      <Route path="/admin/service-settings" element={<ServiceSettingsPage />} />
       <Route path="/admin/managed-sales-register" element={<ManagedSalesRegister />} />
       <Route path="/admin/managed-dashboard" element={<ManagedDashboardPage />} />
-      <Route path="/admin/managed-cataloging" element={<ManagedDashboardPage />} />
-      <Route path="/admin/managed-orders" element={<ManagedDashboardPage />} />
-      <Route path="/admin/managed-payouts" element={<ManagedDashboardPage />} />
+      <Route path="/admin/managed-orders" element={<OrdersToPackPage />} />
+      <Route path="/admin/managed-payouts" element={<EarningsPage />} />
       <Route path="/admin/dashboard" element={<DashboardPage />} />
       <Route path="/admin/products" element={<ProductsPage />} />
       <Route path="/admin/categories" element={<CategoriesPage />} />
       <Route path="/admin/orders" element={<OrdersPage />} />
       <Route path="/admin/payment" element={<PaymentPage />} />
+      <Route path="/admin/settings" element={<SettingsPage />} />
       <Route path="/super-admin/dashboard" element={<SuperAdminDashboard />} />
       <Route path="/super-admin/managed-requests" element={<ManagedRequestsPage />} />
       <Route path="/super-admin/sellers" element={<SellersMasterPage />} />

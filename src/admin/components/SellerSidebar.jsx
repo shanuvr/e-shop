@@ -6,6 +6,7 @@ import {
   Grid, 
   ShoppingBag, 
   CreditCard, 
+  Settings,
   Store, 
   LogOut,
   ChevronRight,
@@ -23,7 +24,8 @@ export default function SellerSidebar() {
     { to: '/admin/products', label: 'Products', icon: Package },
     { to: '/admin/categories', label: 'Categories', icon: Grid },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBag },
-    { to: '/admin/payment', label: 'Payment', icon: CreditCard }
+    { to: '/admin/payment', label: 'Payment', icon: CreditCard },
+    { to: '/admin/settings', label: 'Settings', icon: Settings }
   ];
 
   return (

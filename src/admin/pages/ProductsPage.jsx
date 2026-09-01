@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SellerAdminLayout from '../layout/SellerAdminLayout';
 import AddProductModal from '../../components/AddProductModal';
-import { Plus, Search, Filter, Trash2, Edit3, Tag, Layers, Package, Layers3, CheckCircle2 } from 'lucide-react';
+import { Plus, Search, Trash2, Edit3, Package } from 'lucide-react';
 
 export default function ProductsPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -89,9 +89,9 @@ export default function ProductsPage() {
           <div>
             <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
               <Package className="w-5 h-5 text-primary" />
-              Products & Inventory Master
+              Product Inventory
             </h2>
-            <p className="text-xs text-slate-500 font-medium">Add, edit, manage stock, and configure product variants</p>
+            <p className="text-xs text-slate-500 font-medium">{productsList.length} products in your catalog</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -128,23 +128,23 @@ export default function ProductsPage() {
               className="px-4 py-2 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md shadow-primary/20 transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
-              Add New Product
+              Add Product
             </button>
           </div>
         </div>
 
-        {/* Professional E-Commerce Table */}
+        {/* Products Table */}
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                  <th className="py-3.5 px-4">Product Details</th>
+                  <th className="py-3.5 px-4">Product</th>
                   <th className="py-3.5 px-4">Category</th>
                   <th className="py-3.5 px-4">Price</th>
                   <th className="py-3.5 px-4">Stock</th>
                   <th className="py-3.5 px-4">Variations</th>
-                  <th className="py-3.5 px-4">Tag</th>
+                  <th className="py-3.5 px-4">Badge</th>
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
@@ -152,14 +152,14 @@ export default function ProductsPage() {
                 {filteredProducts.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="text-center py-12 text-slate-400 font-medium">
-                      No listings match your search criteria.
+                      No products match your search.
                     </td>
                   </tr>
                 ) : (
                   filteredProducts.map((item) => (
-                    <tr key={item.id} className="hover:bg-slate-50/70 transition-colors group">
+                    <tr key={item.id} className="hover:bg-slate-50/70 transition-colors">
                       
-                      {/* Item Details */}
+                      {/* Product Details */}
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-3">
                           <img
@@ -171,7 +171,7 @@ export default function ProductsPage() {
                             <p className="font-bold text-slate-900 text-xs group-hover:text-primary transition-colors">
                               {item.title}
                             </p>
-                            <p className="text-[11px] text-slate-400 truncate max-w-[200px]">
+                            <p className="text-[11px] text-slate-400">
                               {item.location || 'Thrissur Store'}
                             </p>
                           </div>
@@ -180,52 +180,67 @@ export default function ProductsPage() {
 
                       {/* Category */}
                       <td className="py-3.5 px-4">
-                        <span className="font-semibold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200/60 text-xs">
-                          {item.category}
+                        <span className="inline-block bg-slate-100 text-slate-700 text-[11px] font-semibold px-2.5 py-1 rounded-lg border border-slate-200/70">
+                          {item.category || 'General'}
                         </span>
                       </td>
 
                       {/* Price */}
                       <td className="py-3.5 px-4">
-                        <span className="font-black text-slate-900 text-sm">
-                          {item.price}
-                        </span>
+                        <span className="font-black text-slate-900 text-sm">{item.price}</span>
                       </td>
 
                       {/* Stock */}
                       <td className="py-3.5 px-4">
-                        <span className={`font-semibold ${
-                          typeof item.stock === 'number' && item.stock < 10 
-                            ? 'text-amber-600 bg-amber-50 px-2 py-1 rounded-lg border border-amber-200' 
-                            : 'text-slate-700'
-                        }`}>
-                          {item.stock} {typeof item.stock === 'number' ? 'units' : ''}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            typeof item.stock === 'number' && item.stock < 10
+                              ? 'bg-amber-50 text-amber-600 border border-amber-200'
+                              : item.stock === 0
+                                ? 'bg-red-50 text-red-600 border border-red-200'
+                                : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                          }`}>
+                            {item.stock === 0 ? 'Out of stock' : `${item.stock} in stock`}
+                          </span>
+                        </div>
                       </td>
 
                       {/* Variations */}
-                      <td className="py-3.5 px-4 max-w-[240px]">
+                      <td className="py-3.5 px-4">
                         {item.variations && item.variations.length > 0 ? (
-                          <div className="flex flex-wrap gap-1.5">
-                            {item.variations.map((v, i) => (
-                              <span key={i} className="inline-flex items-center gap-1 bg-slate-100 border border-slate-200/90 text-slate-800 text-[10px] px-2 py-0.5 rounded-md font-medium">
-                                <span className="font-bold text-slate-900">{v.name}:</span>
-                                <span className="text-slate-600 truncate max-w-[120px]">{v.options}</span>
-                              </span>
-                            ))}
+                          <div className="flex flex-col gap-1.5 max-w-[260px]">
+                            {item.variations.map((v, i) => {
+                              const opts = Array.isArray(v.options)
+                                ? v.options.map(o => (typeof o === 'string' ? { value: o, image: null } : o))
+                                : String(v.options || '').split(',').map(s => ({ value: s.trim() })).filter(o => o.value);
+                              return (
+                                <div key={i} className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-slate-700 text-[10px] uppercase shrink-0">{v.name}:</span>
+                                  {opts.map((o, oi) => (
+                                    <span key={oi} className="inline-flex items-center gap-1 bg-slate-100 border border-slate-200/90 text-slate-700 text-[10px] px-1.5 py-0.5 rounded-md font-medium">
+                                      {o.image && (
+                                        <img src={o.image} alt={o.value} className="w-3.5 h-3.5 rounded object-cover" />
+                                      )}
+                                      <span className="truncate max-w-[100px]">{o.value}</span>
+                                    </span>
+                                  ))}
+                                </div>
+                              );
+                            })}
                           </div>
                         ) : (
-                          <span className="text-slate-400 text-[11px] italic">No variations</span>
+                          <span className="text-slate-400 text-[11px] italic">—</span>
                         )}
                       </td>
 
-                      {/* Tag */}
+                      {/* Badge */}
                       <td className="py-3.5 px-4">
-                        {item.tag && (
-                          <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[10px] font-bold">
-                            <Tag className="w-2.5 h-2.5" />
+                        {item.tag ? (
+                          <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200/80 px-2 py-0.5 rounded-md text-[10px] font-bold">
                             {item.tag}
                           </span>
+                        ) : (
+                          <span className="text-slate-300 text-[11px]">—</span>
                         )}
                       </td>
 
@@ -238,20 +253,19 @@ export default function ProductsPage() {
                               setIsAddModalOpen(true);
                             }}
                             className="w-8 h-8 rounded-lg border border-slate-200 text-slate-500 hover:text-primary hover:border-blue-200 hover:bg-blue-50 flex items-center justify-center transition-colors cursor-pointer"
-                            title="Edit Item"
+                            title="Edit"
                           >
                             <Edit3 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDeleteProduct(item.id)}
                             className="w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50 flex items-center justify-center transition-colors cursor-pointer"
-                            title="Delete Item"
+                            title="Delete"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                       </td>
-
                     </tr>
                   ))
                 )}
@@ -262,6 +276,7 @@ export default function ProductsPage() {
 
         {/* Add / Edit Modal */}
         <AddProductModal
+          key={editingProduct?.id ?? 'new-product'}
           isOpen={isAddModalOpen}
           onClose={() => {
             setIsAddModalOpen(false);

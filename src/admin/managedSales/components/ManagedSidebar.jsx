@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
-  Camera, 
   Truck, 
   DollarSign, 
   UserCheck, 
@@ -19,7 +18,6 @@ export default function ManagedSidebar() {
 
   const menuItems = [
     { to: '/admin/managed-dashboard', label: 'Overview & Dispatch', icon: LayoutDashboard },
-    { to: '/admin/managed-cataloging', label: 'Cataloging Status', icon: Camera, badge: '5 Pending' },
     { to: '/admin/managed-orders', label: 'Orders to Pack', icon: Truck, badge: '3 Ready' },
     { to: '/admin/managed-payouts', label: 'Earnings & Payouts', icon: DollarSign }
   ];
