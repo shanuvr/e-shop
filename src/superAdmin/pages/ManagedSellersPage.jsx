@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
 import SuperAdminLayout from '../layout/SuperAdminLayout';
-import { Store, CheckCircle2, ExternalLink, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Store } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export default function SellersMasterPage() {
-  const [sellers, setSellers] = useState([
+export default function ManagedSellersPage() {
+  const sellers = [
     {
       id: 'S-101',
       name: 'Elite Digital Mall',
@@ -32,15 +31,15 @@ export default function SellersMasterPage() {
       status: 'Approved & Active',
       productsCount: 9
     }
-  ]);
+  ];
 
   return (
-    <SuperAdminLayout title="Master Platform Sellers" subtitle="Manage all registered merchants and open their store admin dashboards">
+    <SuperAdminLayout title="Managed Sellers" subtitle="Manage merchant stores and open their store admin dashboards">
       <div className="space-y-6">
-        
+
         <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
           <div>
-            <h2 className="text-base font-bold text-slate-900">Approved Merchant Stores</h2>
+            <h2 className="text-base font-bold text-slate-900">Managed Merchant Stores</h2>
             <p className="text-xs text-slate-500 font-medium">Click "Open Store Admin Dashboard" on any store to add products, categories, or manage orders</p>
           </div>
           <span className="px-3 py-1 bg-emerald-50 text-emerald-700 font-bold text-xs rounded-full border border-emerald-100">
@@ -51,7 +50,7 @@ export default function SellersMasterPage() {
         <div className="space-y-4">
           {sellers.map((s) => (
             <div key={s.id} className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              
+
               <div className="flex items-center gap-3.5">
                 <div className="w-11 h-11 bg-primary/10 rounded-2xl flex items-center justify-center text-primary font-bold shrink-0">
                   <Store className="w-5 h-5" />

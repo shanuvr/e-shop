@@ -29,9 +29,11 @@ import ManagedDashboardPage from './admin/managedSales/pages/ManagedDashboardPag
 import OrdersToPackPage from './admin/managedSales/pages/OrdersToPackPage'
 import EarningsPage from './admin/managedSales/pages/EarningsPage'
 import SuperAdminDashboard from './superAdmin/pages/SuperAdminDashboard'
+import SuperAdminLogin from './superAdmin/pages/SuperAdminLogin'
 import ManagedRequestsPage from './superAdmin/pages/ManagedRequestsPage'
-import CatalogingUploadPage from './superAdmin/pages/CatalogingUploadPage'
-import SellersMasterPage from './superAdmin/pages/SellersMasterPage'
+import ManagedSellersPage from './superAdmin/pages/ManagedSellersPage'
+import SuperAdminCategoriesPage from './superAdmin/pages/SuperAdminCategoriesPage'
+import IndividualSellersPage from './superAdmin/pages/IndividualSellersPage'
 
 function App() {
   return (
@@ -62,11 +64,12 @@ function App() {
       <Route path="/admin/orders" element={<OrdersPage />} />
       <Route path="/admin/payment" element={<PaymentPage />} />
       <Route path="/admin/settings" element={<SettingsPage />} />
+      <Route path="/super-admin/login" element={<SuperAdminLogin />} />
       <Route path="/super-admin/dashboard" element={<SuperAdminDashboard />} />
       <Route path="/super-admin/managed-requests" element={<ManagedRequestsPage />} />
-      <Route path="/super-admin/sellers" element={<SellersMasterPage />} />
-      <Route path="/super-admin/categories" element={<CategoriesPage />} />
-      <Route path="/super-admin/cataloging" element={<CatalogingUploadPage />} />
+      <Route path="/super-admin/sellers" element={<ManagedSellersPage />} />
+      <Route path="/super-admin/categories" element={<SuperAdminCategoriesPage />} />
+      <Route path="/super-admin/individual-sellers" element={<IndividualSellersPage />} />
       <Route path="/product/:id" element={<DetailedProduct />} />
       <Route path="/product" element={<DetailedProduct />} />
       <Route path="/shop/:id" element={<DetailedStoreview />} />

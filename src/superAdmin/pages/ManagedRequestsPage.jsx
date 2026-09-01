@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SuperAdminLayout from '../layout/SuperAdminLayout';
-import { Zap, Calendar, UserCheck, CheckCircle2, Phone, MapPin, Camera, Store } from 'lucide-react';
+import { UserCheck, Phone, MapPin, Store } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function ManagedRequestsPage() {
@@ -110,13 +110,6 @@ export default function ManagedRequestsPage() {
                     >
                       <Store className="w-4 h-4" />
                       Open Store Admin Dashboard
-                    </Link>
-                    <Link
-                      to="/super-admin/cataloging"
-                      className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-600/20 transition-all flex items-center gap-1.5"
-                    >
-                      <Camera className="w-4 h-4" />
-                      Upload Photo Shoot
                     </Link>
                   </>
                 )}

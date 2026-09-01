@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { 
   ShieldAlert, 
   LayoutDashboard, 
   Zap, 
-  Camera, 
   Users, 
   Grid, 
   LogOut, 
   ChevronRight,
   Menu,
   X,
-  Store
+  UserRound
 } from 'lucide-react';
 
 export default function SuperAdminSidebar() {
@@ -21,8 +20,8 @@ export default function SuperAdminSidebar() {
   const menuItems = [
     { to: '/super-admin/dashboard', label: 'Platform Overview', icon: LayoutDashboard },
     { to: '/super-admin/managed-requests', label: 'Managed Sales Requests', icon: Zap, badge: '2 New' },
-    { to: '/super-admin/cataloging', label: 'Upload Managed Products', icon: Camera },
-    { to: '/super-admin/sellers', label: 'All Platform Sellers', icon: Users },
+    { to: '/super-admin/sellers', label: 'Managed Sellers', icon: Users },
+    { to: '/super-admin/individual-sellers', label: 'Individual Seller', icon: UserRound },
     { to: '/super-admin/categories', label: 'Master Categories', icon: Grid }
   ];
 
@@ -94,7 +93,7 @@ export default function SuperAdminSidebar() {
                     <span>{item.label}</span>
                   </div>
                   {item.badge ? (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/20">
+                    <span className="px-2.5 py-1 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/20 whitespace-nowrap leading-none">
                       {item.badge}
                     </span>
                   ) : (

@@ -1,6 +1,5 @@
-import React from 'react';
 import SuperAdminLayout from '../layout/SuperAdminLayout';
-import { DollarSign, Store, Zap, Users, Camera, ArrowRight } from 'lucide-react';
+import { DollarSign, Store, Zap, Camera } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function SuperAdminDashboard() {
@@ -56,18 +55,6 @@ export default function SuperAdminDashboard() {
                 </Link>
               </div>
             </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
-            <h3 className="font-bold text-slate-900 text-base">E-SHOP Cataloging & Photo Studio</h3>
-            <p className="text-xs text-slate-500 font-medium">Upload HD product photos and create listings on behalf of managed merchants.</p>
-            <Link
-              to="/super-admin/cataloging"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-600/20 transition-all"
-            >
-              <Camera className="w-4 h-4" />
-              Open Cataloging Upload Studio
-            </Link>
           </div>
 
         </div>
