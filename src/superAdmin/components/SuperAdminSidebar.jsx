@@ -5,12 +5,14 @@ import {
   LayoutDashboard, 
   Zap, 
   Users, 
+  UserCheck,
   Grid, 
   LogOut, 
   ChevronRight,
   Menu,
   X,
-  UserRound
+  UserRound,
+  Settings
 } from 'lucide-react';
 
 export default function SuperAdminSidebar() {
@@ -22,7 +24,9 @@ export default function SuperAdminSidebar() {
     { to: '/super-admin/managed-requests', label: 'Managed Sales Requests', icon: Zap, badge: '2 New' },
     { to: '/super-admin/sellers', label: 'Managed Sellers', icon: Users },
     { to: '/super-admin/individual-sellers', label: 'Individual Seller', icon: UserRound },
-    { to: '/super-admin/categories', label: 'Master Categories', icon: Grid }
+    { to: '/super-admin/managers', label: 'Account Managers', icon: UserCheck },
+    { to: '/super-admin/categories', label: 'Master Categories', icon: Grid },
+    { to: '/super-admin/settings', label: 'Platform Settings', icon: Settings }
   ];
 
   return (

@@ -34,6 +34,8 @@ import ManagedRequestsPage from './superAdmin/pages/ManagedRequestsPage'
 import ManagedSellersPage from './superAdmin/pages/ManagedSellersPage'
 import SuperAdminCategoriesPage from './superAdmin/pages/SuperAdminCategoriesPage'
 import IndividualSellersPage from './superAdmin/pages/IndividualSellersPage'
+import SuperAdminManagersPage from './superAdmin/pages/SuperAdminManagersPage'
+import SuperAdminSettingsPage from './superAdmin/pages/SuperAdminSettingsPage'
 
 function App() {
   return (
@@ -70,6 +72,8 @@ function App() {
       <Route path="/super-admin/sellers" element={<ManagedSellersPage />} />
       <Route path="/super-admin/categories" element={<SuperAdminCategoriesPage />} />
       <Route path="/super-admin/individual-sellers" element={<IndividualSellersPage />} />
+      <Route path="/super-admin/managers" element={<SuperAdminManagersPage />} />
+      <Route path="/super-admin/settings" element={<SuperAdminSettingsPage />} />
       <Route path="/product/:id" element={<DetailedProduct />} />
       <Route path="/product" element={<DetailedProduct />} />
       <Route path="/shop/:id" element={<DetailedStoreview />} />
