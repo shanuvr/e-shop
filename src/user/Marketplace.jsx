@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import UserLayout from '../layout/UserLayout';
 import ProductCard from '../components/ProductCard';
-import { Star, MapPin } from 'lucide-react';
+import StoreCard from '../components/StoreCard';
 
 export default function Marketplace() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -185,7 +185,10 @@ export default function Marketplace() {
       image: 'https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=400&h=260',
       badge: 'VERIFIED STORE',
       isOpen: true,
-      distance: '0.8 km'
+      distance: '0.8 km',
+      productCount: 128,
+      maxDiscount: '40% OFF',
+      description: 'Thrissur\'s trusted destination for the latest smartphones, laptops, audio gear and smart devices from top global brands.'
     },
     {
       id: 'shop-2',
@@ -197,7 +200,10 @@ export default function Marketplace() {
       image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&h=260',
       badge: 'TOP SELLER',
       isOpen: true,
-      distance: '1.4 km'
+      distance: '1.4 km',
+      productCount: 214,
+      maxDiscount: '55% OFF',
+      description: 'Premium silk sarees, ethnic wear and festive fashion handpicked from across Kerala and beyond.'
     },
     {
       id: 'shop-3',
@@ -209,7 +215,10 @@ export default function Marketplace() {
       image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&h=260',
       badge: 'EXPRESS DELIVERY',
       isOpen: true,
-      distance: '2.1 km'
+      distance: '2.1 km',
+      productCount: 96,
+      maxDiscount: '30% OFF',
+      description: 'Farm-fresh produce, organic grains and exotic spices delivered straight to your doorstep.'
     },
     {
       id: 'shop-4',
@@ -221,7 +230,10 @@ export default function Marketplace() {
       image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&h=260',
       badge: 'PREMIUM PARTNER',
       isOpen: false,
-      distance: '3.0 km'
+      distance: '3.0 km',
+      productCount: 150,
+      maxDiscount: '45% OFF',
+      description: 'Handcrafted wooden furniture and premium home decor pieces made by local artisans.'
     }
   ];
 
@@ -362,8 +374,18 @@ export default function Marketplace() {
 
   const filteredStores = useMemo(() => {
     const matchingShopIds = new Set(filteredProducts.map(p => p.shopId));
-    return initialStores.filter(store => matchingShopIds.has(store.id));
-  }, [filteredProducts]);
+    let stores = initialStores.filter(store => matchingShopIds.has(store.id));
+    if (searchQuery.trim() !== '') {
+      const q = searchQuery.toLowerCase();
+      stores = stores.filter(
+        store =>
+          store.name.toLowerCase().includes(q) ||
+          store.category.toLowerCase().includes(q) ||
+          (store.description || '').toLowerCase().includes(q)
+      );
+    }
+    return stores;
+  }, [filteredProducts, searchQuery]);
 
   const renderFilterContent = () => (
     <div className="space-y-6">
@@ -516,6 +538,40 @@ export default function Marketplace() {
         </button>
       </div>
 
+      {/* Mobile Search Bar */}
+      <div className="sm:hidden px-4 pt-3 pb-1">
+        <form
+          onSubmit={handleSearchSubmit}
+          className="relative"
+        >
+          <svg
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+            fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.602 10.602Z" />
+          </svg>
+          <input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={searchType === 'products' ? 'Search products...' : 'Search stores...'}
+            className="w-full pl-9 pr-8 py-2.5 bg-white border border-outline-variant/30 rounded-xl text-sm font-medium text-on-surface placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 shadow-sm"
+            type="text"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+              aria-label="Clear search"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </form>
+      </div>
+
 
 
       {/* Mobile Filter Slide-Over Drawer */}
@@ -562,7 +618,7 @@ export default function Marketplace() {
       )}
 
       {/* Product List Area */}
-      <section className="flex-grow px-4 sm:px-0 lg:h-[calc(100vh-120px)] lg:overflow-y-auto lg:overscroll-contain">
+      <section className="flex-grow px-4 sm:px-0 lg:h-[calc(100vh-120px)] lg:overflow-y-auto lg:overscroll-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {/* Desktop / Tablet Header */}
         <div className="hidden sm:flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div>
@@ -575,6 +631,39 @@ export default function Marketplace() {
           </div>
 
           <div className="flex items-center gap-4">
+
+            {/* Search Bar */}
+            <form
+              onSubmit={handleSearchSubmit}
+              className="flex-grow sm:flex-grow-0 sm:w-72 relative"
+            >
+              <svg
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400"
+                fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.602 10.602Z" />
+              </svg>
+              <input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={searchType === 'products' ? 'Search products...' : 'Search stores...'}
+                className="w-full pl-10 pr-9 py-2.5 bg-white border border-outline-variant/30 rounded-xl text-sm font-medium text-on-surface placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 shadow-sm transition-all"
+                type="text"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                  aria-label="Clear search"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </form>
+
             {/* Tablet Filter Button */}
             <button
               onClick={() => setIsMobileFilterOpen(true)}
@@ -656,54 +745,13 @@ export default function Marketplace() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+            <div className="flex flex-col gap-4 sm:gap-5">
               {filteredStores.map((shop) => (
-                <Link 
-                  to={`/shop/${shop.id}`} 
-                  key={shop.id} 
-                  className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group border border-outline-variant/30 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="h-[140px] bg-slate-100 w-full overflow-hidden relative">
-                      <img src={shop.image} alt={shop.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      
-                      <span className="absolute top-2.5 left-2.5 bg-slate-900/90 text-white text-[9px] font-bold px-2 py-0.5 rounded backdrop-blur-sm tracking-wider uppercase">
-                        {shop.badge}
-                      </span>
-
-                      <span className={`absolute bottom-2.5 right-2.5 text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur-md ${
-                        shop.isOpen ? 'bg-emerald-500/90 text-white' : 'bg-slate-700/90 text-slate-200'
-                      }`}>
-                        {shop.isOpen ? 'OPEN NOW' : 'CLOSED'}
-                      </span>
-                    </div>
-
-                    <div className="p-4">
-                      <div className="flex items-center justify-between gap-1 mb-1">
-                        <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{shop.category}</span>
-                        <div className="flex items-center gap-1 text-[11px] font-bold text-amber-500">
-                          <Star className="w-3 h-3 fill-current" />
-                          <span>{shop.rating}</span>
-                          <span className="text-slate-400 font-medium text-[10px]">({shop.reviews})</span>
-                        </div>
-                      </div>
-
-                      <h3 className="font-bold text-sm sm:text-base text-on-surface group-hover:text-primary transition-colors line-clamp-1 mb-1.5">{shop.name}</h3>
-
-                      <div className="flex items-center gap-1 text-[11px] text-slate-550 font-semibold">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                        <span className="truncate">{shop.location}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="px-4 pb-4 pt-0 flex items-center justify-between text-[11px] font-semibold text-slate-400 border-t border-slate-50 mt-2">
-                    <span>{shop.distance} away</span>
-                    <span className="text-primary group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
-                      Visit Store &rarr;
-                    </span>
-                  </div>
-                </Link>
+                <StoreCard
+                  key={shop.id}
+                  store={shop}
+                  favorites={[]}
+                />
               ))}
             </div>
           )

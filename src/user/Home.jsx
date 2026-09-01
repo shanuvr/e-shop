@@ -190,37 +190,37 @@ export default function Home() {
   ];
 
   const categories = [
-    { name: 'Electronics', icon: <img src="/icons/device.png" alt="Electronics" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Home & Kitchen', icon: <img src="/icons/seater-sofa.png" alt="Home & Kitchen" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Fashion', icon: <img src="/icons/dress.png" alt="Fashion" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Beauty & Health', icon: <img src="/icons/beauty-product.png" alt="Beauty & Health" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Sports', icon: <img src="/icons/sports.png" alt="Sports" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Books & Stationery', icon: <img src="/icons/book.png" alt="Books & Stationery" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Automotive', icon: <img src="/icons/car-repair.png" alt="Automotive" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Services', icon: <img src="/icons/customer-service.png" alt="Services" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'View All', icon: <LayoutGrid className="w-8 h-8 text-slate-500 group-hover:text-blue-600 transition-colors" /> }
+    { name: 'Electronics', icon: <img src="/icons/device.png" alt="Electronics" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Home & Kitchen', icon: <img src="/icons/seater-sofa.png" alt="Home & Kitchen" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Fashion', icon: <img src="/icons/dress.png" alt="Fashion" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Beauty & Health', icon: <img src="/icons/beauty-product.png" alt="Beauty & Health" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Sports', icon: <img src="/icons/sports.png" alt="Sports" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Books & Stationery', icon: <img src="/icons/book.png" alt="Books & Stationery" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Automotive', icon: <img src="/icons/car-repair.png" alt="Automotive" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Services', icon: <img src="/icons/customer-service.png" alt="Services" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'View All', icon: <LayoutGrid className="w-6 h-6 text-slate-500 group-hover:text-blue-600 transition-colors" /> }
   ];
 
   return (
     <UserLayout>
-      <div className="w-full bg-[#f8fafc] pb-24 flex flex-col font-sans text-slate-900 antialiased">
+      <div className="w-full bg-[#f8fafc] pb-20 flex flex-col font-sans text-slate-900 antialiased">
         
         {/* 1. Hero Banner */}
         <Hero2 />
 
         {/* 2. Floating Categories Row */}
-        <div className="max-w-7xl mx-auto w-full px-6 -mt-10 relative z-20">
-          <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-[0_12px_40px_rgba(0,0,0,0.03)] border border-slate-100 p-5 flex flex-wrap md:flex-nowrap items-center justify-between gap-6 md:gap-4 overflow-x-auto">
+        <div className="max-w-7xl mx-auto w-full px-6 -mt-7 relative z-20">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.03)] border border-slate-100 p-3.5 flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-3 overflow-x-auto">
             {categories.map((cat, idx) => (
               <Link 
                 key={idx} 
-                to={`/${cat.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
-                className="flex flex-col items-center justify-center gap-2.5 group min-w-[90px] flex-grow text-center"
+                to={cat.name === 'View All' ? '/categories' : `/${cat.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
+                className="flex flex-col items-center justify-center gap-1.5 group min-w-[78px] flex-grow text-center"
               >
-                <div className="w-14 h-14 bg-slate-50/80 rounded-2xl flex items-center justify-center group-hover:bg-blue-50/80 transition-all duration-300 border border-slate-100/50">
+                <div className="w-11 h-11 bg-slate-50/80 rounded-xl flex items-center justify-center group-hover:bg-blue-50/80 transition-all duration-300 border border-slate-100/50">
                   {cat.icon}
                 </div>
-                <span className="text-[11px] font-semibold text-slate-600 group-hover:text-blue-650 transition-colors whitespace-nowrap tracking-tight">
+                <span className="text-[10px] font-semibold text-slate-600 group-hover:text-blue-650 transition-colors whitespace-nowrap tracking-tight">
                   {cat.name}
                 </span>
               </Link>
