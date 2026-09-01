@@ -190,15 +190,15 @@ export default function Home() {
   ];
 
   const categories = [
-    { name: 'Electronics', icon: <img src="/icons/device.png" alt="Electronics" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Home & Kitchen', icon: <img src="/icons/seater-sofa.png" alt="Home & Kitchen" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Fashion', icon: <img src="/icons/dress.png" alt="Fashion" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Beauty & Health', icon: <img src="/icons/beauty-product.png" alt="Beauty & Health" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Sports', icon: <img src="/icons/sports.png" alt="Sports" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Books & Stationery', icon: <img src="/icons/book.png" alt="Books & Stationery" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Automotive', icon: <img src="/icons/car-repair.png" alt="Automotive" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'Services', icon: <img src="/icons/customer-service.png" alt="Services" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
-    { name: 'View All', icon: <LayoutGrid className="w-6 h-6 text-slate-500 group-hover:text-blue-600 transition-colors" /> }
+    { name: 'Electronics', icon: <img src="/icons/device.png" alt="Electronics" className="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Home & Kitchen', icon: <img src="/icons/seater-sofa.png" alt="Home & Kitchen" className="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Fashion', icon: <img src="/icons/dress.png" alt="Fashion" className="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Beauty & Health', icon: <img src="/icons/beauty-product.png" alt="Beauty & Health" className="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Sports', icon: <img src="/icons/sports.png" alt="Sports" className="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Books & Stationery', icon: <img src="/icons/book.png" alt="Books & Stationery" className="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Automotive', icon: <img src="/icons/car-repair.png" alt="Automotive" className="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'Services', icon: <img src="/icons/customer-service.png" alt="Services" className="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-110 transition-transform duration-300" /> },
+    { name: 'View All', icon: <LayoutGrid className="w-6 h-6 sm:w-7 sm:h-7 text-slate-500 group-hover:text-blue-600 transition-colors" /> }
   ];
 
   return (
@@ -209,18 +209,18 @@ export default function Home() {
         <Hero2 />
 
         {/* 2. Floating Categories Row */}
-        <div className="max-w-7xl mx-auto w-full px-6 -mt-7 relative z-20">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.03)] border border-slate-100 p-3.5 flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-3 overflow-x-auto">
+        <div className="max-w-5xl mx-auto w-full px-3.5 sm:px-5 -mt-5 sm:-mt-7 relative z-20">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-100 p-2.5 sm:p-3.5 flex flex-nowrap items-center justify-start md:justify-center gap-3 md:gap-5 lg:gap-6 overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {categories.map((cat, idx) => (
               <Link 
                 key={idx} 
                 to={cat.name === 'View All' ? '/categories' : `/${cat.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
-                className="flex flex-col items-center justify-center gap-1.5 group min-w-[78px] flex-grow text-center"
+                className="flex flex-col items-center justify-center gap-1.5 group min-w-[68px] sm:min-w-[76px] text-center flex-shrink-0"
               >
-                <div className="w-11 h-11 bg-slate-50/80 rounded-xl flex items-center justify-center group-hover:bg-blue-50/80 transition-all duration-300 border border-slate-100/50">
+                <div className="w-10 h-10 sm:w-[46px] sm:h-[46px] bg-slate-50/80 rounded-xl flex items-center justify-center group-hover:bg-blue-50/80 transition-all duration-300 border border-slate-100/50">
                   {cat.icon}
                 </div>
-                <span className="text-[10px] font-semibold text-slate-600 group-hover:text-blue-650 transition-colors whitespace-nowrap tracking-tight">
+                <span className="text-[9px] sm:text-[11px] font-semibold text-slate-600 group-hover:text-blue-600 transition-colors whitespace-nowrap tracking-tight">
                   {cat.name}
                 </span>
               </Link>
@@ -229,22 +229,23 @@ export default function Home() {
         </div>
 
         {/* 3. Popular Shops in Thrissur */}
-        <div className="max-w-5xl mx-auto w-full px-6 mt-20">
-          <div className="flex justify-between items-end mb-8">
+        <div className="max-w-5xl mx-auto w-full px-5 sm:px-6 mt-12 md:mt-20">
+          <div className="flex justify-between items-end mb-6 md:mb-8">
             <div>
-              <div className="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+              <div className="flex items-center gap-1.5 text-primary text-[11px] md:text-xs font-bold uppercase tracking-wider mb-1">
                 <MapPin className="w-3.5 h-3.5" />
                 Local Marketplace
               </div>
-              <h2 className="text-2xl md:text-3xl font-black text-on-surface tracking-tight">Popular Shops in Thrissur</h2>
+              <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-on-surface tracking-tight">Popular Shops in Thrissur</h2>
             </div>
-            <Link className="text-primary font-semibold flex items-center hover:underline text-sm gap-1" to="/shops">
-              View All Shops
+            <Link className="text-primary font-semibold flex items-center hover:underline text-[13px] sm:text-sm gap-1" to="/shops">
+              <span className="hidden sm:inline">View All Shops</span>
+              <span className="sm:hidden">All</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {popularShops.map((shop) => (
               <Link 
                 to={`/shop/${shop.id}`} 
@@ -252,41 +253,40 @@ export default function Home() {
                 className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group border border-outline-variant/30 flex flex-col justify-between"
               >
                 <div>
-                  <div className="h-[140px] sm:h-[160px] bg-slate-100 w-full overflow-hidden relative">
+                  <div className="h-[110px] sm:h-[160px] bg-slate-100 w-full overflow-hidden relative">
                     <img src={shop.image} alt={shop.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     
-                    <span className="absolute top-2.5 left-2.5 bg-slate-900/90 text-white text-[9px] font-bold px-2 py-0.5 rounded backdrop-blur-sm tracking-wider uppercase">
+                    <span className="absolute top-2.5 left-2.5 bg-slate-900/90 text-white text-[8px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded backdrop-blur-sm tracking-wider uppercase">
                       {shop.badge}
                     </span>
 
-                    <span className={`absolute bottom-2.5 right-2.5 text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur-md ${
+                    <span className={`absolute bottom-2.5 right-2.5 text-[8px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full backdrop-blur-md ${
                       shop.isOpen ? 'bg-emerald-500/90 text-white' : 'bg-slate-700/90 text-slate-200'
                     }`}>
-                      {shop.isOpen ? 'OPEN NOW' : 'CLOSED'}
+                      {shop.isOpen ? 'OPEN' : 'CLOSED'}
                     </span>
                   </div>
 
-                  <div className="p-4">
+                  <div className="p-3 sm:p-4">
                     <div className="flex items-center justify-between gap-1 mb-1">
-                      <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{shop.category}</span>
+                      <span className="text-[9px] sm:text-[10px] font-bold text-primary uppercase tracking-wider truncate">{shop.category}</span>
                       <div className="flex items-center gap-1 text-[11px] font-bold text-amber-500">
                         <Star className="w-3 h-3 fill-current" />
                         <span>{shop.rating}</span>
-                        <span className="text-slate-400 font-medium text-[10px]">({shop.reviews})</span>
                       </div>
                     </div>
 
-                    <h3 className="font-bold text-sm sm:text-base text-on-surface group-hover:text-primary transition-colors line-clamp-1 mb-1.5">{shop.name}</h3>
+                    <h3 className="font-bold text-[13px] sm:text-base text-on-surface group-hover:text-primary transition-colors line-clamp-1 mb-1.5">{shop.name}</h3>
 
-                    <div className="flex items-center gap-1 text-[11px] text-slate-500 font-medium">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                    <div className="flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-500 font-medium">
+                      <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400 flex-shrink-0" />
                       <span className="truncate">{shop.location}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="px-4 pb-4 pt-0 flex items-center justify-between text-[11px] font-semibold text-slate-400 border-t border-slate-50 mt-2">
-                  <span>{shop.distance} away</span>
+                <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-0 flex items-center justify-between text-[10px] sm:text-[11px] font-semibold text-slate-400 border-t border-slate-50 mt-2">
+                  <span className="hidden sm:inline">{shop.distance} away</span>
                   <span className="text-primary group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
                     Visit Store &rarr;
                   </span>
@@ -297,24 +297,24 @@ export default function Home() {
         </div>
 
         {/* 4. Popular in Electronics */}
-        <div className="max-w-5xl mx-auto w-full px-6 mt-20">
-          <div className="flex justify-between items-end mb-8">
+        <div className="max-w-5xl mx-auto w-full px-5 sm:px-6 mt-12 md:mt-20">
+          <div className="flex justify-between items-end mb-6 md:mb-8">
             <div>
-              <div className="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+              <div className="flex items-center gap-1.5 text-primary text-[11px] md:text-xs font-bold uppercase tracking-wider mb-1">
                 <Sparkles className="w-3.5 h-3.5" />
                 Featured Tech
               </div>
-              <h2 className="text-2xl md:text-3xl font-black text-on-surface tracking-tight">Popular in Electronics</h2>
+              <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-on-surface tracking-tight">Popular in Electronics</h2>
             </div>
             <Link className="text-primary font-semibold flex items-center hover:underline text-sm gap-1" to="/marketplace?category=electronics">
-              View All 
+              <span className="hidden sm:inline">View All</span>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
               </svg>
             </Link>
           </div>
           
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
             {electronics.map((item) => (
               <ProductCard key={item.id} item={item} linkPrefix="/product" />
             ))}
@@ -322,21 +322,22 @@ export default function Home() {
         </div>
 
         {/* 4. Popular Services */}
-        <div className="max-w-5xl mx-auto w-full px-6 mt-20">
-          <div className="flex justify-between items-end mb-8">
+        <div className="max-w-5xl mx-auto w-full px-5 sm:px-6 mt-12 md:mt-20">
+          <div className="flex justify-between items-end mb-6 md:mb-8">
             <div>
-              <div className="flex items-center gap-1.5 text-blue-600 text-xs font-bold uppercase tracking-wider mb-1">
+              <div className="flex items-center gap-1.5 text-blue-600 text-[11px] md:text-xs font-bold uppercase tracking-wider mb-1">
                 <Sparkles className="w-3.5 h-3.5" />
                 Verified Pros
               </div>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Popular Services</h2>
+              <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Popular Services</h2>
             </div>
-            <Link to="/services" className="text-xs font-bold text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors border-b border-transparent hover:border-blue-600 pb-0.5">
-              View All Services
+            <Link to="/services" className="text-xs font-bold text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors border-b border-transparent hover:border-blue-600 pb-0.5 whitespace-nowrap">
+              <span className="hidden sm:inline">View All Services</span>
+              <span className="sm:hidden">All</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
             {services.map((item) => (
               <ProductCard key={item.id} item={item} linkPrefix="/service" />
             ))}
@@ -344,13 +345,13 @@ export default function Home() {
         </div>
 
         {/* 5. Bottom Columns (How It Works & Sell Your Way) */}
-        <div className="max-w-7xl mx-auto w-full px-6 mt-20 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 mt-12 md:mt-20 grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
           
           {/* How E-SHOP Works */}
-          <div className="lg:col-span-2 bg-[#f8fafc] rounded-3xl border border-slate-100 p-8 shadow-sm flex flex-col justify-between">
-            <div className="flex justify-between items-center mb-8">
+          <div className="lg:col-span-2 bg-[#f8fafc] rounded-3xl border border-slate-100 p-5 sm:p-8 shadow-sm flex flex-col justify-between">
+            <div className="flex justify-between items-center gap-3 flex-wrap mb-6 sm:mb-8">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                   How <span className="text-blue-600">E-SHOP</span> Works
                 </h2>
                 <p className="text-slate-500 text-xs mt-1">Our platform logic simplified</p>
@@ -358,7 +359,7 @@ export default function Home() {
               <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-3.5 py-1.5 rounded-full">Step-by-Step Guide</span>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 items-stretch relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 items-stretch relative">
               {[
                 {
                   step: '01',
@@ -390,7 +391,7 @@ export default function Home() {
                     {step.step}
                   </span>
                   <div className="z-10">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-6 group-hover:bg-white/20 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-5 md:mb-6 group-hover:bg-white/20 transition-all duration-300">
                       {step.icon}
                     </div>
                     <h3 className="font-semibold text-[15px] text-slate-800 mb-2 group-hover:text-white transition-colors">{step.title}</h3>
@@ -405,9 +406,9 @@ export default function Home() {
           <div className="bg-[#0f172a] rounded-3xl overflow-hidden flex flex-col justify-between relative min-h-[300px] shadow-lg group border border-slate-800">
             <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
             
-            <div className="p-8 z-10 flex flex-col justify-between h-full w-[65%] text-white relative">
+            <div className="p-5 sm:p-8 z-10 flex flex-col justify-between h-full w-full sm:w-[65%] text-white relative">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight mb-2">Sell Your Way</h2>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">Sell Your Way</h2>
                 <p className="text-slate-400 text-[11px] leading-relaxed mb-6">
                   Grow your brand on E-SHOP. Choose how much of the sales process you want us to manage.
                 </p>
@@ -436,7 +437,7 @@ export default function Home() {
               </Link>
             </div>
             
-            <div className="absolute right-0 bottom-0 h-full w-[38%] pointer-events-none select-none z-0">
+            <div className="absolute right-0 bottom-0 h-full w-full sm:w-[38%] opacity-0 sm:opacity-100 pointer-events-none select-none z-0">
               <div className="absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-[#0f172a] to-transparent z-10" />
               <img 
                 src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=300&h=400" 
@@ -448,23 +449,23 @@ export default function Home() {
         </div>
 
         {/* 6. Partners & Brands Logo Carousel */}
-        <div className="max-w-7xl mx-auto w-full px-6 mt-20 text-center select-none bg-white rounded-3xl border border-slate-100 p-8 shadow-[0_4px_20px_rgba(0,0,0,0.01)]">
+        <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 mt-12 md:mt-20 text-center select-none bg-white rounded-3xl border border-slate-100 p-5 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.01)]">
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">Partners & Verified Brands</p>
-          <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16 opacity-40 hover:opacity-60 transition-opacity duration-300">
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-16 opacity-40 hover:opacity-60 transition-opacity duration-300">
             {['SAMSUNG', 'NIKE', 'APPLE', 'IKEA', 'SONY', 'DELL'].map((brand, idx) => (
-              <span key={idx} className="text-lg md:text-xl font-bold text-slate-700 tracking-widest font-sans hover:text-blue-600 transition-colors cursor-pointer">{brand}</span>
+              <span key={idx} className="text-base md:text-xl font-bold text-slate-700 tracking-widest font-sans hover:text-blue-600 transition-colors cursor-pointer">{brand}</span>
             ))}
           </div>
         </div>
 
         {/* 7. Flash Sale Countdown Banner */}
-        <div className="max-w-7xl mx-auto w-full px-6 mt-20">
-          <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between shadow-lg border border-slate-800">
+        <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 mt-12 md:mt-20">
+          <div className="bg-slate-900 rounded-3xl p-5 sm:p-8 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between shadow-lg border border-slate-800">
             <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
             
             <div className="z-10 text-center md:text-left mb-6 md:mb-0 max-w-xl">
               <span className="bg-blue-500 text-white text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Limited Deal</span>
-              <h2 className="text-3xl font-black mt-4 leading-tight tracking-tight text-white">Up to 40% Off on Premium Sound Systems</h2>
+              <h2 className="text-xl sm:text-3xl font-black mt-4 leading-tight tracking-tight text-white">Up to 40% Off on Premium Sound Systems</h2>
               <p className="text-slate-400 text-xs mt-2 leading-relaxed">
                 Elevate your home cinema experience today. Get free installation and an extended 2-year warranty with every purchase.
               </p>

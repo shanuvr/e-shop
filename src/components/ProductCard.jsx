@@ -11,7 +11,7 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
   return (
     <Link 
       to={targetLink} 
-      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group relative border border-outline-variant/30 flex flex-col justify-between cursor-pointer w-full max-w-[230px] mx-auto"
+      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group relative border border-outline-variant/30 flex flex-col justify-between cursor-pointer w-full"
     >
       <div>
         {displayTag && (
@@ -34,7 +34,7 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
           </svg>
         </button>
-        <div className="h-[130px] sm:h-[180px] bg-surface-container-lowest w-full overflow-hidden relative">
+        <div className="h-[120px] sm:h-[180px] bg-surface-container-lowest w-full overflow-hidden relative">
           <img alt={item.title} className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-500" src={item.image || item.img} />
           {/* Hover Overlay */}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
@@ -47,10 +47,10 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
             </span>
           </div>
         </div>
-        <div className="p-3 sm:p-4">
+        <div className="p-2.5 sm:p-4">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 gap-1 sm:gap-2">
-            <h3 className="font-bold text-xs sm:text-base text-on-surface group-hover:text-primary transition-colors line-clamp-1">{item.title}</h3>
-            <span className="text-sm sm:text-lg font-bold text-primary">{item.price}</span>
+            <h3 className="font-bold text-[11px] sm:text-base text-on-surface group-hover:text-primary transition-colors line-clamp-2 sm:line-clamp-1 leading-snug">{item.title}</h3>
+            <span className="text-[13px] sm:text-lg font-bold text-primary">{item.price}</span>
           </div>
           {item.location && (
             <p className="text-on-surface-variant text-[10px] sm:text-xs mb-1 sm:mb-1.5 font-medium flex items-center gap-1">
@@ -61,14 +61,14 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
               {item.location}
             </p>
           )}
-          <p className="text-slate-500 text-[10px] sm:text-xs line-clamp-2 leading-relaxed mt-1 sm:mt-1.5">
+          <p className="hidden sm:block text-slate-500 text-[10px] sm:text-xs line-clamp-2 leading-relaxed mt-1 sm:mt-1.5">
             {item.description || item.desc}
           </p>
         </div>
       </div>
       {(item.shipping || item.tag2) && (
-        <div className="px-3 pb-3 sm:px-4 sm:pb-4 pt-0">
-          <span className="text-emerald-800 text-[9px] sm:text-[10px] font-bold uppercase tracking-tight bg-emerald-50 px-2 py-0.5 rounded">
+        <div className="px-2.5 pb-2.5 sm:px-4 sm:pb-4 pt-0">
+          <span className="text-emerald-800 text-[8px] sm:text-[10px] font-bold uppercase tracking-tight bg-emerald-50 px-1.5 sm:px-2 py-0.5 rounded">
             {item.shipping || item.tag2}
           </span>
         </div>

@@ -495,7 +495,7 @@ export default function Marketplace() {
   return (
     <UserLayout>
       <div className="w-full bg-[#f8fafc] pb-24 font-sans text-slate-900 antialiased">
-        <main className="max-w-[1400px] mx-auto pt-2 sm:pt-4 pb-8 px-6 md:px-12 flex flex-col lg:flex-row gap-8 w-full relative">
+        <main className="max-w-[1400px] mx-auto pt-2 sm:pt-4 pb-8 px-3.5 sm:px-6 md:px-8 flex flex-col lg:flex-row gap-5 lg:gap-8 w-full relative">
 
       {/* Desktop Sidebar (visible on large screen) */}
       <aside className="hidden lg:block lg:w-64 shrink-0 bg-white p-5 rounded-2xl border border-outline-variant/30 lg:sticky lg:top-[76px] lg:h-[calc(100vh-95px)] lg:overflow-y-auto lg:overscroll-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden shadow-sm">
@@ -512,7 +512,7 @@ export default function Marketplace() {
       </aside>
 
       {/* Mobile Sort & Filter Bar (Flipkart Style) */}
-      <div className="flex sm:hidden border-b border-outline-variant/20 bg-white sticky top-[110px] z-30 shadow-sm w-full divide-x divide-outline-variant/20">
+      <div className="flex sm:hidden border-b border-outline-variant/20 bg-white sticky top-[64px] z-30 shadow-sm w-full divide-x divide-outline-variant/20 -mx-3.5 px-3.5">
         <button
           onClick={cycleSortMobile}
           className="flex-1 py-2.5 flex items-center justify-center gap-1.5 font-bold text-xs text-on-surface hover:bg-slate-50 cursor-pointer active:bg-slate-100 transition-colors"
@@ -539,7 +539,7 @@ export default function Marketplace() {
       </div>
 
       {/* Mobile Search Bar */}
-      <div className="sm:hidden px-4 pt-3 pb-1">
+      <div className="sm:hidden px-0 pt-2 pb-1 w-full">
         <form
           onSubmit={handleSearchSubmit}
           className="relative"
@@ -618,7 +618,7 @@ export default function Marketplace() {
       )}
 
       {/* Product List Area */}
-      <section className="flex-grow px-4 sm:px-0 lg:h-[calc(100vh-120px)] lg:overflow-y-auto lg:overscroll-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <section className="flex-grow w-full px-0 lg:h-[calc(100vh-120px)] lg:overflow-y-auto lg:overscroll-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {/* Desktop / Tablet Header */}
         <div className="hidden sm:flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div>
@@ -711,7 +711,7 @@ export default function Marketplace() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 bg-transparent border-none">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-6 bg-transparent border-none">
               {filteredProducts.map((item) => {
                 const shopNames = {
                   'shop-1': 'Elite Digital Mall',

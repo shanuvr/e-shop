@@ -197,63 +197,63 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
 
   return (
     <UserLayout>
-      <div className="bg-white min-h-screen">
+      <div className="bg-white min-h-screen pb-24 sm:pb-8">
 
         {/* Breadcrumb */}
         <div className="border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-2 text-sm text-gray-500">
-            <Link to="/" className="hover:text-gray-900 transition-colors">Home</Link>
-            <ChevronRight className="w-4 h-4 text-gray-300" />
-            <Link to="/marketplace" className="hover:text-gray-900 transition-colors">Marketplace</Link>
-            <ChevronRight className="w-4 h-4 text-gray-300" />
+          <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-2.5 flex items-center gap-1.5 sm:gap-2 text-xs sm:text-[13px] text-gray-500 overflow-x-auto whitespace-nowrap">
+            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-gray-300 shrink-0" />
+            <Link to="/marketplace" className="hover:text-primary transition-colors">Marketplace</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-gray-300 shrink-0" />
             <span className="text-gray-900 font-medium truncate">{product.title}</span>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-8">
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-14">
 
             {/* Left: Images */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               {/* Main Image */}
-              <div className="relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 group shadow-sm flex items-center justify-center p-3 h-[360px] sm:h-[380px]">
+              <div className="relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 group shadow-sm flex items-center justify-center p-2 h-[300px] sm:h-[320px]">
                 <img
                   src={product.images[selectedColor][activeImageIndex] || product.images[selectedColor][0]}
                   alt={`${product.title} - ${product.colorNames[selectedColor]}`}
                   className="w-full h-full object-cover rounded-xl transition-all duration-300 group-hover:scale-[1.02]"
                 />
                 {product.isAssured && (
-                  <span className="absolute top-4 left-4 bg-slate-900/90 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md backdrop-blur-md flex items-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-blue-400" /> Assured
+                  <span className="absolute top-3 left-3 bg-primary/95 text-white text-[11px] font-semibold px-3 py-1 rounded-full shadow-md backdrop-blur-md flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-white" /> Assured
                   </span>
                 )}
-                <div className="absolute top-4 right-4 flex gap-2">
+                <div className="absolute top-3 right-3 flex gap-2">
                   <button
                     onClick={() => setIsWishlisted(!isWishlisted)}
-                    className={`w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md flex items-center justify-center transition-all ${
+                    className={`w-9 h-9 rounded-full bg-white/90 backdrop-blur-md shadow-md flex items-center justify-center transition-all ${
                       isWishlisted ? 'text-red-500 scale-110' : 'text-slate-500 hover:text-red-500 hover:scale-105'
                     }`}
                   >
-                    <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+                    <Heart className={`w-4.5 h-4.5 ${isWishlisted ? 'fill-current' : ''}`} />
                   </button>
-                  <button className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md flex items-center justify-center text-slate-500 hover:text-slate-900 hover:scale-105 transition-all">
-                    <Share2 className="w-5 h-5" />
+                  <button className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-md shadow-md flex items-center justify-center text-slate-500 hover:text-slate-900 hover:scale-105 transition-all">
+                    <Share2 className="w-4.5 h-4.5" />
                   </button>
                 </div>
               </div>
 
               {/* Downside Thumbnails: Change angle / photo of current product */}
-              <div className="flex gap-3 justify-center items-center py-1">
+              <div className="flex gap-2.5 justify-center items-center py-1">
                 {product.images[selectedColor].map((imgUrl, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImageIndex(idx)}
-                    className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                    className={`relative w-14 h-14 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
                       activeImageIndex === idx
-                        ? 'border-slate-900 ring-2 ring-slate-900/20 scale-105 shadow-sm'
+                        ? 'border-primary ring-2 ring-primary/20 scale-105 shadow-sm'
                         : 'border-slate-200 opacity-60 hover:opacity-100 hover:border-slate-400'
                     }`}
                   >
@@ -263,22 +263,22 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
               </div>
 
               {/* Quick Highlights / Key Specifications */}
-              <div className="grid grid-cols-2 gap-3 mt-2">
+              <div className="grid grid-cols-2 gap-2.5 mt-1">
                 {product.quickFeatures.map((feat, idx) => {
                   const IconComponent = feat.icon;
                   return (
                     <div
                       key={idx}
-                      className="flex items-center gap-3 p-3 bg-slate-50/80 hover:bg-white rounded-xl border border-slate-200/60 hover:border-slate-300 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-sm transition-all duration-200 group"
+                      className="flex items-center gap-2.5 p-2.5 bg-slate-50/80 hover:bg-white rounded-xl border border-slate-200/60 hover:border-slate-300 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-sm transition-all duration-200 group"
                     >
-                      <div className={`w-9 h-9 rounded-lg ${feat.color || 'bg-blue-50 text-blue-600 border-blue-100'} border flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
-                        {IconComponent && <IconComponent className="w-4.5 h-4.5" />}
+                      <div className={`w-8 h-8 rounded-lg ${feat.color || 'bg-blue-50 text-primary border-blue-100'} border flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
+                        {IconComponent && <IconComponent className="w-4 h-4" />}
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider truncate">
+                        <span className="text-[9px] sm:text-[10px] font-semibold text-slate-400 uppercase tracking-wider truncate">
                           {feat.label}
                         </span>
-                        <span className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                        <span className="text-[11px] sm:text-xs font-bold text-slate-900 truncate">
                           {feat.value}
                         </span>
                       </div>
@@ -287,19 +287,50 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
                 })}
               </div>
 
+              {/* Color Selection */}
+              <div className="mt-1">
+                <p className="text-xs sm:text-sm font-semibold text-slate-900 mb-2">
+                  Color Variant — <span className="font-normal text-slate-600">{product.colorNames[selectedColor]}</span>
+                </p>
+                <div className="flex flex-wrap gap-2 sm:gap-2.5">
+                  {[
+                    { id: 'black', label: 'Matte Black', swatch: 'bg-slate-900' },
+                    { id: 'white', label: 'Silver White', swatch: 'bg-gradient-to-br from-white to-slate-200 border border-slate-300' },
+                    { id: 'blue', label: 'Navy Blue', swatch: 'bg-gradient-to-br from-blue-600 to-blue-900' }
+                  ].map((c) => {
+                    const isActive = selectedColor === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        onClick={() => handleColorChange(c.id)}
+                        className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-[13px] font-semibold border-2 transition-all ${
+                          isActive
+                            ? 'border-primary bg-primary text-white shadow-md shadow-primary/25 scale-[1.02]'
+                            : 'border-slate-200 bg-white text-slate-700 hover:border-primary/60 hover:bg-blue-50/50'
+                        }`}
+                      >
+                        <span className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full ${c.swatch} shrink-0 ring-1 sm:ring-2 ring-offset-1 ${isActive ? 'ring-white' : 'ring-transparent'}`} />
+                        {c.label}
+                        {isActive && <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white ml-0.5" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Trust Bar */}
-              <div className="flex items-center justify-center gap-8 py-4 border-t border-gray-100 mt-2">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span className="text-sm font-medium">100% Genuine</span>
+              <div className="flex items-center justify-center gap-3 sm:gap-6 py-2 sm:py-3 border-t border-gray-100 mt-2">
+                <div className="flex items-center gap-1 text-gray-600">
+                  <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary shrink-0" />
+                  <span className="text-[10px] sm:text-[13px] font-medium">100% Genuine</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <RotateCcw className="w-4 h-4" />
-                  <span className="text-sm font-medium">7 Day Returns</span>
+                <div className="flex items-center gap-1 text-gray-600">
+                  <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary shrink-0" />
+                  <span className="text-[10px] sm:text-[13px] font-medium">7 Day Returns</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Clock className="w-4 h-4" />
-                  <span className="text-sm font-medium">1 Year Warranty</span>
+                <div className="flex items-center gap-1 text-gray-600">
+                  <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary shrink-0" />
+                  <span className="text-[10px] sm:text-[13px] font-medium">1 Year Warranty</span>
                 </div>
               </div>
             </div>
@@ -308,139 +339,116 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
             <div className="flex flex-col">
 
               {/* Brand & Category */}
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-sm font-semibold text-gray-500 uppercase tracking-wide">{product.brand}</span>
+              <div className="flex items-center gap-3 mb-2.5">
+                <span className="text-[13px] font-semibold text-gray-500 uppercase tracking-wide">{product.brand}</span>
                 <span className="text-gray-300">|</span>
-                <span className="text-sm text-gray-500">{product.subCategory}</span>
+                <span className="text-[13px] text-gray-500">{product.subCategory}</span>
               </div>
 
               {/* Title */}
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mb-4">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 leading-tight mb-3">
                 {product.title}
               </h1>
 
               {/* Rating */}
-              <div className="flex items-center gap-3 mb-6">
-                <div className="flex items-center gap-1.5 bg-gray-900 text-white px-3 py-1 rounded text-sm font-semibold">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="flex items-center gap-1.5 bg-primary text-white px-2.5 py-1 rounded text-[13px] font-semibold">
                   <span>{product.rating}</span>
                   <Star className="w-3.5 h-3.5 fill-current" />
                 </div>
-                <span className="text-sm text-gray-500">
+                <span className="text-[13px] text-gray-500">
                   {product.reviewsCount.toLocaleString()} ratings
                 </span>
-                <span className="text-sm text-green-600 font-semibold flex items-center gap-1">
+                <span className="text-[13px] text-green-600 font-semibold flex items-center gap-1">
                   In Stock
                 </span>
               </div>
 
               {/* Price */}
-              <div className="mb-6 pb-6 border-b border-gray-200">
+              <div className="mb-5 pb-5 border-b border-gray-200">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-bold text-gray-900">
+                  <span className="text-2xl font-bold text-gray-900">
                     ₹{product.price.toLocaleString()}
                   </span>
-                  <span className="text-lg text-gray-400 line-through">
+                  <span className="text-base text-gray-400 line-through">
                     ₹{product.originalPrice.toLocaleString()}
                   </span>
-                  <span className="text-sm font-semibold text-green-600">
+                  <span className="text-[13px] font-semibold text-primary">
                     {product.discount}% off
                   </span>
                 </div>
-                <p className="text-sm text-gray-500 mt-1">Inclusive of all taxes</p>
+                <p className="text-[13px] text-gray-500 mt-1">Inclusive of all taxes</p>
               </div>
 
-              {/* Color Selection */}
-              <div className="mb-6">
-                <p className="text-sm font-semibold text-slate-900 mb-3">
-                  Color Variant — <span className="font-normal text-slate-600">{product.colorNames[selectedColor]}</span>
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {[
-                    { id: 'black', label: 'Matte Black', bg: 'bg-slate-900' },
-                    { id: 'white', label: 'Silver White', bg: 'bg-slate-100 border border-slate-300' },
-                    { id: 'blue', label: 'Navy Blue', bg: 'bg-indigo-900' }
-                  ].map((c) => (
+              {/* Quantity + Actions (Desktop & Tablet inline view) */}
+              <div className="flex flex-col sm:flex-row gap-2.5 mb-5">
+                <div className="flex items-center justify-between sm:justify-start border border-gray-200 rounded-xl h-11 px-3 sm:px-0">
+                  <span className="sm:hidden text-xs font-semibold text-gray-500">Quantity</span>
+                  <div className="flex items-center">
                     <button
-                      key={c.id}
-                      onClick={() => handleColorChange(c.id)}
-                      className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold border transition-all ${
-                        selectedColor === c.id
-                          ? 'border-slate-900 bg-slate-900 text-white shadow-sm'
-                          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-400'
-                      }`}
+                      onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
+                      className="w-9 sm:w-11 h-full flex items-center justify-center text-gray-600 hover:text-primary font-medium transition-colors"
                     >
-                      <span className={`w-3.5 h-3.5 rounded-full ${c.bg} shrink-0`} />
-                      {c.label}
-                      {selectedColor === c.id && <Check className="w-4 h-4 text-white ml-0.5" />}
+                      −
                     </button>
-                  ))}
+                    <span className="w-8 sm:w-11 text-center text-sm font-semibold text-gray-900">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(prev => prev + 1)}
+                      className="w-9 sm:w-11 h-full flex items-center justify-center text-gray-600 hover:text-primary font-medium transition-colors"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
-              </div>
-
-              {/* Quantity + Actions */}
-              <div className="flex flex-col sm:flex-row gap-3 mb-6">
-                <div className="flex items-center border border-gray-200 rounded-lg h-12">
-                  <button
-                    onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                    className="w-12 h-full flex items-center justify-center text-gray-600 hover:text-gray-900 font-medium transition-colors"
-                  >
-                    −
+                <div className="hidden sm:flex flex-1 gap-2.5">
+                  <button className="flex-1 border-2 border-primary text-primary hover:bg-blue-50 font-semibold text-sm h-11 rounded-xl flex items-center justify-center gap-2 transition-colors">
+                    <ShoppingBag className="w-4 h-4" />
+                    Add to Cart
                   </button>
-                  <span className="w-12 text-center text-sm font-semibold text-gray-900">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(prev => prev + 1)}
-                    className="w-12 h-full flex items-center justify-center text-gray-600 hover:text-gray-900 font-medium transition-colors"
-                  >
-                    +
+                  <button className="flex-1 bg-primary hover:bg-blue-700 text-white font-semibold text-sm h-11 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm shadow-primary/25">
+                    <Zap className="w-4 h-4" />
+                    Buy Now
                   </button>
                 </div>
-                <button className="flex-1 border-2 border-gray-900 text-gray-900 hover:bg-gray-50 font-semibold text-sm h-12 rounded-lg flex items-center justify-center gap-2 transition-colors">
-                  <ShoppingBag className="w-4 h-4" />
-                  Add to Cart
-                </button>
-                <button className="flex-1 bg-gray-900 hover:bg-black text-white font-semibold text-sm h-12 rounded-lg flex items-center justify-center gap-2 transition-colors">
-                  <Zap className="w-4 h-4" />
-                  Buy Now
-                </button>
               </div>
 
               {/* Delivery Check */}
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-2 mb-3">
-                  <Truck className="w-4 h-4 text-gray-700" />
+              <div className="mb-5 p-3.5 sm:p-4 bg-slate-50 rounded-xl">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <Truck className="w-4 h-4 text-primary" />
                   <span className="text-sm font-semibold text-gray-900">Delivery</span>
                 </div>
                 <form onSubmit={handlePincodeCheck} className="flex gap-2">
-                  <div className="flex items-center flex-1 bg-white border border-gray-200 rounded-lg px-3 focus-within:border-gray-900 transition-colors">
-                    <MapPin className="w-4 h-4 text-gray-400" />
+                  <div className="flex items-center flex-1 bg-white border border-gray-200 rounded-xl px-3 focus-within:border-primary transition-colors">
+                    <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
                     <input
                       type="text"
                       placeholder="Enter pincode"
                       maxLength={6}
                       value={pincode}
                       onChange={(e) => setPincode(e.target.value)}
-                      className="w-full px-2 py-2.5 text-sm outline-none placeholder-gray-400"
+                      className="w-full px-2 py-2 text-xs sm:text-sm outline-none placeholder-gray-400 min-w-0"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="px-5 py-2.5 bg-gray-900 hover:bg-black text-white text-sm font-semibold rounded-lg transition-colors"
+                    className="px-4 sm:px-5 py-2 bg-primary hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold rounded-xl transition-colors shrink-0"
                   >
                     Check
                   </button>
                 </form>
                 {deliveryStatus && (
-                  <p className={`mt-3 text-sm font-medium ${deliveryStatus.success ? 'text-green-600' : 'text-red-500'}`}>
+                  <p className={`mt-2.5 text-xs sm:text-sm font-medium ${deliveryStatus.success ? 'text-green-600' : 'text-red-500'}`}>
                     {deliveryStatus.message}
                   </p>
                 )}
               </div>
 
               {/* Seller Info */}
-              <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 border border-gray-200 rounded-xl">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <Store className="w-5 h-5 text-gray-700" />
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                    <Store className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-gray-900">{product.seller.name}</p>
@@ -450,16 +458,16 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 w-full sm:w-auto">
                   <Link
                     to={`/shop/${product.seller.id}`}
-                    className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex-1 sm:flex-none text-center px-3.5 py-2 border border-primary text-primary rounded-xl text-xs sm:text-sm font-semibold hover:bg-blue-50 transition-colors"
                   >
                     Visit Store
                   </Link>
                   <button
                     onClick={() => alert('Chat with seller coming soon!')}
-                    className="px-4 py-2 bg-gray-900 hover:bg-black text-white rounded-lg text-sm font-medium transition-colors"
+                    className="flex-1 sm:flex-none text-center px-3.5 py-2 bg-primary hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-semibold transition-colors"
                   >
                     Chat
                   </button>
@@ -470,9 +478,9 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
           </div>
 
           {/* Tabs Section */}
-          <div className="mt-12 border-t border-gray-200 pt-8">
+          <div className="mt-10 border-t border-gray-200 pt-6">
             {/* Tab Headers */}
-            <div className="flex gap-8 border-b border-gray-200 mb-8 overflow-x-auto">
+            <div className="flex gap-6 border-b border-gray-200 mb-6 overflow-x-auto">
               {[
                 { id: 'specs', label: 'Specifications' },
                 { id: 'overview', label: 'Highlights' },
@@ -484,7 +492,7 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
                   onClick={() => setActiveTab(tab.id)}
                   className={`pb-3 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'border-gray-900 text-gray-900'
+                      ? 'border-primary text-primary'
                       : 'border-transparent text-gray-400 hover:text-gray-600'
                   }`}
                 >
@@ -593,18 +601,18 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
           </div>
 
           {/* Related Products */}
-          <div className="mt-12 border-t border-gray-200 pt-8">
-            <div className="flex items-end justify-between mb-6">
+          <div className="mt-10 border-t border-gray-200 pt-6">
+            <div className="flex items-end justify-between mb-5">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">You might also like</h2>
-                <p className="text-sm text-gray-500 mt-1">Similar products from verified sellers</p>
+                <h2 className="text-lg font-bold text-gray-900">You might also like</h2>
+                <p className="text-[13px] text-gray-500 mt-0.5">Similar products from verified sellers</p>
               </div>
-              <Link to="/marketplace" className="text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1 transition-colors">
+              <Link to="/marketplace" className="text-sm font-medium text-primary hover:text-blue-700 flex items-center gap-1 transition-colors">
                 View all
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
               {relatedProducts.map((item) => (
                 <ProductCard key={item.id} item={item} linkPrefix="/product" />
               ))}
@@ -612,6 +620,18 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
           </div>
 
         </div>
+      </div>
+
+      {/* Mobile Fixed Bottom Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 sm:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.08)] flex items-center gap-2.5">
+        <button className="flex-1 border-2 border-primary text-primary active:bg-blue-50 font-bold text-xs h-11 rounded-xl flex items-center justify-center gap-1.5 transition-colors">
+          <ShoppingBag className="w-4 h-4" />
+          Add to Cart
+        </button>
+        <button className="flex-1 bg-primary active:bg-blue-700 text-white font-bold text-xs h-11 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm shadow-primary/25">
+          <Zap className="w-4 h-4" />
+          Buy Now
+        </button>
       </div>
     </UserLayout>
   );
