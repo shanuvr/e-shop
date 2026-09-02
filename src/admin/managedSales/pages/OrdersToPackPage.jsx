@@ -1,74 +1,140 @@
 import { useState } from 'react';
 import ManagedAdminLayout from '../layout/ManagedAdminLayout';
 import {
+  Search,
+  Package,
   Truck,
-  PackageCheck,
-  MapPin,
   Clock,
-  PackageSearch,
   CheckCircle2,
-  Banknote,
-  Route
+  AlertTriangle,
+  Box,
+  MapPin,
+  ShoppingBag,
+  TrendingUp,
+  ChevronDown,
+  CreditCard,
+  Route,
+  Zap
 } from 'lucide-react';
 
-const sampleOrders = [
-  { id: 'M-ORD-8822', item: 'Kanchipuram Pure Silk Saree (Red & Gold)', qty: '1 unit', customer: 'Meera Nambiar', city: 'Ernakulam', amount: '₹8,900', paid: 'UPI · Paid', stage: 'ready', courier: 'Blue Dart Express' },
-  { id: 'M-ORD-8821', item: 'Handloom Cotton Kurta (Size L)', qty: '2 units', customer: 'Devika P', city: 'Thrissur East', amount: '₹4,200', paid: 'Card · Paid', stage: 'ready', courier: 'Delhivery' },
-  { id: 'M-ORD-8820', item: 'Traditional Kasavu Dhoti Pack', qty: '3 pcs', customer: 'Rajesh Menon', city: 'Kochi', amount: '₹6,300', paid: 'UPI · Paid', stage: 'ready', courier: 'Ecom Express' },
-  { id: 'M-ORD-8817', item: 'Kanchipuram Silk Saree (Peacock)', qty: '1 unit', customer: 'Anitha V', city: 'Palakkad', amount: '₹8,900', paid: 'UPI · Paid', stage: 'shipped', courier: 'Blue Dart Express' },
-  { id: 'M-ORD-8816', item: 'Handloom Cotton Kurta (Size M)', qty: '1 unit', customer: 'Sajith K', city: 'Thrissur', amount: '₹2,100', paid: 'COD Accepted', stage: 'delivered', courier: 'Delhivery' },
-  { id: 'M-ORD-8813', item: 'Silk Pattu Blouse Piece', qty: '2 pcs', customer: 'Lakshmi N', city: 'Trivandrum', amount: '₹3,400', paid: 'UPI · Paid', stage: 'delivered', courier: 'Ecom Express' }
-];
-
-const STAGE_META = {
-  ready: { label: 'To Pick Up', pill: 'bg-blue-50 text-blue-700 border-blue-200' },
-  shipped: { label: 'Dispatched', pill: 'bg-amber-50 text-amber-700 border-amber-200' },
-  delivered: { label: 'Delivered', pill: 'bg-emerald-50 text-emerald-700 border-emerald-200' }
+const STATUS_CONFIG = {
+  'Pending': { color: 'bg-amber-50 text-amber-600 border-amber-200', dot: 'bg-amber-500', step: 0 },
+  'Confirmed': { color: 'bg-blue-50 text-blue-600 border-blue-200', dot: 'bg-blue-500', step: 1 },
+  'Packed': { color: 'bg-violet-50 text-violet-600 border-violet-200', dot: 'bg-violet-500', step: 2 },
+  'Shipped': { color: 'bg-cyan-50 text-cyan-600 border-cyan-200', dot: 'bg-cyan-500', step: 3 },
+  'Out for Delivery': { color: 'bg-indigo-50 text-indigo-600 border-indigo-200', dot: 'bg-indigo-500', step: 4 },
+  'Delivered': { color: 'bg-emerald-50 text-emerald-600 border-emerald-200', dot: 'bg-emerald-500', step: 5 },
+  'Delayed': { color: 'bg-red-50 text-red-600 border-red-200', dot: 'bg-red-500', step: -1 },
+  'Cancelled': { color: 'bg-slate-100 text-slate-500 border-slate-200', dot: 'bg-slate-400', step: -1 }
 };
 
+const STATUSES = Object.keys(STATUS_CONFIG);
+const TIMELINE_STEPS = ['Confirmed', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered'];
+
+const AVATAR_COLORS = [
+  'bg-emerald-600', 'bg-blue-600', 'bg-violet-600', 'bg-amber-600', 'bg-rose-600', 'bg-cyan-600'
+];
+
+const fmtMoney = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
+
 export default function OrdersToPackPage() {
-  const [filter, setFilter] = useState('all');
-  const [orders, setOrders] = useState(sampleOrders);
+  const [orders, setOrders] = useState([
+    {
+      id: 'M-ORD-8822',
+      customer: 'Meera Nambiar',
+      date: 'Today, 09:30 AM',
+      items: [{ name: 'Kanchipuram Pure Silk Saree (Red & Gold)', qty: 1, img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=100&h=100', price: 8900 }],
+      total: 8900,
+      status: 'Packed',
+      payment: 'UPI',
+      address: 'Ernakulam, Kerala',
+      courier: 'Blue Dart Express'
+    },
+    {
+      id: 'M-ORD-8821',
+      customer: 'Devika P',
+      date: 'Today, 10:15 AM',
+      items: [{ name: 'Handloom Cotton Kurta (Size L)', qty: 2, img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=100&h=100', price: 2100 }],
+      total: 4200,
+      status: 'Pending',
+      payment: 'Card',
+      address: 'Thrissur East, Kerala',
+      courier: 'Delhivery'
+    },
+    {
+      id: 'M-ORD-8820',
+      customer: 'Rajesh Menon',
+      date: 'Yesterday',
+      items: [{ name: 'Traditional Kasavu Dhoti Pack', qty: 3, img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=100&h=100', price: 2100 }],
+      total: 6300,
+      status: 'Confirmed',
+      payment: 'UPI',
+      address: 'Kochi, Kerala',
+      courier: 'Ecom Express'
+    },
+    {
+      id: 'M-ORD-8817',
+      customer: 'Anitha V',
+      date: '28 Aug 2026',
+      items: [{ name: 'Kanchipuram Silk Saree (Peacock)', qty: 1, img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=100&h=100', price: 8900 }],
+      total: 8900,
+      status: 'Shipped',
+      payment: 'UPI',
+      address: 'Palakkad, Kerala',
+      courier: 'Blue Dart Express'
+    },
+    {
+      id: 'M-ORD-8816',
+      customer: 'Sajith K',
+      date: '27 Aug 2026',
+      items: [{ name: 'Handloom Cotton Kurta (Size M)', qty: 1, img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=100&h=100', price: 2100 }],
+      total: 2100,
+      status: 'Delivered',
+      payment: 'COD',
+      address: 'Thrissur, Kerala',
+      courier: 'Delhivery'
+    }
+  ]);
 
-  const counts = {
-    all: orders.length,
-    ready: orders.filter((o) => o.stage === 'ready').length,
-    shipped: orders.filter((o) => o.stage === 'shipped').length,
-    delivered: orders.filter((o) => o.stage === 'delivered').length
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+
+  const updateStatus = (id, newStatus) => {
+    setOrders(orders.map(o => o.id === id ? { ...o, status: newStatus } : o));
   };
 
-  const visible = filter === 'all' ? orders : orders.filter((o) => o.stage === filter);
+  const filteredOrders = orders.filter(o => {
+    const matchesSearch = o.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          o.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          o.items.some(it => it.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesStatus = statusFilter === 'All' || o.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
-  const move = (id, next) => {
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, stage: next } : o)));
-    alert(`${id} ${next === 'shipped' ? 'picked up & handed to courier' : 'marked as delivered'}`);
-  };
+  const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
+  const delivered = orders.filter(o => o.status === 'Delivered').length;
+  const inTransit = orders.filter(o => ['Confirmed', 'Packed', 'Shipped', 'Out for Delivery'].includes(o.status)).length;
+  const pending = orders.filter(o => o.status === 'Pending').length;
 
-  const filters = [
-    { key: 'all', label: 'All Orders' },
-    { key: 'ready', label: 'To Pick Up' },
-    { key: 'shipped', label: 'Dispatched' },
-    { key: 'delivered', label: 'Delivered' }
-  ];
-
-  const statCards = [
-    { title: 'To Pick Up', value: String(counts.ready), sub: 'Ready at merchant store', icon: Truck, color: 'text-blue-600 bg-blue-50' },
-    { title: 'Dispatched', value: String(counts.shipped), sub: 'In courier transit', icon: PackageSearch, color: 'text-amber-600 bg-amber-50' },
-    { title: 'Delivered', value: String(counts.delivered), sub: 'This week', icon: CheckCircle2, color: 'text-emerald-600 bg-emerald-50' },
-    { title: 'Avg. Delivery', value: '2.1 days', sub: 'Across all couriers', icon: Clock, color: 'text-slate-700 bg-slate-100' }
+  const stats = [
+    { label: 'Total Orders', value: orders.length, icon: ShoppingBag, color: 'text-emerald-600 bg-emerald-50' },
+    { label: 'Pending', value: pending, icon: Clock, color: 'text-amber-600 bg-amber-50' },
+    { label: 'In Transit', value: inTransit, icon: Truck, color: 'text-cyan-600 bg-cyan-50' },
+    { label: 'Delivered', value: delivered, icon: CheckCircle2, color: 'text-emerald-600 bg-emerald-50' },
+    { label: 'Revenue', value: fmtMoney(totalRevenue), icon: TrendingUp, color: 'text-violet-600 bg-violet-50' }
   ];
 
   return (
     <ManagedAdminLayout title="Orders to Pack" subtitle="E-SHOP dispatch operations · pickup, shipping & delivery tracking">
-      <div className="space-y-6">
+      <div className="space-y-6 font-sans">
 
-        {/* Banner */}
+        {/* Dispatch Banner */}
         <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white p-6 sm:p-7 rounded-3xl shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-5 border border-emerald-900/40">
           <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold uppercase tracking-wider border border-emerald-400/20">
-                ● Today&apos;s Pickup Window: 04:00 PM
+              <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold uppercase tracking-wider border border-emerald-400/20 flex items-center gap-1.5">
+                <Zap className="w-3 h-3 text-emerald-400" /> Today&apos;s Pickup Window: 04:00 PM
               </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">Dispatch Center</h1>
@@ -82,120 +148,215 @@ export default function OrdersToPackPage() {
             </div>
             <div>
               <p className="text-[11px] font-bold text-white">Pickup Route Today</p>
-              <p className="text-[11px] text-slate-400 font-medium mt-0.5">3 stops · Thrissur → Kochi</p>
+              <p className="text-[11px] text-slate-400 font-medium mt-0.5">3 stops · Thrissur &rarr; Kochi</p>
             </div>
           </div>
         </div>
 
-        {/* Stat cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {statCards.map((item, idx) => {
-            const IconComponent = item.icon;
-            return (
-              <div key={idx} className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm hover:border-slate-300 transition-all flex flex-col justify-between">
-                <div className="flex items-center justify-between gap-1 mb-1.5">
-                  <span className="text-[11px] font-semibold text-slate-500 truncate">{item.title}</span>
-                  <div className={`w-7 h-7 rounded-lg ${item.color} flex items-center justify-center shrink-0`}>
-                    <IconComponent className="w-3.5 h-3.5" />
-                  </div>
-                </div>
-                <span className="text-lg font-bold text-slate-900 tracking-tight">{item.value}</span>
-                <p className="text-[10px] text-slate-400 font-medium mt-1 truncate">{item.sub}</p>
-              </div>
-            );
-          })}
-        </div>
+        {/* Controls Header */}
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Package className="w-5 h-5 text-emerald-600" />
+                Managed Orders &amp; Fulfillment
+              </h2>
+              <p className="text-xs text-slate-500 font-medium">{orders.length} total orders · {inTransit + pending} awaiting delivery</p>
+            </div>
+            <div className="relative flex-1 sm:w-64">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search by order ID or customer..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              />
+            </div>
+          </div>
 
-        {/* Filter chips */}
-        <div className="flex items-center flex-wrap gap-1.5">
-          {filters.map((f) => (
-            <button
-              key={f.key}
-              onClick={() => setFilter(f.key)}
-              className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                filter === f.key
-                  ? 'bg-slate-900 text-white shadow-sm'
-                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-              }`}
-            >
-              {f.label} <span className={filter === f.key ? 'text-emerald-400' : 'text-slate-400'}>({counts[f.key]})</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Orders */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-3">
-          {visible.length === 0 && (
-            <p className="text-xs text-slate-400 font-medium py-6 text-center">No orders in this stage.</p>
-          )}
-          {visible.map((o) => {
-            const meta = STAGE_META[o.stage];
-            return (
-              <div key={o.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-mono text-xs font-bold text-slate-400">{o.id}</span>
-                    <span className="text-xs font-bold text-slate-900 truncate">{o.item}</span>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 flex-shrink-0">
-                      {o.qty}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-500 font-medium mt-1">
-                    <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-slate-400" /> {o.customer} · {o.city}</span>
-                    <span className="flex items-center gap-1"><Banknote className="w-3 h-3 text-slate-400" /> {o.paid}</span>
-                    <span className="flex items-center gap-1"><Truck className="w-3 h-3 text-slate-400" /> {o.courier}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2.5 shrink-0 self-start sm:self-auto">
-                  <span className="text-sm font-black text-slate-900">{o.amount}</span>
-                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${meta.pill}`}>{meta.label}</span>
-                  {o.stage === 'ready' && (
-                    <button
-                      onClick={() => move(o.id, 'shipped')}
-                      className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-xl shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <PackageCheck className="w-3.5 h-3.5" />
-                      Confirm Pickup &amp; Ship
-                    </button>
-                  )}
-                  {o.stage === 'shipped' && (
-                    <button
-                      onClick={() => move(o.id, 'delivered')}
-                      className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-[11px] rounded-xl shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      Mark Delivered
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Today's route strip */}
-        <div className="bg-blue-50 border border-blue-200/70 rounded-2xl p-5">
-          <p className="text-xs font-bold text-blue-900 flex items-center gap-2 mb-3">
-            <Route className="w-4 h-4 text-blue-600" />
-            Today&apos;s Pickup Route — {counts.ready} stops
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            {[
-              { stop: 'Silk Land Textiles', time: '04:00 PM', note: 'Pickup 3 packed orders' },
-              { stop: 'E-SHOP Central Hub', time: '05:15 PM', note: 'Packing & labels done' },
-              { stop: 'Courier Bays', time: '06:00 PM', note: 'Blue Dart · Delhivery · Ecom' }
-            ].map((s, i) => (
-              <div key={i} className="flex items-start gap-2.5 bg-white rounded-xl border border-blue-100 p-3">
-                <div className="w-6 h-6 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</div>
-                <div className="min-w-0">
-                  <p className="text-xs font-bold text-slate-900">{s.stop}</p>
-                  <p className="text-[10px] text-slate-500 font-medium mt-0.5 truncate">{s.time} · {s.note}</p>
-                </div>
-              </div>
+          {/* Status filter chips */}
+          <div className="flex flex-wrap gap-2">
+            {['All', ...STATUSES].map((st) => (
+              <button
+                key={st}
+                onClick={() => setStatusFilter(st)}
+                className={`px-3 py-1.5 rounded-full text-[11px] font-bold border transition-all cursor-pointer ${
+                  statusFilter === st
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-600 hover:text-emerald-600'
+                }`}
+              >
+                {st}
+              </button>
             ))}
           </div>
         </div>
 
+        {/* Stats Strip */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {stats.map((s, i) => (
+            <div key={i} className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.color} shrink-0`}>
+                <s.icon className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xl font-black text-slate-900 leading-none truncate">{s.value}</p>
+                <p className="text-[10px] text-slate-500 font-semibold mt-1">{s.label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Orders list */}
+        {filteredOrders.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm py-16 text-center">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
+              <Package className="w-7 h-7" />
+            </div>
+            <p className="text-sm font-bold text-slate-700">No orders found</p>
+            <p className="text-xs text-slate-400 font-medium mt-1">Try adjusting your search or filters.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {filteredOrders.map((ord, oi) => {
+              const cfg = STATUS_CONFIG[ord.status] || STATUS_CONFIG['Pending'];
+              const isTerminal = ord.status === 'Delivered' || ord.status === 'Cancelled';
+              const isDelayed = ord.status === 'Delayed';
+              return (
+                <div key={ord.id} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all">
+                  
+                  {/* Order header */}
+                  <div className="p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-11 h-11 rounded-xl ${AVATAR_COLORS[oi % AVATAR_COLORS.length]} text-white flex items-center justify-center font-black text-sm shrink-0`}>
+                        {ord.customer.split(' ').map(w => w[0]).slice(0, 2).join('')}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-sm font-bold text-slate-900">{ord.id}</span>
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${cfg.color}`}>
+                            {ord.status}
+                          </span>
+                        </div>
+                        <p className="text-xs font-semibold text-slate-600 mt-0.5">{ord.customer}</p>
+                        <p className="text-[10px] text-slate-400 font-medium mt-0.5">{ord.date}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 flex-wrap">
+                      <div className="text-right">
+                        <p className="text-lg font-black text-slate-900">{fmtMoney(ord.total)}</p>
+                        <p className="text-[10px] text-slate-400 font-semibold flex items-center gap-1 justify-end">
+                          <CreditCard className="w-3 h-3" /> {ord.payment}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Body: items + status update dropdown & progress bar */}
+                  <div className="p-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    
+                    {/* Left: Items list */}
+                    <div className="space-y-2.5">
+                      {ord.items.map((it, ii) => (
+                        <div key={ii} className="flex items-center gap-3">
+                          {it.img ? (
+                            <img src={it.img} alt={it.name} className="w-10 h-10 rounded-lg object-cover border border-slate-200 flex-shrink-0" />
+                          ) : (
+                            <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 flex-shrink-0">
+                              <Box className="w-4 h-4" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-bold text-slate-800 truncate">{it.name}</p>
+                            <p className="text-[10px] text-slate-400 font-medium">Qty ×{it.qty}</p>
+                          </div>
+                          <span className="text-xs font-bold text-slate-700">{fmtMoney(it.qty * (it.price || ord.total))}</span>
+                        </div>
+                      ))}
+                      
+                      <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                          {ord.address}
+                        </span>
+                        {ord.courier && (
+                          <span className="flex items-center gap-1 font-semibold text-slate-700">
+                            <Truck className="w-3.5 h-3.5 text-emerald-600" />
+                            {ord.courier}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Right: Status update dropdown + fulfillment progress bar */}
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                          Update Order Status
+                        </label>
+                        <div className="relative">
+                          <select
+                            value={ord.status}
+                            onChange={(e) => updateStatus(ord.id, e.target.value)}
+                            className="w-full px-3.5 py-2.5 pr-9 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:bg-white transition-colors appearance-none cursor-pointer"
+                          >
+                            {STATUSES.map((st) => (
+                              <option key={st} value={st}>{st}</option>
+                            ))}
+                          </select>
+                          <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        </div>
+                      </div>
+
+                      {/* Timeline / progress bar */}
+                      {isDelayed ? (
+                        <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2.5 text-xs font-bold text-red-600">
+                          <AlertTriangle className="w-4 h-4" />
+                          Order is delayed — please review the delivery timeline.
+                        </div>
+                      ) : isTerminal ? (
+                        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2.5 text-xs font-bold text-emerald-600">
+                          <CheckCircle2 className="w-4 h-4" />
+                          {ord.status === 'Delivered' ? 'Order delivered successfully.' : 'Order cancelled.'}
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Fulfillment progress</span>
+                            <span className="text-[10px] font-bold text-slate-700">{cfg.step}/{TIMELINE_STEPS.length}</span>
+                          </div>
+                          <div className="flex items-center">
+                            {TIMELINE_STEPS.map((step, si) => {
+                              const reached = cfg.step >= si + 1;
+                              return (
+                                <div key={step} className="flex items-center flex-1 last:flex-none">
+                                  <div className={`w-3 h-3 rounded-full ${reached ? 'bg-emerald-600' : 'bg-slate-200'} ring-2 ring-white transition-colors`} />
+                                  {si < TIMELINE_STEPS.length - 1 && (
+                                    <div className={`flex-1 h-0.5 ${cfg.step > si + 1 ? 'bg-emerald-600' : 'bg-slate-200'}`} />
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <div className="flex justify-between mt-1.5">
+                            {TIMELINE_STEPS.map((step, si) => (
+                              <span key={step} className={`text-[8px] font-bold ${cfg.step >= si + 1 ? 'text-emerald-600' : 'text-slate-400'} w-10 text-center`}>
+                                {step}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </ManagedAdminLayout>
   );

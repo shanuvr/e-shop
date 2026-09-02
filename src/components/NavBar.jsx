@@ -21,8 +21,10 @@ export default function NavBar() {
   }, []);
 
   const navLinks = [
+    { to: '/', label: 'Home' },
     { to: '/marketplace', label: 'Marketplace' },
-    { to: '/categories', label: 'Categories' }
+    { to: '/categories', label: 'Categories' },
+    { to: '/about', label: 'About Us' }
   ];
 
   const accountLinks = [
@@ -78,7 +80,7 @@ export default function NavBar() {
         {/* Desktop: Navigation Links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <NavLink key={link.to} to={link.to} className={linkClass}>
+            <NavLink key={link.to} to={link.to} end={link.to === '/'} className={linkClass}>
               {link.label}
             </NavLink>
           ))}
@@ -187,6 +189,7 @@ export default function NavBar() {
             <NavLink
               key={link.to}
               to={link.to}
+              end={link.to === '/'}
               onClick={() => setIsOpen(false)}
               className={({ isActive }) => `${mobileLinkClass} ${isActive ? 'text-primary font-semibold' : ''} border-b border-slate-50`}
             >

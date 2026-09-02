@@ -31,7 +31,6 @@ const AVATAR_COLORS = [
 const fmt = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
 export default function BookingsPage({ defaultMode = 'accepted' }) {
-  const [viewMode, setViewMode] = useState(defaultMode); // 'requests' or 'accepted'
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
@@ -48,11 +47,13 @@ export default function BookingsPage({ defaultMode = 'accepted' }) {
     setBookings(bookings.map(b => (b.id === id ? { ...b, status: next } : b)));
   };
 
+  const isRequestsView = defaultMode === 'requests';
+
   const requestedBookings = bookings.filter(b => b.status === 'Requested');
   const acceptedBookings = bookings.filter(b => b.status !== 'Requested');
 
   // Filter based on view mode (Requests vs Accepted)
-  const currentList = viewMode === 'requests' ? requestedBookings : acceptedBookings;
+  const currentList = isRequestsView ? requestedBookings : acceptedBookings;
 
   const filtered = currentList.filter(b => {
     const matchesSearch = b.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -64,11 +65,8 @@ export default function BookingsPage({ defaultMode = 'accepted' }) {
 
   const requestedCount = requestedBookings.length;
   const confirmedCount = bookings.filter(b => b.status === 'Confirmed').length;
-  const inProgressCount = bookings.filter(b => b.status === 'In Progress').length;
   const completedCount = bookings.filter(b => b.status === 'Completed').length;
   const totalRevenue = bookings.filter(b => b.status !== 'Cancelled' && b.status !== 'Requested').reduce((s, b) => s + b.price, 0);
-
-  const isRequestsView = viewMode === 'requests';
 
   return (
     <ServiceAdminLayout
@@ -77,48 +75,24 @@ export default function BookingsPage({ defaultMode = 'accepted' }) {
     >
       <div className="space-y-6 font-sans">
 
-        {/* View Switcher Tabs (Booking Requests vs Accepted Bookings) */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-          <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200/80">
-            <button
-              onClick={() => { setViewMode('requests'); setStatusFilter('All'); }}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                viewMode === 'requests'
-                  ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Clock className="w-4 h-4" />
-              Booking Requests
-              {requestedCount > 0 && (
-                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                  viewMode === 'requests' ? 'bg-white text-amber-600' : 'bg-amber-500 text-white'
-                }`}>
-                  {requestedCount}
-                </span>
-              )}
-            </button>
-
-            <button
-              onClick={() => { setViewMode('accepted'); setStatusFilter('All'); }}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                viewMode === 'accepted'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <CalendarCheck className="w-4 h-4" />
-              Accepted Bookings
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                viewMode === 'accepted' ? 'bg-white text-blue-600' : 'bg-blue-100 text-blue-700'
-              }`}>
-                {acceptedBookings.length}
+        {/* Header Controls (Title / Status Indicator + Search) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+          <div className="flex items-center gap-2.5">
+            {isRequestsView ? (
+              <span className="px-3 py-1.5 bg-amber-50 border border-amber-200 text-amber-800 font-bold text-xs rounded-xl flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-amber-600" />
+                {requestedCount} Pending Request{requestedCount === 1 ? '' : 's'} Awaiting Confirmation
               </span>
-            </button>
+            ) : (
+              <span className="px-3 py-1.5 bg-blue-50 border border-blue-200 text-blue-800 font-bold text-xs rounded-xl flex items-center gap-1.5">
+                <CalendarCheck className="w-4 h-4 text-blue-600" />
+                {acceptedBookings.length} Active &amp; Confirmed Booking{acceptedBookings.length === 1 ? '' : 's'}
+              </span>
+            )}
           </div>
 
           {/* Search bar */}
-          <div className="relative flex-1 sm:w-64">
+          <div className="relative flex-1 sm:w-72">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
@@ -276,7 +250,7 @@ export default function BookingsPage({ defaultMode = 'accepted' }) {
                     <div className="space-y-3.5">
                       {b.status === 'Requested' ? (
                         <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 text-xs font-bold text-amber-700">
-                          <Clock className="w-4 h-4 text-amber-600" />
+                          <Clock className="w-4 h-4 text-amber-600 shrink-0" />
                           Awaiting your confirmation — review the visit and accept when ready
                         </div>
                       ) : isTerminal ? (
@@ -286,8 +260,8 @@ export default function BookingsPage({ defaultMode = 'accepted' }) {
                             : 'bg-red-50 border border-red-200 text-red-600'
                         }`}>
                           {b.status === 'Completed'
-                            ? <><CheckCircle2 className="w-4 h-4 text-emerald-600" /> Visit completed. Customer payment received directly.</>
-                            : <><XCircle className="w-4 h-4 text-red-500" /> Booking cancelled.</>}
+                            ? <><CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" /> Visit completed. Customer payment received directly.</>
+                            : <><XCircle className="w-4 h-4 text-red-500 shrink-0" /> Booking cancelled.</>}
                         </div>
                       ) : (
                         <div>

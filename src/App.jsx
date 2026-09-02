@@ -46,6 +46,7 @@ import ReturnsPage from './user/ReturnsPage'
 import ShippingPage from './user/ShippingPage'
 import PrivacyPolicy from './user/PrivacyPolicy'
 import TermsPage from './user/TermsPage'
+import AboutUs from './user/AboutUs'
 
 import ScrollToTop from './components/ScrollToTop'
 
@@ -103,6 +104,7 @@ function App() {
       <Route path="/shipping" element={<ShippingPage />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsPage />} />
+      <Route path="/about" element={<AboutUs />} />
     </Routes>
     </>
   )
