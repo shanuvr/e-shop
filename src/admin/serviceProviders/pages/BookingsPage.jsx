@@ -10,7 +10,8 @@ import {
   CheckCircle2,
   XCircle,
   Wrench,
-  TrendingUp
+  TrendingUp,
+  Inbox
 } from 'lucide-react';
 
 const STATUS_CONFIG = {
@@ -21,7 +22,6 @@ const STATUS_CONFIG = {
   'Cancelled': { badge: 'bg-red-50 text-red-500 border-red-200', dot: 'bg-red-400', step: -1 }
 };
 
-const STATUSES = Object.keys(STATUS_CONFIG);
 const TIMELINE_STEPS = ['Confirmed', 'In Progress', 'Completed'];
 
 const AVATAR_COLORS = [
@@ -30,23 +30,31 @@ const AVATAR_COLORS = [
 
 const fmt = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
-export default function BookingsPage() {
+export default function BookingsPage({ defaultMode = 'accepted' }) {
+  const [viewMode, setViewMode] = useState(defaultMode); // 'requests' or 'accepted'
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+
   const [bookings, setBookings] = useState([
-    { id: 'SRV-8821', service: 'Split AC Deep Jet Service', note: '2 AC units · deep jet cleaning', customer: 'Anand Kumar', phone: '+91 98470 12345', address: 'West Fort, Thrissur', time: 'Today, 03:30 PM', price: 799, status: 'Confirmed' },
     { id: 'SRV-8820', service: 'Electrical Distribution Box Repair', note: 'MCB replacement + wiring check', customer: 'Saritha Nair', phone: '+91 98471 99882', address: 'MG Road, Thrissur', time: 'Tomorrow, 10:00 AM', price: 499, status: 'Requested' },
+    { id: 'SRV-8821', service: 'Split AC Deep Jet Service', note: '2 AC units · deep jet cleaning', customer: 'Anand Kumar', phone: '+91 98470 12345', address: 'West Fort, Thrissur', time: 'Today, 03:30 PM', price: 799, status: 'Confirmed' },
     { id: 'SRV-8815', service: 'Full House Wiring Inspection', note: '12 points · safety report', customer: 'Vipin Das', phone: '+91 98472 88991', address: 'Ramavarmapuram, Thrissur', time: '02 Sept, 11:00 AM', price: 1200, status: 'In Progress' },
     { id: 'SRV-8812', service: 'Water Heater Full Service', note: 'Heater flush + thermostat clean', customer: 'Rahul Menon', phone: '+91 98473 55671', address: 'Punkunnam, Thrissur', time: '01 Sept, 05:00 PM', price: 649, status: 'Completed' },
     { id: 'SRV-8809', service: 'Ceiling Fan & Light Fixing', note: '2 fans + 1 LED fixture', customer: 'Meera Nair', phone: '+91 98474 22013', address: 'Ollur, Thrissur', time: '30 Aug 2026', price: 349, status: 'Completed' },
     { id: 'SRV-8805', service: 'Split AC Gas Refill', note: 'R-22 gas top-up · leak test', customer: 'Jijo Thomas', phone: '+91 98475 88340', address: 'Poothole, Thrissur', time: '28 Aug 2026', price: 999, status: 'Cancelled' }
   ]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
 
   const updateStatus = (id, next) => {
     setBookings(bookings.map(b => (b.id === id ? { ...b, status: next } : b)));
   };
 
-  const filtered = bookings.filter(b => {
+  const requestedBookings = bookings.filter(b => b.status === 'Requested');
+  const acceptedBookings = bookings.filter(b => b.status !== 'Requested');
+
+  // Filter based on view mode (Requests vs Accepted)
+  const currentList = viewMode === 'requests' ? requestedBookings : acceptedBookings;
+
+  const filtered = currentList.filter(b => {
     const matchesSearch = b.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           b.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           b.service.toLowerCase().includes(searchQuery.toLowerCase());
@@ -54,86 +62,148 @@ export default function BookingsPage() {
     return matchesSearch && matchesStatus;
   });
 
-  const requested = bookings.filter(b => b.status === 'Requested').length;
-  const upcoming = bookings.filter(b => b.status === 'Confirmed' || b.status === 'In Progress').length;
-  const completed = bookings.filter(b => b.status === 'Completed').length;
-  const revenue = bookings.filter(b => b.status !== 'Cancelled').reduce((s, b) => s + b.price, 0);
+  const requestedCount = requestedBookings.length;
+  const confirmedCount = bookings.filter(b => b.status === 'Confirmed').length;
+  const inProgressCount = bookings.filter(b => b.status === 'In Progress').length;
+  const completedCount = bookings.filter(b => b.status === 'Completed').length;
+  const totalRevenue = bookings.filter(b => b.status !== 'Cancelled' && b.status !== 'Requested').reduce((s, b) => s + b.price, 0);
 
-  const stats = [
-    { label: 'Total Bookings', value: bookings.length, icon: CalendarCheck, color: 'text-blue-600 bg-blue-50' },
-    { label: 'New Requests', value: requested, icon: Clock, color: 'text-amber-600 bg-amber-50' },
-    { label: 'Upcoming Visits', value: upcoming, icon: CalendarCheck, color: 'text-slate-600 bg-slate-100' },
-    { label: 'Completed Visits', value: completed, icon: CheckCircle2, color: 'text-emerald-600 bg-emerald-50' },
-    { label: 'Revenue', value: fmt(revenue), icon: TrendingUp, color: 'text-blue-700 bg-blue-100' }
-  ];
+  const isRequestsView = viewMode === 'requests';
 
   return (
-    <ServiceAdminLayout title="Customer Visit Bookings" subtitle="Manage appointment requests and visit statuses">
-      <div className="space-y-6">
+    <ServiceAdminLayout
+      title={isRequestsView ? "Customer Booking Requests" : "Accepted & Active Bookings"}
+      subtitle={isRequestsView ? "Review and respond to incoming customer visit requests" : "Manage confirmed appointments, start visits, and track completed jobs"}
+    >
+      <div className="space-y-6 font-sans">
 
-        {/* Controls header */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <CalendarCheck className="w-5 h-5 text-primary" />
-                Visit Scheduling
-              </h2>
-              <p className="text-xs text-slate-500 font-medium">{bookings.length} bookings · {requested + upcoming} active visits</p>
+        {/* View Switcher Tabs (Booking Requests vs Accepted Bookings) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+          <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200/80">
+            <button
+              onClick={() => { setViewMode('requests'); setStatusFilter('All'); }}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                viewMode === 'requests'
+                  ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Clock className="w-4 h-4" />
+              Booking Requests
+              {requestedCount > 0 && (
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                  viewMode === 'requests' ? 'bg-white text-amber-600' : 'bg-amber-500 text-white'
+                }`}>
+                  {requestedCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => { setViewMode('accepted'); setStatusFilter('All'); }}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                viewMode === 'accepted'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <CalendarCheck className="w-4 h-4" />
+              Accepted Bookings
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                viewMode === 'accepted' ? 'bg-white text-blue-600' : 'bg-blue-100 text-blue-700'
+              }`}>
+                {acceptedBookings.length}
+              </span>
+            </button>
+          </div>
+
+          {/* Search bar */}
+          <div className="relative flex-1 sm:w-64">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search by ID, customer or service..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:border-primary focus:bg-white transition-colors"
+            />
+          </div>
+        </div>
+
+        {/* Stats Strip */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+              <Clock className="w-5 h-5" />
             </div>
-            <div className="relative flex-1 sm:w-64">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search by ID, customer or service..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:border-primary focus:bg-white transition-colors"
-              />
+            <div>
+              <p className="text-xl font-black text-slate-900 leading-none">{requestedCount}</p>
+              <p className="text-[11px] text-slate-500 font-semibold mt-1">New Requests</p>
             </div>
           </div>
 
-          {/* Status filter chips */}
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <CalendarCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xl font-black text-slate-900 leading-none">{confirmedCount}</p>
+              <p className="text-[11px] text-slate-500 font-semibold mt-1">Confirmed Visits</p>
+            </div>
+          </div>
+
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xl font-black text-slate-900 leading-none">{completedCount}</p>
+              <p className="text-[11px] text-slate-500 font-semibold mt-1">Completed Jobs</p>
+            </div>
+          </div>
+
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center shrink-0">
+              <TrendingUp className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xl font-black text-slate-900 leading-none">{fmt(totalRevenue)}</p>
+              <p className="text-[11px] text-slate-500 font-semibold mt-1">Revenue Earned</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Status sub-filters for Accepted view */}
+        {!isRequestsView && (
           <div className="flex flex-wrap gap-2">
-            {['All', ...STATUSES].map((st) => (
+            {['All', 'Confirmed', 'In Progress', 'Completed', 'Cancelled'].map((st) => (
               <button
                 key={st}
                 onClick={() => setStatusFilter(st)}
                 className={`px-3 py-1.5 rounded-full text-[11px] font-bold border transition-all cursor-pointer ${
                   statusFilter === st
-                    ? 'bg-primary text-white border-primary shadow-sm'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-primary hover:text-primary'
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-blue-600 hover:text-blue-600'
                 }`}
               >
                 {st}
               </button>
             ))}
           </div>
-        </div>
+        )}
 
-        {/* Stats cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {stats.map((s, i) => (
-            <div key={i} className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.color} shrink-0`}>
-                <s.icon className="w-5 h-5" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-xl font-black text-slate-900 leading-none truncate">{s.value}</p>
-                <p className="text-[10px] text-slate-500 font-semibold mt-1">{s.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Bookings list */}
+        {/* Bookings List */}
         {filtered.length === 0 ? (
           <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm py-16 text-center">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
-              <CalendarCheck className="w-7 h-7" />
+              {isRequestsView ? <Inbox className="w-7 h-7" /> : <CalendarCheck className="w-7 h-7" />}
             </div>
-            <p className="text-sm font-bold text-slate-700">No bookings found</p>
-            <p className="text-xs text-slate-400 font-medium mt-1">Try adjusting your search or filters.</p>
+            <p className="text-sm font-bold text-slate-700">
+              {isRequestsView ? "No new booking requests pending" : "No accepted bookings found"}
+            </p>
+            <p className="text-xs text-slate-400 font-medium mt-1">
+              {isRequestsView ? "When customers request a visit, they will appear here for your confirmation." : "Accepted customer visits will show up here."}
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -205,19 +275,19 @@ export default function BookingsPage() {
                     {/* Progress & actions */}
                     <div className="space-y-3.5">
                       {b.status === 'Requested' ? (
-                        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 text-xs font-bold text-amber-600">
-                          <Clock className="w-4 h-4" />
+                        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 text-xs font-bold text-amber-700">
+                          <Clock className="w-4 h-4 text-amber-600" />
                           Awaiting your confirmation — review the visit and accept when ready
                         </div>
                       ) : isTerminal ? (
                         <div className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold ${
                           b.status === 'Completed'
-                            ? 'bg-emerald-50 border border-emerald-200 text-emerald-600'
-                            : 'bg-red-50 border border-red-200 text-red-500'
+                            ? 'bg-emerald-50 border border-emerald-200 text-emerald-700'
+                            : 'bg-red-50 border border-red-200 text-red-600'
                         }`}>
                           {b.status === 'Completed'
-                            ? <><CheckCircle2 className="w-4 h-4" /> Visit completed. Customer payment received directly.</>
-                            : <><XCircle className="w-4 h-4" /> Booking cancelled.</>}
+                            ? <><CheckCircle2 className="w-4 h-4 text-emerald-600" /> Visit completed. Customer payment received directly.</>
+                            : <><XCircle className="w-4 h-4 text-red-500" /> Booking cancelled.</>}
                         </div>
                       ) : (
                         <div>
@@ -230,9 +300,9 @@ export default function BookingsPage() {
                               const reached = cfg.step >= si + 1;
                               return (
                                 <div key={step} className="flex items-center flex-1 last:flex-none">
-                                  <div className={`w-3 h-3 rounded-full ${reached ? 'bg-primary' : 'bg-slate-200'} ring-2 ring-white transition-colors`} />
+                                  <div className={`w-3 h-3 rounded-full ${reached ? 'bg-blue-600' : 'bg-slate-200'} ring-2 ring-white transition-colors`} />
                                   {si < TIMELINE_STEPS.length - 1 && (
-                                    <div className={`flex-1 h-0.5 ${cfg.step > si + 1 ? 'bg-primary' : 'bg-slate-200'}`} />
+                                    <div className={`flex-1 h-0.5 ${cfg.step > si + 1 ? 'bg-blue-600' : 'bg-slate-200'}`} />
                                   )}
                                 </div>
                               );
@@ -240,7 +310,7 @@ export default function BookingsPage() {
                           </div>
                           <div className="flex justify-between mt-1.5">
                             {TIMELINE_STEPS.map((step, si) => (
-                              <span key={step} className={`text-[8px] font-bold ${cfg.step >= si + 1 ? 'text-primary' : 'text-slate-400'} w-14 text-center`}>
+                              <span key={step} className={`text-[8px] font-bold ${cfg.step >= si + 1 ? 'text-blue-600' : 'text-slate-400'} w-14 text-center`}>
                                 {step}
                               </span>
                             ))}
@@ -269,7 +339,7 @@ export default function BookingsPage() {
                       {b.status === 'Confirmed' && (
                         <button
                           onClick={() => updateStatus(b.id, 'In Progress')}
-                          className="px-4 py-2.5 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer"
+                          className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer"
                         >
                           <Wrench className="w-3.5 h-3.5" />
                           Start Visit

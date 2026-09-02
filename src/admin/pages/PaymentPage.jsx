@@ -88,38 +88,6 @@ export default function PaymentPage() {
         {activeTab === 'bank' && (
           <div className="space-y-6 max-w-3xl">
 
-            {/* Summary */}
-            <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white p-6 rounded-2xl border border-slate-800 shadow-md">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <span className="text-xs text-blue-300 font-bold uppercase tracking-wider block mb-1">Available Payout Balance</span>
-                  <div className="text-3xl font-black tracking-tight">₹42,850.00</div>
-                  <span className="text-[11px] text-slate-400 font-medium">Next scheduled payout on Friday</span>
-                </div>
-                <button
-                  onClick={() => alert('Instant payout request initiated!')}
-                  className="px-5 py-2.5 bg-primary hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-primary/30 transition-all cursor-pointer"
-                >
-                  Request Instant Payout
-                </button>
-              </div>
-
-              <div className="mt-5 pt-5 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Payouts this month</p>
-                  <p className="text-sm font-bold mt-0.5">₹38,470.00</p>
-                </div>
-                <div>
-                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Pending settlement</p>
-                  <p className="text-sm font-bold mt-0.5">₹4,380.00</p>
-                </div>
-                <div>
-                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Payout method</p>
-                  <p className="text-sm font-bold mt-0.5">Bank Transfer</p>
-                </div>
-              </div>
-            </div>
-
             {/* Bank form */}
             <form onSubmit={handleSaveBank} className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
               <div className="flex items-center justify-between mb-1">

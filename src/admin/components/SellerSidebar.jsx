@@ -5,6 +5,7 @@ import {
   Package, 
   Grid, 
   ShoppingBag, 
+  RotateCcw,
   CreditCard, 
   Settings,
   Store, 
@@ -24,6 +25,7 @@ export default function SellerSidebar() {
     { to: '/admin/products', label: 'Products', icon: Package },
     { to: '/admin/categories', label: 'Categories', icon: Grid },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBag },
+    { to: '/admin/returns', label: 'Returns', icon: RotateCcw },
     { to: '/admin/payment', label: 'Payment', icon: CreditCard },
     { to: '/admin/settings', label: 'Settings', icon: Settings }
   ];

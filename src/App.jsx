@@ -24,6 +24,7 @@ import DashboardPage from './admin/pages/DashboardPage'
 import ProductsPage from './admin/pages/ProductsPage'
 import CategoriesPage from './admin/pages/CategoriesPage'
 import OrdersPage from './admin/pages/OrdersPage'
+import ReturnsManagePage from './admin/pages/ReturnsManagePage'
 import PaymentPage from './admin/pages/PaymentPage'
 import SettingsPage from './admin/pages/SettingsPage'
 import ManagedSalesRegister from './admin/managedSales/ManagedSalesRegister'
@@ -39,10 +40,20 @@ import IndividualSellersPage from './superAdmin/pages/IndividualSellersPage'
 import SuperAdminManagersPage from './superAdmin/pages/SuperAdminManagersPage'
 import SuperAdminSettingsPage from './superAdmin/pages/SuperAdminSettingsPage'
 import IndependentStoreRequestsPage from './superAdmin/pages/IndependentStoreRequestsPage'
+import HelpCenter from './user/HelpCenter'
+import OrderTracking from './user/OrderTracking'
+import ReturnsPage from './user/ReturnsPage'
+import ShippingPage from './user/ShippingPage'
+import PrivacyPolicy from './user/PrivacyPolicy'
+import TermsPage from './user/TermsPage'
+
+import ScrollToTop from './components/ScrollToTop'
 
 function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/marketplace" element={<Marketplace />} />
       <Route path="/categories" element={<Categories />} />
@@ -57,7 +68,8 @@ function App() {
       <Route path="/admin/marketplace-register" element={<MarketplaceRegister />} />
       <Route path="/admin/service-register" element={<ServiceRegister />} />
       <Route path="/admin/service-dashboard" element={<ServiceDashboardPage />} />
-      <Route path="/admin/service-bookings" element={<BookingsPage />} />
+      <Route path="/admin/service-requests" element={<BookingsPage defaultMode="requests" />} />
+      <Route path="/admin/service-bookings" element={<BookingsPage defaultMode="accepted" />} />
       <Route path="/admin/service-manage" element={<ServicesManagePage />} />
       <Route path="/admin/service-earnings" element={<ServiceEarningsPage />} />
       <Route path="/admin/service-settings" element={<ServiceSettingsPage />} />
@@ -69,6 +81,7 @@ function App() {
       <Route path="/admin/products" element={<ProductsPage />} />
       <Route path="/admin/categories" element={<CategoriesPage />} />
       <Route path="/admin/orders" element={<OrdersPage />} />
+      <Route path="/admin/returns" element={<ReturnsManagePage />} />
       <Route path="/admin/payment" element={<PaymentPage />} />
       <Route path="/admin/settings" element={<SettingsPage />} />
       <Route path="/super-admin/login" element={<SuperAdminLogin />} />
@@ -84,7 +97,14 @@ function App() {
       <Route path="/product" element={<DetailedProduct />} />
       <Route path="/shop/:id" element={<DetailedStoreview />} />
       <Route path="/shop" element={<DetailedStoreview />} />
+      <Route path="/help" element={<HelpCenter />} />
+      <Route path="/order-tracking" element={<OrderTracking />} />
+      <Route path="/returns" element={<ReturnsPage />} />
+      <Route path="/shipping" element={<ShippingPage />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsPage />} />
     </Routes>
+    </>
   )
 }
 

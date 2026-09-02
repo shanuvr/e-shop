@@ -20,7 +20,8 @@ export default function ServiceSidebar() {
 
   const menuItems = [
     { to: '/admin/service-dashboard', label: 'Overview', icon: LayoutDashboard },
-    { to: '/admin/service-bookings', label: 'Customer Bookings', icon: CalendarCheck, badge: '2 New' },
+    { to: '/admin/service-requests', label: 'Booking Requests', icon: Clock, badge: '1 New' },
+    { to: '/admin/service-bookings', label: 'Accepted Bookings', icon: CalendarCheck },
     { to: '/admin/service-manage', label: 'Service & Price Settings', icon: SlidersHorizontal },
     { to: '/admin/service-earnings', label: 'Earnings & Payouts', icon: DollarSign },
     { to: '/admin/service-settings', label: 'Settings', icon: Settings }
@@ -74,7 +75,7 @@ export default function ServiceSidebar() {
           {/* Provider Business Profile */}
           <div className="m-3 p-3 bg-blue-950/60 rounded-xl border border-blue-800/40 text-xs">
             <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider block mb-0.5">Active Business</span>
-            <div className="text-white font-bold truncate">Thrissur AC & Electrical Care</div>
+            <div className="text-white font-bold truncate">Thrissur AC &amp; Electrical Care</div>
             <div className="text-[10px] text-slate-400">Primary: Appliance Repair</div>
           </div>
 
@@ -101,7 +102,7 @@ export default function ServiceSidebar() {
                     <span>{item.label}</span>
                   </div>
                   {item.badge ? (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-400/20">
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/20">
                       {item.badge}
                     </span>
                   ) : (

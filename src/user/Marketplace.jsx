@@ -667,7 +667,7 @@ export default function Marketplace() {
       )}
 
       {/* Product List Area */}
-      <section className="flex-grow w-full px-0 lg:h-[calc(100vh-120px)] lg:overflow-y-auto lg:overscroll-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <section className="flex-grow w-full px-0">
         {/* Desktop / Tablet Header */}
         <div className="hidden sm:flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div>
