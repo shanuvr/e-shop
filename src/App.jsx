@@ -8,6 +8,7 @@ import DetailedStoreview from './user/DetailedStoreview'
 import Categories from './user/Categories'
 import Cart from './user/Cart'
 import Login from './user/Login'
+import Account from './user/Account'
 import BecomeSeller from './user/BecomeSeller'
 import IndependentStoreApply from './user/IndependentStoreApply'
 import SellerDashboard from './admin/SellerDashboard'
@@ -47,6 +48,7 @@ function App() {
       <Route path="/categories" element={<Categories />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/account" element={<Account />} />
       <Route path="/seller-login" element={<SellerLogin />} />
       <Route path="/seller/login" element={<SellerLogin />} />
       <Route path="/seller" element={<BecomeSeller />} />

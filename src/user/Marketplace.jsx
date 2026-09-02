@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import UserLayout from '../layout/UserLayout';
 import ProductCard from '../components/ProductCard';
@@ -8,7 +8,7 @@ export default function Marketplace() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get('category') || '';
 
-  // Rich products dataset with pricing, ratings, offers, and warranty matching high-fidelity mobile views
+  // Rich products dataset covering all marketplace categories
   const initialProducts = [
     {
       id: 'e1',
@@ -52,7 +52,27 @@ export default function Marketplace() {
       shopId: 'shop-1'
     },
     {
-      id: 'e3',
+      id: 'f1',
+      title: 'Kerala Kasavu Handloom Saree',
+      price: 1850,
+      originalPrice: 2999,
+      discount: 38,
+      rating: 4.9,
+      reviews: 420,
+      isAssured: true,
+      category: 'Fashion',
+      location: 'M.G. Road, Thrissur',
+      tag: 'BESTSELLER',
+      condition: 'New',
+      bankOffer: 1750,
+      exchangeOffer: 200,
+      warranty: 'Authentic Handloom Certificate',
+      image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&h=300',
+      description: 'Traditional Kerala Kasavu golden zari woven cotton saree for festive and temple wear.',
+      shopId: 'shop-2'
+    },
+    {
+      id: 'f2',
       title: 'Vintage Perfume Oud & Rose',
       price: 1250,
       originalPrice: 1999,
@@ -72,67 +92,27 @@ export default function Marketplace() {
       shopId: 'shop-2'
     },
     {
-      id: 'e4',
-      title: 'Lumix Mirrorless G9 Camera',
-      price: 890,
-      originalPrice: 1490,
-      discount: 40,
-      rating: 4.2,
-      reviews: 512,
-      isAssured: true,
-      category: 'Electronics',
-      location: 'San Francisco, CA',
-      tag: 'Hot Deal',
-      condition: 'Used',
-      bankOffer: 790,
-      exchangeOffer: 300,
-      warranty: '6 months seller warranty',
-      image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&h=300',
-      description: 'Ultra-fast autofocus mirrorless camera featuring 4K video recording and robust image stabilization.',
-      shopId: 'shop-1'
-    },
-    {
-      id: 'e5',
-      title: 'Ultra HD 4K Monitor',
-      price: 899,
-      originalPrice: 1299,
-      discount: 30,
-      rating: 4.7,
-      reviews: 1024,
-      isAssured: true,
-      category: 'Electronics',
-      location: 'Seattle, WA',
-      tag: 'Top Rated',
-      condition: 'Refurbished',
-      bankOffer: 849,
-      exchangeOffer: 200,
-      warranty: '3 years manufacturer warranty',
-      image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=400&h=300',
-      description: 'Professional creator monitor with 100% sRGB coverage and factory calibrated color accuracy.',
-      shopId: 'shop-1'
-    },
-    {
-      id: 'e6',
-      title: 'Mechanical Keyboard RGB',
-      price: 159,
-      originalPrice: 249,
-      discount: 36,
-      rating: 4.4,
+      id: 'h1',
+      title: 'Teak Wood Dining Chair Set',
+      price: 4999,
+      originalPrice: 7999,
+      discount: 37,
+      rating: 4.8,
       reviews: 310,
       isAssured: true,
-      category: 'Electronics',
-      location: 'Miami, FL',
-      tag: 'Staff Pick',
+      category: 'Home & Kitchen',
+      location: 'Kokkala, Thrissur',
+      tag: 'HANDMADE',
       condition: 'New',
-      bankOffer: 149,
-      exchangeOffer: 40,
-      warranty: '1 year warranty by MarketElite',
-      image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=400&h=300',
-      description: 'Hot-swappable mechanical switches with vibrant RGB backlighting and premium aluminum top plate.',
-      shopId: 'shop-1'
+      bankOffer: 4699,
+      exchangeOffer: 500,
+      warranty: '5 year teak wood warranty',
+      image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&h=300',
+      description: 'Handcrafted solid teak wooden dining chairs with comfortable cushioned fabric upholstery.',
+      shopId: 'shop-4'
     },
     {
-      id: 'e7',
+      id: 'h2',
       title: 'Minimalist Bamboo LED Lamp',
       price: 120,
       originalPrice: 199,
@@ -140,11 +120,11 @@ export default function Marketplace() {
       rating: 4.3,
       reviews: 156,
       isAssured: false,
-      category: 'Home & Living',
+      category: 'Home & Kitchen',
       location: 'Portland, OR',
       tag: 'BESTSELLER',
       shipping: 'Free Shipping',
-      condition: 'Used',
+      condition: 'New',
       bankOffer: 110,
       exchangeOffer: 20,
       warranty: '1 year warranty by DecorElite',
@@ -153,24 +133,104 @@ export default function Marketplace() {
       shopId: 'shop-4'
     },
     {
-      id: 'e8',
-      title: 'Sonic Fabric Speaker',
-      price: 199,
-      originalPrice: 349,
-      discount: 43,
-      rating: 4.5,
-      reviews: 408,
+      id: 'bh1',
+      title: 'Organic Aloe Vera Skincare Kit',
+      price: 649,
+      originalPrice: 999,
+      discount: 35,
+      rating: 4.7,
+      reviews: 580,
       isAssured: true,
-      category: 'Electronics',
-      location: 'Chicago, IL',
-      tag: 'Sold Out Soon',
-      condition: 'Used',
-      bankOffer: 199,
-      exchangeOffer: 60,
-      warranty: '1 year brand warranty',
-      image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=400&h=300',
-      description: 'High-fidelity cylindrical Bluetooth speaker wrapped in tactile, sustainable textured fabric.',
+      category: 'Beauty & Health',
+      location: 'East Fort, Thrissur',
+      tag: '100% ORGANIC',
+      condition: 'New',
+      bankOffer: 599,
+      exchangeOffer: 50,
+      warranty: 'Dermatologically Tested',
+      image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=400&h=300',
+      description: 'Pure cold-pressed organic aloe vera soothing gel and hydration moisturizer.',
+      shopId: 'shop-3'
+    },
+    {
+      id: 'sp1',
+      title: 'Pro Carbon Tennis Racket',
+      price: 1499,
+      originalPrice: 2299,
+      discount: 34,
+      rating: 4.8,
+      reviews: 190,
+      isAssured: true,
+      category: 'Sports',
+      location: 'Swaraj Round, Thrissur',
+      tag: 'PRO GEAR',
+      condition: 'New',
+      bankOffer: 1399,
+      exchangeOffer: 150,
+      warranty: '1 year frame warranty',
+      image: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=400&h=300',
+      description: 'Lightweight carbon fiber pro tournament tennis racket with high string tension control.',
       shopId: 'shop-1'
+    },
+    {
+      id: 'bk1',
+      title: 'Hardcover Classic Literature Set',
+      price: 899,
+      originalPrice: 1499,
+      discount: 40,
+      rating: 4.9,
+      reviews: 640,
+      isAssured: true,
+      category: 'Books & Stationery',
+      location: 'Round North, Thrissur',
+      tag: 'COLLECTOR EDITION',
+      condition: 'New',
+      bankOffer: 849,
+      exchangeOffer: 100,
+      warranty: 'Collector Box Set',
+      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&h=300',
+      description: 'Beautiful gold-embossed hardcover set of timeless world classics.',
+      shopId: 'shop-2'
+    },
+    {
+      id: 'au1',
+      title: 'High-Pressure Car Washer Spray',
+      price: 1299,
+      originalPrice: 1999,
+      discount: 35,
+      rating: 4.6,
+      reviews: 310,
+      isAssured: true,
+      category: 'Automotive',
+      location: 'Poothole, Thrissur',
+      tag: 'HEAVY DUTY',
+      condition: 'New',
+      bankOffer: 1199,
+      exchangeOffer: 100,
+      warranty: '1 year motor warranty',
+      image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&h=300',
+      description: 'Portable brass nozzle high-pressure water pump for car washing and garden cleaning.',
+      shopId: 'shop-1'
+    },
+    {
+      id: 'sv1',
+      title: 'Deep Home Sanitization Service',
+      price: 799,
+      originalPrice: 1200,
+      discount: 33,
+      rating: 4.9,
+      reviews: 820,
+      isAssured: true,
+      category: 'Services',
+      location: 'Thrissur Town',
+      tag: 'VERIFIED PRO',
+      condition: 'New',
+      bankOffer: 749,
+      exchangeOffer: 0,
+      warranty: 'Satisfaction Guarantee',
+      image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=400&h=300',
+      description: 'Full house deep cleaning and hospital-grade sanitization by certified professionals.',
+      shopId: 'shop-3'
     }
   ];
 
@@ -179,7 +239,7 @@ export default function Marketplace() {
       id: 'shop-1',
       name: 'Elite Digital Mall',
       category: 'Electronics & Mobiles',
-      location: 'Swaraj Round, Thrissur',
+      location: 'Commercial District',
       rating: '4.9',
       reviews: '340+',
       image: 'https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=400&h=260',
@@ -188,13 +248,13 @@ export default function Marketplace() {
       distance: '0.8 km',
       productCount: 128,
       maxDiscount: '40% OFF',
-      description: 'Thrissur\'s trusted destination for the latest smartphones, laptops, audio gear and smart devices from top global brands.'
+      description: 'Your trusted destination for the latest smartphones, laptops, audio gear and smart devices from top global brands.'
     },
     {
       id: 'shop-2',
       name: 'Swaraj Heritage Silks',
       category: 'Fashion & Traditional Wear',
-      location: 'M.G. Road, Thrissur',
+      location: 'Fashion Arcade',
       rating: '4.8',
       reviews: '510+',
       image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&h=260',
@@ -203,13 +263,13 @@ export default function Marketplace() {
       distance: '1.4 km',
       productCount: 214,
       maxDiscount: '55% OFF',
-      description: 'Premium silk sarees, ethnic wear and festive fashion handpicked from across Kerala and beyond.'
+      description: 'Premium silk sarees, ethnic wear and festive fashion handpicked from top heritage weavers.'
     },
     {
       id: 'shop-3',
-      name: 'Thrissur Organic Mart',
+      name: 'Heritage Organic Mart',
       category: 'Fresh Groceries & Spices',
-      location: 'East Fort, Thrissur',
+      location: 'Green Park Avenue',
       rating: '4.7',
       reviews: '190+',
       image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&h=260',
@@ -224,7 +284,7 @@ export default function Marketplace() {
       id: 'shop-4',
       name: 'Royal Crafts & Furniture',
       category: 'Home Decor & Wooden Crafts',
-      location: 'Kokkala, Thrissur',
+      location: 'Crafts Square',
       rating: '4.9',
       reviews: '280+',
       image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&h=260',
@@ -233,16 +293,33 @@ export default function Marketplace() {
       distance: '3.0 km',
       productCount: 150,
       maxDiscount: '45% OFF',
-      description: 'Handcrafted wooden furniture and premium home decor pieces made by local artisans.'
+      description: 'Handcrafted wooden furniture and premium home decor pieces made by skilled artisans.'
     }
   ];
 
+  // Categories list
+  const categoriesList = useMemo(() => [
+    'Electronics',
+    'Home & Kitchen',
+    'Fashion',
+    'Beauty & Health',
+    'Sports',
+    'Books & Stationery',
+    'Automotive',
+    'Services'
+  ], []);
+
+  // Helper to match initialCategory
+  const initialSelectedCats = useMemo(() => {
+    if (!initialCategory) return [];
+    const matched = categoriesList.find(c => c.toLowerCase() === initialCategory.toLowerCase());
+    return matched ? [matched] : [initialCategory];
+  }, [initialCategory, categoriesList]);
+
   // Filters State
-  const [selectedCategories, setSelectedCategories] = useState(
-    initialCategory ? [initialCategory] : ['Electronics']
-  );
+  const [selectedCategories, setSelectedCategories] = useState(initialSelectedCats);
   const [priceMin, setPriceMin] = useState(0);
-  const [priceMax, setPriceMax] = useState(2500);
+  const [priceMax, setPriceMax] = useState(6000);
   const [selectedLocation, setSelectedLocation] = useState('All Locations');
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const [locationSearchQuery, setLocationSearchQuery] = useState('');
@@ -253,42 +330,14 @@ export default function Marketplace() {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [searchType, setSearchType] = useState('products');
 
-  const locations = [
-    'Kerala',
-    'Tamil Nadu',
-    'Punjab',
-    'Maharashtra',
-    'Delhi',
-    'Karnataka',
-    'Gujarat',
-    'Uttar Pradesh'
-  ];
-
-  const handleUseCurrentLocation = () => {
-    setSelectedLocation('Mumbai, MH');
-    setLocationDropdownOpen(false);
-  };
-
-  // Handle wishlisting
-  const toggleWishlist = (id) => {
-    if (wishlist.includes(id)) {
-      setWishlist(wishlist.filter(item => item !== id));
-    } else {
-      setWishlist([...wishlist, id]);
+  // Sync selectedCategories whenever URL searchParams change
+  useEffect(() => {
+    const catParam = searchParams.get('category');
+    if (catParam) {
+      const matched = categoriesList.find(c => c.toLowerCase() === catParam.toLowerCase());
+      setSelectedCategories(matched ? [matched] : [catParam]);
     }
-  };
-
-  // Categories list
-  const categoriesList = [
-    'Electronics',
-    'Home & Kitchen',
-    'Fashion',
-    'Beauty & Health',
-    'Sports',
-    'Books & Stationery',
-    'Automotive',
-    'Services'
-  ];
+  }, [searchParams, categoriesList]);
 
   // Handle Category check
   const handleCategoryChange = (cat) => {

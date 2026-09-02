@@ -214,7 +214,7 @@ export default function Home() {
             {categories.map((cat, idx) => (
               <Link 
                 key={idx} 
-                to={cat.name === 'View All' ? '/categories' : `/${cat.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
+                to={cat.name === 'View All' ? '/marketplace' : `/marketplace?category=${encodeURIComponent(cat.name)}`}
                 className="flex flex-col items-center justify-center gap-1.5 group min-w-[68px] sm:min-w-[76px] text-center flex-shrink-0 transition-all hover:-translate-y-1 hover:scale-105 active:scale-95 duration-300"
               >
                 <div className="w-10 h-10 sm:w-[46px] sm:h-[46px] bg-slate-50/90 rounded-xl flex items-center justify-center group-hover:bg-blue-50 group-hover:shadow-md group-hover:shadow-blue-500/15 group-hover:border-blue-200/80 transition-all duration-300 border border-slate-100">
