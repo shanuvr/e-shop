@@ -72,7 +72,7 @@ export default function ManagedSalesRegister() {
             <div className="relative z-10 space-y-3 pt-6 border-t border-slate-800">
               {[
                 { title: '1. Professional Photography', desc: 'HD photos & videos taken at your store' },
-                { title: '2. Managed Listing & Marketing', desc: 'Targeted ads across Thrissur' },
+                { title: '2. Managed Listing & Marketing', desc: 'Targeted digital ads across your area' },
                 { title: '3. Pack & Dispatch', desc: 'Simply hand over packages to E-SHOP courier' }
               ].map((step, idx) => (
                 <div key={idx} className="flex items-start gap-2.5">
@@ -103,12 +103,12 @@ export default function ManagedSalesRegister() {
                 Request Managed Sales Service
               </h1>
               <p className="text-slate-500 text-xs sm:text-sm mt-1 font-medium">
-                Fill out pickup details to assign your E-SHOP Account Manager
+                Fill out store location details to assign your E-SHOP Account Manager
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
-              
+
               {/* Business Name */}
               <div className="relative pt-1">
                 <input
@@ -167,7 +167,7 @@ export default function ManagedSalesRegister() {
                 </div>
               </div>
 
-              {/* Pickup Address */}
+              {/* Store Location */}
               <div className="relative pt-1">
                 <input
                   type="text"
@@ -182,7 +182,7 @@ export default function ManagedSalesRegister() {
                   htmlFor="address"
                   className="absolute left-3 -top-2.5 bg-white px-1.5 text-[11px] font-bold text-slate-500 transition-all peer-placeholder-shown:text-xs peer-placeholder-shown:font-medium peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-placeholder-shown:left-3.5 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-[11px] peer-focus:font-bold peer-focus:text-emerald-600 peer-autofill:-top-2.5 peer-autofill:left-3 peer-autofill:text-[11px] peer-autofill:font-bold pointer-events-none"
                 >
-                  Pickup Address (Thrissur)
+                  Store Location
                 </label>
               </div>
 
