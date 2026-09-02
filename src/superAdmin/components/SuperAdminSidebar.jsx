@@ -12,17 +12,22 @@ import {
   Menu,
   X,
   UserRound,
-  Settings
+  Settings,
+  Store
 } from 'lucide-react';
+import { useStoreRequests } from '../../lib/independentStoreRequests';
 
 export default function SuperAdminSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
+  const storeRequests = useStoreRequests();
+  const pendingStoreRequests = storeRequests.filter((r) => r.status === 'Pending').length;
 
   const menuItems = [
     { to: '/super-admin/dashboard', label: 'Platform Overview', icon: LayoutDashboard },
     { to: '/super-admin/managed-requests', label: 'Managed Sales Requests', icon: Zap, badge: '2 New' },
     { to: '/super-admin/sellers', label: 'Managed Sellers', icon: Users },
+    { to: '/super-admin/store-requests', label: 'Independent Seller Requests', icon: Store, badge: pendingStoreRequests ? `${pendingStoreRequests} New` : undefined },
     { to: '/super-admin/individual-sellers', label: 'Individual Seller', icon: UserRound },
     { to: '/super-admin/managers', label: 'Account Managers', icon: UserCheck },
     { to: '/super-admin/categories', label: 'Master Categories', icon: Grid },

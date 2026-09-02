@@ -9,6 +9,7 @@ import Categories from './user/Categories'
 import Cart from './user/Cart'
 import Login from './user/Login'
 import BecomeSeller from './user/BecomeSeller'
+import IndependentStoreApply from './user/IndependentStoreApply'
 import SellerDashboard from './admin/SellerDashboard'
 import SellerLogin from './admin/SellerLogin'
 import MarketplaceRegister from './admin/pages/MarketplaceRegister'
@@ -36,6 +37,7 @@ import SuperAdminCategoriesPage from './superAdmin/pages/SuperAdminCategoriesPag
 import IndividualSellersPage from './superAdmin/pages/IndividualSellersPage'
 import SuperAdminManagersPage from './superAdmin/pages/SuperAdminManagersPage'
 import SuperAdminSettingsPage from './superAdmin/pages/SuperAdminSettingsPage'
+import IndependentStoreRequestsPage from './superAdmin/pages/IndependentStoreRequestsPage'
 
 function App() {
   return (
@@ -48,6 +50,7 @@ function App() {
       <Route path="/seller-login" element={<SellerLogin />} />
       <Route path="/seller/login" element={<SellerLogin />} />
       <Route path="/seller" element={<BecomeSeller />} />
+      <Route path="/seller/independent-store" element={<IndependentStoreApply />} />
       <Route path="/seller/dashboard" element={<SellerDashboard />} />
       <Route path="/admin/marketplace-register" element={<MarketplaceRegister />} />
       <Route path="/admin/service-register" element={<ServiceRegister />} />
@@ -72,6 +75,7 @@ function App() {
       <Route path="/super-admin/sellers" element={<ManagedSellersPage />} />
       <Route path="/super-admin/categories" element={<SuperAdminCategoriesPage />} />
       <Route path="/super-admin/individual-sellers" element={<IndividualSellersPage />} />
+      <Route path="/super-admin/store-requests" element={<IndependentStoreRequestsPage />} />
       <Route path="/super-admin/managers" element={<SuperAdminManagersPage />} />
       <Route path="/super-admin/settings" element={<SuperAdminSettingsPage />} />
       <Route path="/product/:id" element={<DetailedProduct />} />

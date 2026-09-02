@@ -148,7 +148,7 @@ export default function BecomeSeller() {
 
               <div className="mt-auto">
                 <Link
-                  to="/seller-login"
+                  to="/seller/independent-store"
                   className="w-full inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-black text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-sm"
                 >
                   Build Independent Store

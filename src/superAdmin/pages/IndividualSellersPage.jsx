@@ -259,18 +259,15 @@ export default function IndividualSellersPage() {
                             className="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0"
                           />
                           <div>
-                            <h3 className="font-bold text-slate-900 group-hover:text-primary transition-colors flex items-center gap-1.5">
+                            <h3 className="font-bold text-slate-900 group-hover:text-primary transition-colors">
                               {s.name}
-                              <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">
-                                ★ {s.rating}
-                              </span>
                             </h3>
                             <p className="text-[11px] text-slate-500 font-medium">Owner: {s.owner}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="py-3.5 px-5 font-semibold text-slate-700">
-                        <span className="px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-lg text-[11px] font-bold text-slate-700">
+                      <td className="py-3.5 px-5">
+                        <span className="inline-flex items-center text-xs font-semibold text-slate-800 whitespace-nowrap">
                           {s.category}
                         </span>
                       </td>
@@ -335,161 +332,160 @@ export default function IndividualSellersPage() {
         {/* Seller Detail Popup Modal */}
         {selectedSeller && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
-            <div className="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-100 overflow-hidden my-8 transform transition-all">
+            <div className="bg-white rounded-3xl max-w-xl w-full shadow-2xl border border-slate-100 overflow-hidden my-6 transform transition-all animate-[fadeIn_0.2s_ease-out]">
               
               {/* Modal Cover Header */}
-              <div className="h-36 w-full relative bg-slate-100">
+              <div className="h-28 w-full relative bg-slate-800">
                 <img
                   src={selectedSeller.cover}
                   alt={selectedSeller.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover opacity-60"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent" />
                 
                 <button
                   onClick={() => setSelectedSeller(null)}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-900/50 hover:bg-slate-900 text-white flex items-center justify-center transition-colors cursor-pointer"
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20"
+                  aria-label="Close"
                 >
                   <X className="w-4 h-4" />
                 </button>
 
-                <div className="absolute bottom-3 left-6 flex items-end gap-4">
-                  <img
-                    src={selectedSeller.avatar}
-                    alt={selectedSeller.owner}
-                    className="w-20 h-20 rounded-2xl object-cover border-4 border-white shadow-xl bg-white shrink-0"
-                  />
-                  <div className="text-white pb-1">
-                    <div className="flex items-center gap-2">
-                      <h2 className="text-xl font-bold">{selectedSeller.name}</h2>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                        selectedSeller.status === 'Enabled' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'
-                      }`}>
-                        {selectedSeller.status}
-                      </span>
+                <div className="absolute bottom-3 left-5 right-5 flex items-end justify-between">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={selectedSeller.avatar}
+                      alt={selectedSeller.owner}
+                      className="w-14 h-14 rounded-2xl object-cover border-2 border-white shadow-lg bg-white shrink-0"
+                    />
+                    <div className="text-white">
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-lg font-bold leading-tight">{selectedSeller.name}</h2>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          selectedSeller.status === 'Enabled' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'
+                        }`}>
+                          {selectedSeller.status}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-200 font-medium mt-0.5">Category: {selectedSeller.category}</p>
                     </div>
-                    <p className="text-xs text-slate-200 font-medium">Category: {selectedSeller.category}</p>
                   </div>
                 </div>
               </div>
 
               {/* Modal Content Body */}
-              <div className="p-6 space-y-6">
+              <div className="p-5 space-y-4">
 
-                {/* Owner & Store Info Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200/70 text-xs">
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Store Owner</span>
-                    <span className="font-bold text-slate-900 text-sm block mt-0.5">{selectedSeller.owner}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Phone Number</span>
-                    <span className="font-semibold text-slate-800 block mt-0.5 flex items-center gap-1">
-                      <Phone className="w-3.5 h-3.5 text-primary" />
-                      {selectedSeller.phone}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email Address</span>
-                    <span className="font-semibold text-slate-800 block mt-0.5 truncate flex items-center gap-1">
-                      <Mail className="w-3.5 h-3.5 text-primary" />
-                      {selectedSeller.email}
-                    </span>
-                  </div>
+                {/* Key Metrics Strip */}
+                <div className="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200/70 text-center">
                   <div>
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Sales</span>
-                    <span className="font-extrabold text-emerald-600 text-sm block mt-0.5">{selectedSeller.revenue}</span>
+                    <span className="font-black text-emerald-600 text-sm block mt-0.5">{selectedSeller.revenue}</span>
                   </div>
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Products</span>
+                  <div className="border-x border-slate-200/80">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Products</span>
                     <span className="font-bold text-slate-900 text-sm block mt-0.5">{selectedSeller.productsCount} Items</span>
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Joined Date</span>
-                    <span className="font-semibold text-slate-800 block mt-0.5 flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                      {selectedSeller.joinedDate}
-                    </span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Joined</span>
+                    <span className="font-semibold text-slate-700 text-xs block mt-1">{selectedSeller.joinedDate}</span>
                   </div>
                 </div>
 
-                {/* Owner Full Address Box */}
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                    Store &amp; Owner Full Address
-                  </span>
-                  <div className="flex items-start gap-2 text-xs font-semibold text-slate-800">
-                    <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                    <p className="leading-relaxed">
+                {/* Contact & Address Card */}
+                <div className="bg-white border border-slate-200/80 rounded-xl p-3.5 space-y-3 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pb-2.5 border-b border-slate-100">
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Owner</span>
+                      <span className="font-bold text-slate-900 text-xs block mt-0.5">{selectedSeller.owner}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Phone</span>
+                      <span className="font-semibold text-slate-700 text-xs block mt-0.5 flex items-center gap-1">
+                        <Phone className="w-3 h-3 text-primary shrink-0" />
+                        {selectedSeller.phone}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email</span>
+                      <span className="font-semibold text-slate-700 text-xs block mt-0.5 truncate flex items-center gap-1">
+                        <Mail className="w-3 h-3 text-primary shrink-0" />
+                        {selectedSeller.email}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+                      Store Address
+                    </span>
+                    <p className="text-xs font-medium text-slate-700 leading-relaxed flex items-start gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
                       {selectedSeller.fullAddress || selectedSeller.location}
                     </p>
                   </div>
                 </div>
 
-                {/* Store Categories Breakdown */}
+                {/* Categories Breakdown */}
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <Filter className="w-4 h-4 text-primary" />
-                      Store Categories &amp; Product Counts ({selectedSeller.categoryBreakdown ? selectedSeller.categoryBreakdown.length : 0})
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                      <Filter className="w-3.5 h-3.5 text-primary" />
+                      Categories &amp; Stock
                     </h4>
                     <Link
                       to={`/shop/${selectedSeller.id}`}
                       onClick={() => setSelectedSeller(null)}
-                      className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
+                      className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1"
                     >
-                      View Live Store Front
-                      <ExternalLink className="w-3.5 h-3.5" />
+                      Live Storefront
+                      <ExternalLink className="w-3 h-3" />
                     </Link>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {selectedSeller.categoryBreakdown && selectedSeller.categoryBreakdown.map((cat, idx) => (
-                      <div key={idx} className="bg-white border border-slate-200/80 rounded-2xl p-3 flex items-center gap-3 shadow-xs hover:border-slate-300 transition-colors">
-                        <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-xl shrink-0">
-                          {cat.icon}
-                        </div>
+                      <div key={idx} className="bg-slate-50 border border-slate-200/70 rounded-xl p-2.5 flex items-center gap-2.5">
+                        <span className="text-lg shrink-0">{cat.icon}</span>
                         <div className="min-w-0">
-                          <p className="font-bold text-slate-900 text-xs truncate">{cat.name}</p>
-                          <span className="inline-block mt-0.5 px-2 py-0.5 bg-blue-50 text-blue-700 font-extrabold text-[10px] rounded-md border border-blue-100">
-                            {cat.count} Products
-                          </span>
+                          <p className="font-bold text-slate-900 text-[11px] truncate">{cat.name}</p>
+                          <p className="text-[10px] text-blue-600 font-bold">{cat.count} Products</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Modal Footer Controls */}
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    Verified Platform Merchant
-                  </div>
+              </div>
 
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedSeller(null)}
-                      className="px-4 py-2 border border-slate-200 text-slate-700 font-semibold rounded-xl text-xs hover:bg-slate-50 transition-colors cursor-pointer"
-                    >
-                      Close
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => toggleSeller(selectedSeller.id, e)}
-                      className={`px-5 py-2 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ${
-                        selectedSeller.status === 'Enabled'
-                          ? 'bg-rose-600 hover:bg-rose-700 text-white'
-                          : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                      }`}
-                    >
-                      <Power className="w-4 h-4" />
-                      {selectedSeller.status === 'Enabled' ? 'Disable Store' : 'Enable Store'}
-                    </button>
-                  </div>
+              {/* Modal Footer Controls */}
+              <div className="px-5 py-3 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  Verified Merchant
                 </div>
 
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSeller(null)}
+                    className="px-3.5 py-1.5 border border-slate-200 text-slate-700 font-semibold rounded-lg text-xs hover:bg-white transition-colors cursor-pointer"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => toggleSeller(selectedSeller.id, e)}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer ${
+                      selectedSeller.status === 'Enabled'
+                        ? 'bg-rose-600 hover:bg-rose-700 text-white'
+                        : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    }`}
+                  >
+                    <Power className="w-3.5 h-3.5" />
+                    {selectedSeller.status === 'Enabled' ? 'Disable Store' : 'Enable Store'}
+                  </button>
+                </div>
               </div>
 
             </div>

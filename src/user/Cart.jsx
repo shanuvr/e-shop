@@ -3,21 +3,17 @@ import { Link } from 'react-router-dom';
 import UserLayout from '../layout/UserLayout';
 import {
   Trash2,
-  Heart,
   ChevronRight,
   ShoppingBag,
   ShieldCheck,
-  Tag,
   RotateCcw,
   Truck,
-  Headphones,
   Lock,
-  CreditCard,
   MapPin,
-  BadgePercent,
-  PackageCheck,
+  Tag,
   Minus,
-  Plus
+  Plus,
+  CreditCard
 } from 'lucide-react';
 
 const initialItems = [
@@ -73,13 +69,113 @@ const initialItems = [
 
 const formatINR = (n) => `₹${n.toLocaleString('en-IN')}`;
 
+function CartItem({ item, onQuantity, onRemove }) {
+  const itemTotal = item.price * item.quantity;
+
+  return (
+    <li
+      className={`flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5 ${
+        item.inStock ? '' : 'opacity-60'
+      }`}
+    >
+      {/* Image */}
+      <Link
+        to={`/product/${item.id}`}
+        className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-slate-50 sm:h-24 sm:w-24"
+      >
+        <img src={item.image} alt={item.title} loading="lazy" className="w-full h-full object-cover" />
+      </Link>
+
+      {/* Info */}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <Link
+              to={`/product/${item.id}`}
+              className="text-[15px] leading-snug font-medium text-slate-900 line-clamp-2 transition-colors hover:text-primary"
+            >
+              {item.title}
+            </Link>
+            <p className="text-[13px] text-slate-500 mt-0.5">
+              {item.variant} · {formatINR(item.price)} each
+            </p>
+          </div>
+          <button
+            onClick={() => onRemove(item.id)}
+            aria-label="Remove item"
+            title="Remove"
+            className="p-1.5 -m-1.5 flex-shrink-0 rounded-lg text-slate-300 transition-colors hover:bg-rose-50 hover:text-rose-500"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+          {item.inStock ? (
+            <>
+              {item.assured && (
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500">
+                  <ShieldCheck className="h-3.5 w-3.5 text-primary" /> E-SHOP Assured
+                </span>
+              )}
+              <span className="text-[11px] font-medium text-slate-400">Sold by {item.seller}</span>
+            </>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
+              <span className="h-1 w-1 rounded-full bg-amber-500" /> Out of stock
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Qty + Total */}
+      <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end sm:justify-center sm:gap-2.5 sm:pl-4">
+        {item.inStock ? (
+          <>
+            <div className="flex h-9 items-center overflow-hidden rounded-lg border border-slate-300">
+              <button
+                onClick={() => onQuantity(item.id, -1)}
+                aria-label="Decrease quantity"
+                className="flex h-full w-9 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary"
+              >
+                <Minus className="h-3.5 w-3.5" />
+              </button>
+              <span className="w-8 text-center text-sm font-medium text-slate-900">{item.quantity}</span>
+              <button
+                onClick={() => onQuantity(item.id, 1)}
+                aria-label="Increase quantity"
+                className="flex h-full w-9 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </button>
+            </div>
+            <div className="text-right">
+              <div className="flex items-baseline justify-end gap-2">
+                <span className="text-base font-semibold text-slate-900">{formatINR(itemTotal)}</span>
+                <span className="text-xs text-slate-400 line-through">
+                  {formatINR(item.originalPrice * item.quantity)}
+                </span>
+              </div>
+              <span className="text-[11px] font-semibold text-emerald-600">
+                {Math.round((1 - item.price / item.originalPrice) * 100)}% off
+              </span>
+            </div>
+          </>
+        ) : (
+          <span className="text-xs font-medium text-slate-400">Currently unavailable</span>
+        )}
+      </div>
+    </li>
+  );
+}
+
 export default function Cart() {
   const [items, setItems] = useState(initialItems);
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   const updateQuantity = (id, delta) => {
-    setItems(items.map(item =>
+    setItems(items.map((item) =>
       item.id === id
         ? { ...item, quantity: Math.max(1, item.quantity + delta) }
         : item
@@ -87,11 +183,7 @@ export default function Cart() {
   };
 
   const removeItem = (id) => {
-    setItems(items.filter(item => item.id !== id));
-  };
-
-  const moveToWishlist = (id) => {
-    removeItem(id);
+    setItems(items.filter((item) => item.id !== id));
   };
 
   const applyCoupon = (e) => {
@@ -103,7 +195,12 @@ export default function Cart() {
     }
   };
 
-  const validItems = items.filter(item => item.inStock);
+  const clearCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+  };
+
+  const validItems = items.filter((item) => item.inStock);
   const subtotal = validItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const totalMRP = validItems.reduce((sum, item) => sum + item.originalPrice * item.quantity, 0);
   const totalDiscount = totalMRP - subtotal;
@@ -112,6 +209,7 @@ export default function Cart() {
     : 0;
   const delivery = subtotal - couponDiscount >= 499 ? 0 : 79;
   const grandTotal = subtotal - couponDiscount + delivery;
+  const totalSavings = totalDiscount + couponDiscount + (delivery === 0 ? 79 : 0);
 
   if (items.length === 0) {
     return (
@@ -123,278 +221,203 @@ export default function Cart() {
 
   return (
     <UserLayout>
-      <div className="w-full bg-[#f8fafc] min-h-screen font-sans text-slate-900 antialiased pb-16">
-        {/* Header */}
-        <div className="bg-white border-b border-slate-200/70">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-            <div className="flex items-center gap-2 text-[13px] text-slate-500 mb-2">
-              <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
-              <span className="text-slate-900 font-medium">Shopping Cart</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 bg-primary rounded-2xl flex items-center justify-center text-white shadow-md shadow-primary/25">
-                <ShoppingBag className="w-5 h-5" />
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-black text-on-surface tracking-tight">
-                  Your Cart
-                </h1>
-                <p className="text-[13px] text-slate-500 font-medium">
-                  {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
-                </p>
-              </div>
-            </div>
+      <div className="min-h-screen bg-[#f8fafc] text-slate-900 antialiased">
+        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+          {/* Breadcrumb */}
+          <div className="mb-5 flex items-center gap-1.5 text-[13px] text-slate-500">
+            <Link to="/" className="transition-colors hover:text-primary">Home</Link>
+            <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
+            <span className="font-medium text-slate-900">Shopping Cart</span>
           </div>
-        </div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left: Items List */}
-          <div className="lg:col-span-2 space-y-5">
-            {/* Coupon Banner */}
-            <div className="bg-gradient-to-r from-primary to-blue-600 rounded-2xl p-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg shadow-primary/10">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center">
-                  <BadgePercent className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold">Get extra 10% off</p>
-                  <p className="text-xs text-blue-100">Use code <span className="font-bold text-white bg-white/20 px-1.5 py-0.5 rounded">ESHOP10</span> at checkout</p>
-                </div>
-              </div>
+          {/* Title */}
+          <div className="mb-6 flex items-end justify-between gap-4 lg:mb-8">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+                Shopping Cart
+              </h1>
+              <p className="mt-1 text-sm text-slate-500">
+                {items.length} {items.length === 1 ? 'item' : 'items'}
+                {validItems.length > 0 && <> · {formatINR(grandTotal)}</>}
+              </p>
             </div>
+            <Link
+              to="/marketplace"
+              className="hidden shrink-0 text-sm font-medium text-primary transition-colors hover:underline sm:inline-flex"
+            >
+              Continue shopping
+            </Link>
+          </div>
 
-            {/* Item Cards */}
-            {items.map((item) => {
-              const itemTotal = item.price * item.quantity;
-              return (
-                <div
-                  key={item.id}
-                  className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${
-                    item.inStock ? 'border-slate-200/80' : 'border-rose-200/70'
-                  }`}
-                >
-                  <div className="p-4 flex gap-4">
-                    {/* Product Image */}
-                    <Link to={`/product/${item.id}`} className="flex-shrink-0">
-                      <div className="w-20 h-20 sm:w-24 sm:h-24 bg-slate-50 rounded-xl overflow-hidden border border-slate-100">
-                        <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                      </div>
-                    </Link>
-
-                    {/* Details */}
-                    <div className="flex-1 min-w-0 flex flex-col">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{item.seller}</span>
-                            {item.assured && (
-                              <span className="flex items-center gap-1 text-[9px] font-semibold text-slate-700 px-1.5 py-0.5 bg-blue-50 rounded">
-                                <ShieldCheck className="w-3 h-3 text-blue-700" />
-                                Assured
-                              </span>
-                            )}
-                          </div>
-                          <h3 className="text-sm sm:text-[15px] font-bold text-slate-900 leading-snug line-clamp-2">
-                            <Link to={`/product/${item.id}`} className="hover:text-primary transition-colors">{item.title}</Link>
-                          </h3>
-                          <p className="text-xs text-slate-500 mt-0.5">{item.variant}</p>
-                        </div>
-                        <button
-                          onClick={() => moveToWishlist(item.id)}
-                          className="text-slate-400 hover:text-rose-500 transition-colors p-1 flex-shrink-0"
-                          aria-label="Move to wishlist"
-                          title="Move to wishlist"
-                        >
-                          <Heart className="w-5 h-5" />
-                        </button>
-                      </div>
-
-                      {!item.inStock && (
-                        <p className="text-xs font-semibold text-rose-500 mt-2 flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500" /> Out of stock
-                        </p>
-                      )}
-
-                      {/* Pricing / Qty */}
-                      <div className="mt-auto pt-3 flex flex-wrap items-end justify-between gap-3">
-                        <div className="flex flex-col">
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-base sm:text-lg font-bold text-slate-900">{formatINR(itemTotal)}</span>
-                            <span className="text-xs text-slate-400 line-through">{formatINR(item.originalPrice * item.quantity)}</span>
-                            <span className="text-xs font-bold text-primary">{Math.round((1 - item.price / item.originalPrice) * 100)}% off</span>
-                          </div>
-                          <span className="text-[11px] text-slate-400 font-medium">Free shipping on this item</span>
-                        </div>
-
-                        <div className="flex flex-col items-end gap-1.5">
-                          <div className="flex items-center border border-slate-200 rounded-lg h-9">
-                            <button
-                              onClick={() => updateQuantity(item.id, -1)}
-                              disabled={!item.inStock}
-                              className="w-9 h-full flex items-center justify-center text-slate-600 hover:text-primary disabled:opacity-40 transition-colors"
-                              aria-label="Decrease quantity"
-                            >
-                              <Minus className="w-3.5 h-3.5" />
-                            </button>
-                            <span className="w-8 text-center text-sm font-semibold text-slate-900">{item.quantity}</span>
-                            <button
-                              onClick={() => updateQuantity(item.id, 1)}
-                              disabled={!item.inStock}
-                              className="w-9 h-full flex items-center justify-center text-slate-600 hover:text-primary disabled:opacity-40 transition-colors"
-                              aria-label="Increase quantity"
-                            >
-                              <Plus className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                          <button
-                            onClick={() => removeItem(item.id)}
-                            className="flex items-center gap-1 text-xs font-semibold text-slate-400 hover:text-rose-500 transition-colors"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+          <div className="lg:flex lg:items-start lg:gap-8">
+            {/* Items */}
+            <div className="min-w-0 flex-1">
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="flex items-baseline justify-between border-b border-slate-100 px-5 pb-4 pt-5 sm:px-6">
+                  <h2 className="text-[15px] font-semibold text-slate-900 sm:text-base">
+                    Items <span className="font-normal text-slate-400">({items.length})</span>
+                  </h2>
+                  <p className="text-[11px] font-medium text-slate-500 sm:text-xs">
+                    Free delivery on orders over ₹499
+                  </p>
                 </div>
-              );
-            })}
+                <ul className="divide-y divide-slate-100">
+                  {items.map((item) => (
+                    <CartItem
+                      key={item.id}
+                      item={item}
+                      onQuantity={updateQuantity}
+                      onRemove={removeItem}
+                    />
+                  ))}
+                </ul>
+              </div>
 
-            {/* Continue shopping */}
-            <div className="flex items-center justify-between text-sm py-2">
-              <Link to="/marketplace" className="text-primary font-semibold hover:underline flex items-center gap-1.5">
-                <ChevronRight className="w-4 h-4 rotate-180" />
-                Continue Shopping
+              {/* Trust strip */}
+              <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 px-1">
+                {[
+                  { icon: Truck, label: 'Free delivery over ₹499' },
+                  { icon: RotateCcw, label: '7-day easy returns' },
+                  { icon: ShieldCheck, label: 'Secure payments' }
+                ].map((f, idx) => (
+                  <span key={idx} className="flex items-center gap-1.5 text-[13px] font-medium text-slate-500">
+                    <f.icon className="h-4 w-4 text-slate-400" />
+                    {f.label}
+                  </span>
+                ))}
+              </div>
+
+              <Link
+                to="/marketplace"
+                className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-primary transition-colors hover:underline sm:hidden"
+              >
+                Continue shopping
               </Link>
             </div>
 
-            {/* Trust bar */}
-            <div className="bg-white rounded-2xl border border-slate-200/70 shadow-sm grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
-              {[
-                { icon: Truck, title: 'Free Shipping', desc: 'On orders above ₹499' },
-                { icon: RotateCcw, title: 'Easy Returns', desc: 'Hassle-free 7 days' },
-                { icon: ShieldCheck, title: 'Secure Payments', desc: '100% encrypted' },
-                { icon: Headphones, title: '24/7 Support', desc: 'We are here to help' }
-              ].map((f, idx) => (
-                <div key={idx} className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center text-primary flex-shrink-0">
-                    <f.icon className="w-4.5 h-4.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-xs font-bold text-slate-800 truncate">{f.title}</span>
-                    <span className="text-[10px] text-slate-400 font-medium truncate">{f.desc}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right: Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-5 lg:sticky lg:top-[76px] space-y-5">
-              {/* Delivery Address */}
-              <div className="pb-4 border-b border-slate-100">
-                <div className="flex items-center gap-2 mb-2">
-                  <MapPin className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-bold text-slate-900">Deliver to</span>
-                </div>
-                <p className="text-[13px] text-slate-600 leading-snug">
-                  <span className="font-semibold text-slate-800">Arjun Mehta, +91 98765 43210</span><br />
-                  House 42, Civil Lines Road,<br />
-                  Thrissur, Kerala 680001
-                </p>
-                <button className="text-xs font-bold text-primary hover:underline mt-1.5">Change</button>
-              </div>
-
-              {/* Coupon */}
-              <form onSubmit={applyCoupon} className="pb-4 border-b border-slate-100">
-                <div className="flex items-center gap-2 mb-2.5">
-                  <Tag className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-bold text-slate-900">Apply Coupon</span>
-                </div>
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
-                      placeholder="Enter coupon code"
-                      className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 outline-none focus:border-primary placeholder:text-slate-400"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="px-4 py-2.5 bg-primary hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-colors"
-                  >
-                    Apply
-                  </button>
-                </div>
-                {appliedCoupon && appliedCoupon.code === 'ESHOP10' && (
-                  <p className="text-xs font-semibold text-emerald-600 mt-2 flex items-center gap-1">
-                    <PackageCheck className="w-3.5 h-3.5" /> Coupon ESHOP10 applied
-                  </p>
-                )}
-                {appliedCoupon && appliedCoupon.code === 'INVALID' && (
-                  <p className="text-xs font-semibold text-rose-500 mt-2">Invalid coupon code. Try ESHOP10</p>
-                )}
-              </form>
-
-              {/* Price Details */}
-              <div className="pb-4 border-b border-slate-100">
-                <h3 className="text-sm font-black text-slate-900 mb-3">Price Details</h3>
-                <div className="space-y-2.5 text-[13px]">
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Price ({validItems.length} {validItems.length === 1 ? 'item' : 'items'})</span>
-                    <span className="font-semibold text-slate-900">{formatINR(totalMRP)}</span>
-                  </div>
-                  <div className="flex justify-between text-emerald-600">
-                    <span>Product Discount</span>
-                    <span className="font-semibold">− {formatINR(totalDiscount)}</span>
-                  </div>
-                  {couponDiscount > 0 && (
-                    <div className="flex justify-between text-primary">
-                      <span>Coupon Discount (ESHOP10)</span>
-                      <span className="font-semibold">− {formatINR(couponDiscount)}</span>
+            {/* Summary */}
+            <aside className="mt-6 lg:mt-0 lg:w-[360px] lg:flex-shrink-0">
+              <div className="rounded-2xl border border-slate-200 bg-white shadow-sm lg:sticky lg:top-24">
+                <h2 className="px-5 pt-5 text-[15px] font-semibold text-slate-900 sm:text-base">
+                  Order summary
+                </h2>
+                <div className="p-5 pt-4 space-y-5">
+                  {/* Delivery address */}
+                  <div className="flex gap-3">
+                    <div className="h-9 w-9 flex-shrink-0 rounded-lg bg-slate-100 flex items-center justify-center">
+                      <MapPin className="h-4 w-4 text-slate-600" />
                     </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Delivery Charges</span>
-                    {delivery === 0 ? (
-                      <span className="font-semibold text-emerald-600">FREE</span>
-                    ) : (
-                      <span className="font-semibold text-slate-900">{formatINR(delivery)}</span>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[13px] font-semibold text-slate-900">Deliver to</span>
+                        <button className="text-[12px] font-semibold text-primary transition-colors hover:underline">
+                          Change
+                        </button>
+                      </div>
+                      <p className="mt-0.5 text-[13px] leading-snug text-slate-500">
+                        Arjun Mehta · +91 98765 43210
+                        <br />
+                        House 42, Civil Lines Road, Thrissur,
+                        <br />
+                        Kerala 680001
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Coupon */}
+                  <form onSubmit={applyCoupon} className="space-y-2.5 border-t border-slate-100 pt-4">
+                    <div className="flex items-center gap-1.5">
+                      <Tag className="h-4 w-4 text-slate-400" />
+                      <span className="text-[13px] font-semibold text-slate-900">Coupon</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        placeholder="Enter code"
+                        className="h-10 min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/15"
+                      />
+                      <button
+                        type="submit"
+                        disabled={!couponCode.trim()}
+                        className="h-10 rounded-lg bg-primary px-4 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Apply
+                      </button>
+                    </div>
+
+                    {appliedCoupon && appliedCoupon.code === 'ESHOP10' && (
+                      <div className="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2">
+                        <span className="text-xs font-semibold text-emerald-700">
+                          ESHOP10 applied · −{formatINR(couponDiscount)}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={clearCoupon}
+                          className="text-xs font-semibold text-emerald-700 underline"
+                        >
+                          Remove
+                        </button>
+                      </div>
                     )}
-                  </div>
-                  {delivery === 0 && couponDiscount === 0 && (
-                    <div className="flex justify-between text-emerald-600">
-                      <span>Delivery Discount</span>
-                      <span className="font-semibold">− {formatINR(79)}</span>
+                    {appliedCoupon && appliedCoupon.code === 'INVALID' && (
+                      <p className="text-xs font-medium text-rose-600">
+                        That code isn't valid — try ESHOP10.
+                      </p>
+                    )}
+                    {!appliedCoupon && (
+                      <p className="text-[11px] text-slate-400">Tip: use code ESHOP10 for 10% off.</p>
+                    )}
+                  </form>
+
+                  {/* Price details */}
+                  <div className="border-t border-slate-100 pt-4">
+                    <div className="space-y-1">
+                      <div className="flex justify-between py-0.5 text-[13px]">
+                        <span className="text-slate-500">Item subtotal ({validItems.length} {validItems.length === 1 ? 'item' : 'items'})</span>
+                        <span className="font-medium text-slate-900">{formatINR(totalMRP)}</span>
+                      </div>
+                      <div className="flex justify-between py-0.5 text-[13px]">
+                        <span className="text-slate-500">Discount</span>
+                        <span className="font-medium text-emerald-600">− {formatINR(totalDiscount)}</span>
+                      </div>
+                      {couponDiscount > 0 && (
+                        <div className="flex justify-between py-0.5 text-[13px]">
+                          <span className="text-slate-500">Coupon (ESHOP10)</span>
+                          <span className="font-medium text-emerald-600">− {formatINR(couponDiscount)}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between py-0.5 text-[13px]">
+                        <span className="text-slate-500">Delivery</span>
+                        {delivery === 0 ? (
+                          <span className="font-medium text-emerald-600">FREE</span>
+                        ) : (
+                          <span className="font-medium text-slate-900">{formatINR(delivery)}</span>
+                        )}
+                      </div>
                     </div>
-                  )}
-                </div>
-                <div className="flex justify-between items-center pt-3 mt-3 border-t border-slate-100">
-                  <span className="text-sm font-black text-slate-900">Total Amount</span>
-                  <span className="text-lg font-black text-slate-900">{formatINR(grandTotal)}</span>
-                </div>
-                <p className="text-xs font-semibold text-emerald-600 mt-1.5">
-                  You will save {formatINR(totalDiscount + couponDiscount + (delivery === 0 ? 79 : 0))} on this order
-                </p>
-              </div>
+                    <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-3">
+                      <span className="text-[15px] font-semibold text-slate-900">Total</span>
+                      <span className="text-lg font-semibold text-slate-900">{formatINR(grandTotal)}</span>
+                    </div>
+                    <p className="mt-2 text-xs font-medium text-emerald-600">
+                      You save {formatINR(totalSavings)} on this order
+                    </p>
+                  </div>
 
-              {/* Proceed to Checkout */}
-              <button className="w-full bg-primary hover:bg-blue-700 text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-primary/25">
-                <Lock className="w-4 h-4" />
-                Proceed to Checkout
-              </button>
-
-              {/* Secure payment note */}
-              <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 font-medium">
-                <CreditCard className="w-3.5 h-3.5" />
-                Secure payment · UPI, Cards, Net Banking & Wallets
+                  {/* CTA */}
+                  <button className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-semibold text-white shadow-sm shadow-primary/20 transition-colors hover:bg-blue-700">
+                    <Lock className="h-4 w-4" />
+                    Proceed to Checkout
+                  </button>
+                  <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+                    <CreditCard className="h-3.5 w-3.5" />
+                    Secure checkout · UPI, Cards, Net Banking & Wallets
+                  </div>
+                </div>
               </div>
-            </div>
+            </aside>
           </div>
         </div>
       </div>
@@ -404,33 +427,32 @@ export default function Cart() {
 
 function EmptyCart() {
   return (
-    <div className="w-full bg-[#f8fafc] min-h-screen font-sans text-slate-900 antialiased">
-      <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <div className="w-20 h-20 bg-white rounded-3xl mx-auto flex items-center justify-center text-slate-300 shadow-sm border border-slate-100 mb-6">
-          <ShoppingBag className="w-9 h-9" />
+    <div className="bg-[#f8fafc]">
+      <div className="mx-auto flex min-h-[62vh] max-w-md flex-col items-center justify-center px-4 py-16 text-center">
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+          <ShoppingBag className="h-7 w-7 text-slate-400" />
         </div>
-        <h1 className="text-2xl font-black text-slate-900 mb-2">Your cart is empty</h1>
-        <p className="text-sm text-slate-500 mb-8">
-          Looks like you haven't added anything to your cart yet. Explore the marketplace and discover great deals.
+        <h1 className="text-xl font-semibold text-slate-900">Your cart is empty</h1>
+        <p className="mt-2 text-sm text-slate-500">
+          Looks like you haven't added anything yet. Explore the marketplace to find something you'll love.
         </p>
         <Link
           to="/marketplace"
-          className="inline-flex items-center gap-2 bg-primary hover:bg-blue-700 text-white font-bold text-sm px-8 py-3.5 rounded-full transition-colors shadow-md shadow-primary/25"
+          className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-sm font-semibold text-white shadow-sm shadow-primary/20 transition-colors hover:bg-blue-700"
         >
-          <ShoppingBag className="w-4 h-4" />
+          <ShoppingBag className="h-4 w-4" />
           Continue Shopping
         </Link>
-        <div className="grid grid-cols-3 gap-4 mt-12">
-          {[
-            { icon: ShieldCheck, label: 'Secure Payments' },
-            { icon: RotateCcw, label: 'Easy Returns' },
-            { icon: Truck, label: 'Fast Delivery' }
-          ].map((f, idx) => (
-            <div key={idx} className="flex flex-col items-center gap-2 text-slate-400">
-              <f.icon className="w-5 h-5" />
-              <span className="text-xs font-semibold">{f.label}</span>
-            </div>
-          ))}
+        <div className="mt-10 flex items-center gap-6 text-slate-400">
+          <span className="flex items-center gap-1.5 text-xs font-medium">
+            <Truck className="h-4 w-4" /> Free delivery
+          </span>
+          <span className="flex items-center gap-1.5 text-xs font-medium">
+            <RotateCcw className="h-4 w-4" /> Easy returns
+          </span>
+          <span className="flex items-center gap-1.5 text-xs font-medium">
+            <ShieldCheck className="h-4 w-4" /> Secure payments
+          </span>
         </div>
       </div>
     </div>
