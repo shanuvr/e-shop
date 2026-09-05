@@ -2,6 +2,25 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Heart, Eye } from 'lucide-react';
 
+// Custom rounded 5-star rating SVG matching standard high-end e-commerce star designs
+const RoundedStarIcon = ({ fill = "#FF9500", size = 14 }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    className="shrink-0 inline-block"
+  >
+    <path 
+      d="M12 2.25c.34 0 .66.19.82.5l2.67 5.41 5.97.87c.36.05.66.29.77.63.11.34.02.72-.24.97l-4.32 4.21 1.02 5.95c.06.36-.08.72-.37.93-.29.21-.68.24-1 .07L12 18.96l-5.34 2.81c-.32.17-.71.14-1-.07-.29-.21-.43-.57-.37-.93l1.02-5.95-4.32-4.21c-.26-.25-.35-.63-.24-.97.11-.34.41-.58.77-.63l5.97-.87 2.67-5.41c.16-.31.48-.5.82-.5z" 
+      fill={fill} 
+      stroke={fill === "url(#halfStarGrad)" ? "#FF9500" : fill} 
+      strokeWidth="1.2" 
+      strokeLinejoin="round" 
+      strokeLinecap="round" 
+    />
+  </svg>
+);
+
 export default function ProductCard({ item, linkPrefix = '/product' }) {
   if (!item) return null;
 
@@ -59,6 +78,10 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
 
   const highlights = getHighlights();
 
+  const numericRating = item.rating !== undefined && item.rating !== null ? parseFloat(item.rating) : 4.5;
+  const ratingValue = isNaN(numericRating) || numericRating <= 0 ? 4.5 : Math.min(5, numericRating);
+  const reviewText = item.reviews || item.reviewCount || null;
+
   return (
     <Link 
       to={targetLink} 
@@ -105,26 +128,54 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
         {/* Card Body Content */}
         <div className="p-3 sm:p-3.5 space-y-1.5">
           
-          {/* Category & Rating Header line */}
-          <div className="flex items-center justify-between text-[10px] font-medium text-slate-400">
-            {item.category && (
-              <span className="text-blue-600 font-semibold tracking-wide text-[9px] truncate max-w-[120px]">
-                {item.category}
-              </span>
-            )}
-            {item.rating && (
-              <span className="flex items-center gap-0.5 text-amber-500 font-semibold ml-auto text-[11px]">
-                <Star className="w-3 h-3 fill-current" />
-                <span>{item.rating}</span>
-                {item.reviews && <span className="text-slate-400 font-normal text-[10px]">({item.reviews})</span>}
-              </span>
-            )}
-          </div>
+          {/* Category Header line */}
+          {item.category && (
+            <div className="text-blue-600 font-semibold tracking-wide text-[9px] uppercase truncate">
+              {item.category}
+            </div>
+          )}
 
           {/* Full Title on its own dedicated lines */}
           <h3 className="font-bold text-xs sm:text-[13px] text-slate-900 group-hover:text-primary transition-colors duration-200 line-clamp-2 leading-snug">
             {item.title}
           </h3>
+
+          {/* Plump Rounded Star Rating Bar (Matching high-end E-Commerce UI) */}
+          <div className="flex items-center gap-1.5 pt-0.5" title={`${ratingValue.toFixed(1)} out of 5 stars`}>
+            <svg className="w-0 h-0 absolute pointer-events-none" aria-hidden="true">
+              <defs>
+                <linearGradient id="halfStarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="50%" stopColor="#FF9500" />
+                  <stop offset="50%" stopColor="#CBD5E1" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            {/* 5 Plump Rounded Stars */}
+            <div className="flex items-center gap-0.5">
+              {[1, 2, 3, 4, 5].map((star) => {
+                let starFill = "#CBD5E1"; // light slate gray for empty star (from screenshot)
+                if (ratingValue >= star - 0.25) {
+                  starFill = "#FF9500"; // rich vivid orange for filled star (from screenshot)
+                } else if (ratingValue >= star - 0.75) {
+                  starFill = "url(#halfStarGrad)";
+                }
+                return (
+                  <RoundedStarIcon key={star} fill={starFill} size={15} />
+                );
+              })}
+            </div>
+
+            <span className="font-bold text-slate-800 text-[12px] leading-none ml-0.5">
+              {ratingValue.toFixed(1)}
+            </span>
+
+            {reviewText && (
+              <span className="text-slate-400 font-medium text-[10px] leading-none ml-auto truncate">
+                ({reviewText})
+              </span>
+            )}
+          </div>
 
           {/* 1 or 2 Key Highlight Bullet Points */}
           <div className="pt-0.5 space-y-1">

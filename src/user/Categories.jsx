@@ -516,7 +516,7 @@ export default function Categories() {
                     <div className="relative z-10 mt-auto">
                       {isHero ? (
                         <>
-                          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1.5 drop-shadow-md">
+                          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-white tracking-normal leading-none mb-1.5 drop-shadow-sm">
                             {cat.name}
                           </h2>
                           {cat.desc && (
@@ -531,7 +531,7 @@ export default function Categories() {
                         </>
                       ) : (
                         <>
-                          <h3 className="text-base md:text-lg font-extrabold text-white tracking-tight leading-tight mb-2 group-hover:text-blue-100 transition-colors">
+                          <h3 className="text-base md:text-lg font-semibold text-white tracking-normal leading-tight mb-2 group-hover:text-blue-100 transition-colors">
                             {cat.name}
                           </h3>
                           <div className="inline-flex items-center gap-1 bg-white text-slate-950 font-bold text-[10px] md:text-[11px] px-3 py-1 rounded-full hover:bg-slate-100 transition-all duration-300 shadow-xs group-hover:translate-x-1">
@@ -555,7 +555,7 @@ export default function Categories() {
                 <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-blue-400 uppercase tracking-wider mb-1">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Verified Marketplace
                 </div>
-                <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">
+                <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight">
                   Looking for something specific?
                 </h3>
                 <p className="text-slate-300 text-xs md:text-sm mt-1 leading-relaxed">

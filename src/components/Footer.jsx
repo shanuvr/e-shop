@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import {
   Store,
   Mail,
-  Phone,
-  MapPin,
   ArrowUp,
   CheckCircle2,
   Truck,
@@ -157,14 +155,6 @@ export default function Footer() {
               </p>
 
               <div className="space-y-2.5 text-[13px]">
-                <div className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
-                  <span>100 Innovation Tech Park, Koramangala, Bangalore, KA 560095</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 flex-shrink-0 text-slate-400" />
-                  <span>+91 (800) 123-4567 / +91 (800) 765-4321</span>
-                </div>
                 <div className="flex items-center gap-3">
                   <Mail className="h-4 w-4 flex-shrink-0 text-slate-400" />
                   <span>support@eshop-marketplace.com</span>
