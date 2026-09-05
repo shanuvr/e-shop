@@ -466,10 +466,10 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
                     Visit Store
                   </Link>
                   <button
-                    onClick={() => alert('Chat with seller coming soon!')}
+                    onClick={() => alert('Contacting seller...')}
                     className="flex-1 sm:flex-none text-center px-3.5 py-2 bg-primary hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-semibold transition-colors"
                   >
-                    Chat
+                    Contact Us
                   </button>
                 </div>
               </div>
@@ -477,127 +477,274 @@ Built with all-day luxury in mind, the frame is crafted from ultra-durable aeros
             </div>
           </div>
 
-          {/* Tabs Section */}
+          {/* Tabs Section — Two-Column Layout on Desktop */}
           <div className="mt-10 border-t border-gray-200 pt-6">
-            {/* Tab Headers */}
-            <div className="flex gap-6 border-b border-gray-200 mb-6 overflow-x-auto">
-              {[
-                { id: 'specs', label: 'Specifications' },
-                { id: 'overview', label: 'Highlights' },
-                { id: 'description', label: 'Description' },
-                { id: 'reviews', label: `Reviews (${product.reviews.length})` }
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`pb-3 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap ${
-                    activeTab === tab.id
-                      ? 'border-primary text-primary'
-                      : 'border-transparent text-gray-400 hover:text-gray-600'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
 
-            {/* Tab: Specs */}
-            {activeTab === 'specs' && (
-              <div className="max-w-3xl">
-                {product.specs.map((spec, idx) => (
-                  <div
-                    key={idx}
-                    className={`flex py-3 ${idx !== product.specs.length - 1 ? 'border-b border-gray-100' : ''}`}
-                  >
-                    <span className="w-48 text-sm text-gray-500 shrink-0">{spec.name}</span>
-                    <span className="text-sm text-gray-900 font-medium">{spec.value}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Tab: Highlights */}
-            {activeTab === 'overview' && (
-              <div className="max-w-3xl">
-                <ul className="space-y-4">
-                  {product.highlights.map((high, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                      <span className="text-sm text-gray-700 leading-relaxed">{high}</span>
-                    </li>
+              {/* Left Column: Tab Headers + Tab Content */}
+              <div className="lg:col-span-2">
+                {/* Tab Headers */}
+                <div className="flex gap-6 border-b border-gray-200 mb-6 overflow-x-auto">
+                  {[
+                    { id: 'specs', label: 'Specifications' },
+                    { id: 'overview', label: 'Highlights' },
+                    { id: 'description', label: 'Description' },
+                    { id: 'reviews', label: `Reviews (${product.reviews.length})` }
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`pb-3 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap ${
+                        activeTab === tab.id
+                          ? 'border-primary text-primary'
+                          : 'border-transparent text-gray-400 hover:text-gray-600'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
                   ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Tab: Description */}
-            {activeTab === 'description' && (
-              <div className="max-w-3xl">
-                <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-                  {product.description}
                 </div>
-              </div>
-            )}
 
-            {/* Tab: Reviews */}
-            {activeTab === 'reviews' && (
-              <div className="max-w-3xl">
-                {/* Rating Summary */}
-                <div className="flex items-center gap-6 mb-8 pb-8 border-b border-gray-100">
-                  <div className="text-center">
-                    <span className="text-4xl font-bold text-gray-900">{product.rating}</span>
-                    <div className="flex gap-0.5 mt-1 justify-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`w-4 h-4 ${i < Math.round(product.rating) ? 'text-amber-400 fill-current' : 'text-gray-200'}`} />
-                      ))}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">{product.reviewsCount.toLocaleString()} ratings</p>
-                  </div>
-                  <div className="flex-1">
-                    {[
-                      { stars: 5, pct: 78 },
-                      { stars: 4, pct: 15 },
-                      { stars: 3, pct: 4 },
-                      { stars: 2, pct: 2 },
-                      { stars: 1, pct: 1 }
-                    ].map((bar) => (
-                      <div key={bar.stars} className="flex items-center gap-2 mb-1">
-                        <span className="text-xs text-gray-500 w-3">{bar.stars}</span>
-                        <Star className="w-3 h-3 text-amber-400 fill-current" />
-                        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-amber-400 rounded-full" style={{ width: `${bar.pct}%` }} />
-                        </div>
-                        <span className="text-xs text-gray-400 w-8">{bar.pct}%</span>
+                {/* Tab: Specs */}
+                {activeTab === 'specs' && (
+                  <div>
+                    {product.specs.map((spec, idx) => (
+                      <div
+                        key={idx}
+                        className={`flex py-3 ${idx !== product.specs.length - 1 ? 'border-b border-gray-100' : ''}`}
+                      >
+                        <span className="w-48 text-sm text-gray-500 shrink-0">{spec.name}</span>
+                        <span className="text-sm text-gray-900 font-medium">{spec.value}</span>
                       </div>
                     ))}
                   </div>
-                </div>
+                )}
 
-                {/* Individual Reviews */}
-                <div className="space-y-6">
-                  {product.reviews.map((rev, idx) => (
-                    <div key={idx} className={idx !== product.reviews.length - 1 ? 'pb-6 border-b border-gray-100' : ''}>
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600">
-                          {rev.name.charAt(0)}
+                {/* Tab: Highlights */}
+                {activeTab === 'overview' && (
+                  <div>
+                    <ul className="space-y-4">
+                      {product.highlights.map((high, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+                          <span className="text-sm text-gray-700 leading-relaxed">{high}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Tab: Description */}
+                {activeTab === 'description' && (
+                  <div>
+                    <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+                      {product.description}
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab: Reviews */}
+                {activeTab === 'reviews' && (
+                  <div>
+                    {/* Rating Summary */}
+                    <div className="flex items-center gap-6 mb-8 pb-8 border-b border-gray-100">
+                      <div className="text-center">
+                        <span className="text-4xl font-bold text-gray-900">{product.rating}</span>
+                        <div className="flex gap-0.5 mt-1 justify-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className={`w-4 h-4 ${i < Math.round(product.rating) ? 'text-amber-400 fill-current' : 'text-gray-200'}`} />
+                          ))}
                         </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">{rev.name}</p>
-                          <p className="text-xs text-gray-500">{rev.date}</p>
+                        <p className="text-xs text-gray-500 mt-1">{product.reviewsCount.toLocaleString()} ratings</p>
+                      </div>
+                      <div className="flex-1">
+                        {[
+                          { stars: 5, pct: 78 },
+                          { stars: 4, pct: 15 },
+                          { stars: 3, pct: 4 },
+                          { stars: 2, pct: 2 },
+                          { stars: 1, pct: 1 }
+                        ].map((bar) => (
+                          <div key={bar.stars} className="flex items-center gap-2 mb-1">
+                            <span className="text-xs text-gray-500 w-3">{bar.stars}</span>
+                            <Star className="w-3 h-3 text-amber-400 fill-current" />
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                              <div className="h-full bg-amber-400 rounded-full" style={{ width: `${bar.pct}%` }} />
+                            </div>
+                            <span className="text-xs text-gray-400 w-8">{bar.pct}%</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Individual Reviews */}
+                    <div className="space-y-6">
+                      {product.reviews.map((rev, idx) => (
+                        <div key={idx} className={idx !== product.reviews.length - 1 ? 'pb-6 border-b border-gray-100' : ''}>
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600">
+                              {rev.name.charAt(0)}
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-gray-900">{rev.name}</p>
+                              <p className="text-xs text-gray-500">{rev.date}</p>
+                            </div>
+                            <div className="ml-auto flex items-center gap-1 text-sm font-semibold text-gray-900">
+                              <span>{rev.rating}</span>
+                              <Star className="w-3.5 h-3.5 text-amber-400 fill-current" />
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-600 leading-relaxed ml-12">
+                            {rev.comment}
+                          </p>
                         </div>
-                        <div className="ml-auto flex items-center gap-1 text-sm font-semibold text-gray-900">
-                          <span>{rev.rating}</span>
-                          <Star className="w-3.5 h-3.5 text-amber-400 fill-current" />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Right Column: Sticky Purchase Sidebar (Desktop Only) */}
+              <div className="hidden lg:block">
+                <div className="sticky top-24 space-y-4">
+
+                  {/* Price + Discount Card */}
+                  <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+                    <div className="flex items-baseline gap-2.5 mb-1">
+                      <span className="text-2xl font-bold text-gray-900">₹{product.price.toLocaleString()}</span>
+                      <span className="text-sm text-gray-400 line-through">₹{product.originalPrice.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">{product.discount}% OFF</span>
+                      <span className="text-xs text-gray-500">Inclusive of all taxes</span>
+                    </div>
+
+                    {/* Quantity Selector */}
+                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+                      <span className="text-sm font-medium text-gray-700">Quantity</span>
+                      <div className="flex items-center border border-gray-200 rounded-lg">
+                        <button
+                          onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
+                          className="w-9 h-9 flex items-center justify-center text-gray-600 hover:text-primary font-medium transition-colors"
+                        >
+                          −
+                        </button>
+                        <span className="w-9 text-center text-sm font-semibold text-gray-900">{quantity}</span>
+                        <button
+                          onClick={() => setQuantity(prev => prev + 1)}
+                          className="w-9 h-9 flex items-center justify-center text-gray-600 hover:text-primary font-medium transition-colors"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* CTA Buttons */}
+                    <div className="space-y-2.5">
+                      <button className="w-full border-2 border-primary text-primary hover:bg-blue-50 font-semibold text-sm h-11 rounded-xl flex items-center justify-center gap-2 transition-colors">
+                        <ShoppingBag className="w-4 h-4" />
+                        Add to Cart
+                      </button>
+                      <button className="w-full bg-primary hover:bg-blue-700 text-white font-semibold text-sm h-11 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm shadow-primary/25">
+                        <Zap className="w-4 h-4" />
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Delivery Check Card */}
+                  <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Truck className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-semibold text-gray-900">Delivery</span>
+                    </div>
+                    <form onSubmit={handlePincodeCheck} className="flex gap-2">
+                      <div className="flex items-center flex-1 bg-slate-50 border border-gray-200 rounded-lg px-3 focus-within:border-primary transition-colors">
+                        <MapPin className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                        <input
+                          type="text"
+                          placeholder="Enter pincode"
+                          maxLength={6}
+                          value={pincode}
+                          onChange={(e) => setPincode(e.target.value)}
+                          className="w-full px-2 py-2 text-xs outline-none placeholder-gray-400 min-w-0 bg-transparent"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="px-3.5 py-2 bg-primary hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors shrink-0"
+                      >
+                        Check
+                      </button>
+                    </form>
+                    {deliveryStatus && (
+                      <p className={`mt-2 text-xs font-medium ${deliveryStatus.success ? 'text-green-600' : 'text-red-500'}`}>
+                        {deliveryStatus.message}
+                      </p>
+                    )}
+                    <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <Truck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Free express delivery on this order</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <RotateCcw className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                        <span>7-day easy return policy</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <ShieldCheck className="w-3.5 h-3.5 text-primary shrink-0" />
+                        <span>1 Year Manufacturer Warranty</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Seller Card */}
+                  <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2.5">Sold by</p>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                        <Store className="w-4.5 h-4.5 text-primary" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-gray-900 truncate">{product.seller.name}</p>
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                          <MapPin className="w-3 h-3 shrink-0" />
+                          <span className="truncate">{product.seller.location}</span>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-600 leading-relaxed ml-12">
-                        {rev.comment}
-                      </p>
                     </div>
-                  ))}
+                    <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100">
+                      <div className="flex items-center gap-1 text-xs">
+                        <Star className="w-3.5 h-3.5 text-amber-400 fill-current" />
+                        <span className="font-semibold text-gray-900">{product.seller.rating}</span>
+                        <span className="text-gray-400">({product.seller.reviews} reviews)</span>
+                      </div>
+                      {product.seller.verified && (
+                        <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60 flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3" /> Verified
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/shop/${product.seller.id}`}
+                        className="flex-1 text-center px-3 py-2 border border-primary text-primary rounded-lg text-xs font-semibold hover:bg-blue-50 transition-colors"
+                      >
+                        Visit Store
+                      </Link>
+                      <button
+                        onClick={() => alert('Contacting seller...')}
+                        className="flex-1 text-center px-3 py-2 bg-primary hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition-colors"
+                      >
+                        Contact Us
+                      </button>
+                    </div>
+                  </div>
+
                 </div>
               </div>
-            )}
+
+            </div>
           </div>
 
           {/* Related Products */}
