@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import UserLayout from '../layout/UserLayout';
 import ProductCard from '../components/ProductCard';
 import {
@@ -24,6 +24,16 @@ import {
 } from 'lucide-react';
 
 export default function DetailedProduct() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  // If a service item ID is accessed on the product route, redirect to service detail
+  useEffect(() => {
+    if (id && (id.startsWith('sv') || ['101', '102', '103', '104'].includes(id))) {
+      navigate(`/service/${id}`, { replace: true });
+    }
+  }, [id, navigate]);
+
   const [selectedColor, setSelectedColor] = useState('black');
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);

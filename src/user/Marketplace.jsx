@@ -6,7 +6,7 @@ import StoreCard from '../components/StoreCard';
 
 export default function Marketplace() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialCategory = searchParams.get('category') || '';
+  const initialCategory = searchParams.get('category') || (typeof window !== 'undefined' && window.location.pathname.includes('/services') ? 'Services' : '');
 
   // Rich products dataset covering all marketplace categories
   const initialProducts = [
@@ -896,7 +896,7 @@ export default function Marketplace() {
                       price: `₹${item.price.toLocaleString()}`,
                       location: shopNames[item.shopId] || item.location
                     }} 
-                    linkPrefix="/product" 
+                    linkPrefix={item.category === 'Services' ? '/service' : '/product'} 
                   />
                 );
               })}

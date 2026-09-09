@@ -24,7 +24,13 @@ const RoundedStarIcon = ({ fill = "#FF9500", size = 14 }) => (
 export default function ProductCard({ item, linkPrefix = '/product' }) {
   if (!item) return null;
 
-  const targetLink = item.link || `${linkPrefix}/${item.id || ''}`;
+  const isService = item.category === 'Services' || 
+                    item.category?.toLowerCase() === 'services' || 
+                    String(item.id).startsWith('sv') || 
+                    (typeof item.price === 'string' && (item.price.includes('/hr') || item.price.includes('/visit')));
+
+  const effectivePrefix = (linkPrefix === '/product' && isService) ? '/service' : linkPrefix;
+  const targetLink = item.link || `${effectivePrefix}/${item.id || ''}`;
   const displayTag = item.tag || item.badge;
   const isTopRated = displayTag === 'Top Rated' || (typeof displayTag === 'string' && displayTag.includes('★'));
 
@@ -114,7 +120,16 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
           <img 
             alt={item.title} 
             className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-500 ease-out" 
-            src={item.image || item.img} 
+            src={
+              item.image || 
+              item.img || 
+              (Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : '') ||
+              'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=400&h=300'
+            }
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=400&h=300';
+            }}
           />
           {/* Hover Overlay */}
           <div className="absolute inset-0 bg-slate-900/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">

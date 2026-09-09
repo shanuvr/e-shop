@@ -30,21 +30,43 @@ const AVATAR_COLORS = [
 
 const fmt = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
+const DEFAULT_BOOKINGS = [
+  { id: 'SRV-8820', service: 'Electrical Distribution Box Repair', note: 'MCB replacement + wiring check', customer: 'Saritha Nair', phone: '+91 98471 99882', address: 'MG Road, Thrissur', time: 'Tomorrow, 10:00 AM', price: 499, status: 'Requested' },
+  { id: 'SRV-8821', service: 'Split AC Deep Jet Service', note: '2 AC units · deep jet cleaning', customer: 'Anand Kumar', phone: '+91 98470 12345', address: 'West Fort, Thrissur', time: 'Today, 03:30 PM', price: 799, status: 'Confirmed' },
+  { id: 'SRV-8815', service: 'Full House Wiring Inspection', note: '12 points · safety report', customer: 'Vipin Das', phone: '+91 98472 88991', address: 'Ramavarmapuram, Thrissur', time: '02 Sept, 11:00 AM', price: 1200, status: 'In Progress' },
+  { id: 'SRV-8812', service: 'Water Heater Full Service', note: 'Heater flush + thermostat clean', customer: 'Rahul Menon', phone: '+91 98473 55671', address: 'Punkunnam, Thrissur', time: '01 Sept, 05:00 PM', price: 649, status: 'Completed' },
+  { id: 'SRV-8809', service: 'Ceiling Fan & Light Fixing', note: '2 fans + 1 LED fixture', customer: 'Meera Nair', phone: '+91 98474 22013', address: 'Ollur, Thrissur', time: '30 Aug 2026', price: 349, status: 'Completed' },
+  { id: 'SRV-8805', service: 'Split AC Gas Refill', note: 'R-22 gas top-up · leak test', customer: 'Jijo Thomas', phone: '+91 98475 88340', address: 'Poothole, Thrissur', time: '28 Aug 2026', price: 999, status: 'Cancelled' }
+];
+
 export default function BookingsPage({ defaultMode = 'accepted' }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
-  const [bookings, setBookings] = useState([
-    { id: 'SRV-8820', service: 'Electrical Distribution Box Repair', note: 'MCB replacement + wiring check', customer: 'Saritha Nair', phone: '+91 98471 99882', address: 'MG Road, Thrissur', time: 'Tomorrow, 10:00 AM', price: 499, status: 'Requested' },
-    { id: 'SRV-8821', service: 'Split AC Deep Jet Service', note: '2 AC units · deep jet cleaning', customer: 'Anand Kumar', phone: '+91 98470 12345', address: 'West Fort, Thrissur', time: 'Today, 03:30 PM', price: 799, status: 'Confirmed' },
-    { id: 'SRV-8815', service: 'Full House Wiring Inspection', note: '12 points · safety report', customer: 'Vipin Das', phone: '+91 98472 88991', address: 'Ramavarmapuram, Thrissur', time: '02 Sept, 11:00 AM', price: 1200, status: 'In Progress' },
-    { id: 'SRV-8812', service: 'Water Heater Full Service', note: 'Heater flush + thermostat clean', customer: 'Rahul Menon', phone: '+91 98473 55671', address: 'Punkunnam, Thrissur', time: '01 Sept, 05:00 PM', price: 649, status: 'Completed' },
-    { id: 'SRV-8809', service: 'Ceiling Fan & Light Fixing', note: '2 fans + 1 LED fixture', customer: 'Meera Nair', phone: '+91 98474 22013', address: 'Ollur, Thrissur', time: '30 Aug 2026', price: 349, status: 'Completed' },
-    { id: 'SRV-8805', service: 'Split AC Gas Refill', note: 'R-22 gas top-up · leak test', customer: 'Jijo Thomas', phone: '+91 98475 88340', address: 'Poothole, Thrissur', time: '28 Aug 2026', price: 999, status: 'Cancelled' }
-  ]);
+  const [bookings, setBookings] = useState(() => {
+    try {
+      const stored = localStorage.getItem('eshop_service_bookings');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const existingIds = new Set(parsed.map(b => b.id));
+          return [...parsed, ...DEFAULT_BOOKINGS.filter(b => !existingIds.has(b.id))];
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return DEFAULT_BOOKINGS;
+  });
 
   const updateStatus = (id, next) => {
-    setBookings(bookings.map(b => (b.id === id ? { ...b, status: next } : b)));
+    const updated = bookings.map(b => (b.id === id ? { ...b, status: next } : b));
+    setBookings(updated);
+    try {
+      localStorage.setItem('eshop_service_bookings', JSON.stringify(updated));
+    } catch {
+      // ignore
+    }
   };
 
   const isRequestsView = defaultMode === 'requests';

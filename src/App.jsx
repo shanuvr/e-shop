@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 import Home from './user/Home'
 import Marketplace from './user/Marketplace'
 import DetailedProduct from './user/DetailedProduct'
+import DetailedService from './user/DetailedService'
 import DetailedStoreview from './user/DetailedStoreview'
 import Categories from './user/Categories'
 import Cart from './user/Cart'
@@ -96,6 +97,9 @@ function App() {
       <Route path="/super-admin/settings" element={<SuperAdminSettingsPage />} />
       <Route path="/product/:id" element={<DetailedProduct />} />
       <Route path="/product" element={<DetailedProduct />} />
+      <Route path="/service/:id" element={<DetailedService />} />
+      <Route path="/service" element={<DetailedService />} />
+      <Route path="/services" element={<Marketplace />} />
       <Route path="/shop/:id" element={<DetailedStoreview />} />
       <Route path="/shop" element={<DetailedStoreview />} />
       <Route path="/help" element={<HelpCenter />} />
