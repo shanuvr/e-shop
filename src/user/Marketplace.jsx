@@ -440,22 +440,34 @@ export default function Marketplace() {
   const [selectedCategories, setSelectedCategories] = useState(initialSelectedCats);
   const [priceMin, setPriceMin] = useState(0);
   const [priceMax, setPriceMax] = useState(6000);
-  const [selectedLocation, setSelectedLocation] = useState('All Locations');
+  const [selectedLocation, setSelectedLocation] = useState(() => searchParams.get('location') || 'All Locations');
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const [locationSearchQuery, setLocationSearchQuery] = useState('');
   const [condition, setCondition] = useState('All');
   const [sortBy, setSortBy] = useState('Newest Arrivals');
   const [wishlist, setWishlist] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get('search') || searchParams.get('q') || '');
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [searchType, setSearchType] = useState('products');
+  const [searchType, setSearchType] = useState(() => searchParams.get('type') || 'stores');
 
-  // Sync selectedCategories whenever URL searchParams change
+  // Sync selectedCategories, searchType, location, and searchQuery whenever URL searchParams change
   useEffect(() => {
     const catParam = searchParams.get('category');
     if (catParam) {
       const matched = categoriesList.find(c => c.toLowerCase() === catParam.toLowerCase());
       setSelectedCategories(matched ? [matched] : [catParam]);
+    }
+    const typeParam = searchParams.get('type');
+    if (typeParam) {
+      setSearchType(typeParam);
+    }
+    const locParam = searchParams.get('location');
+    if (locParam) {
+      setSelectedLocation(locParam);
+    }
+    const qParam = searchParams.get('search') || searchParams.get('q');
+    if (qParam !== null && qParam !== undefined) {
+      setSearchQuery(qParam);
     }
   }, [searchParams, categoriesList]);
 

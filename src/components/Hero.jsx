@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { MapPin, Search } from 'lucide-react';
 
 export default function Hero() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  const [location, setLocation] = useState('Thrissur');
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
+    const params = new URLSearchParams();
+    if (searchQuery.trim()) params.append('search', searchQuery.trim());
+    if (location && location.trim() && location !== 'All Locations') params.append('location', location.trim());
+    navigate(`/marketplace?${params.toString()}`);
   };
 
   return (
@@ -78,23 +84,35 @@ export default function Hero() {
             </p>
           </div>
           
-          {/* Search Bar */}
-          <form onSubmit={handleSearch} className="flex items-center bg-white rounded-full p-1 sm:p-1.5 shadow-xl w-full max-w-md mb-4 text-black transition-all border border-transparent focus-within:border-white/50 focus-within:shadow-2xl hover:shadow-2xl animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-            <div className="pl-3 text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
+          {/* Search Bar with Location */}
+          <form onSubmit={handleSearch} className="flex items-center bg-white rounded-full p-1 sm:p-1.5 shadow-xl w-full max-w-lg mb-4 text-black transition-all border border-transparent focus-within:border-white/50 focus-within:shadow-2xl hover:shadow-2xl animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+            {/* Location selector */}
+            <div className="flex items-center pl-2.5 pr-2 border-r border-slate-200 shrink-0 max-w-[120px] sm:max-w-[140px]">
+              <MapPin className="w-3.5 h-3.5 text-purple-600 shrink-0 mr-1" />
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Location..."
+                className="w-full bg-transparent text-[11px] font-bold text-gray-800 outline-none placeholder-gray-400 truncate"
+              />
             </div>
-            <input 
-              type="text" 
-              placeholder="Search products, services..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent px-2.5 py-1.5 text-xs font-semibold outline-none placeholder-gray-400 text-gray-800"
-            />
+
+            {/* Keyword Input */}
+            <div className="flex items-center flex-1 min-w-0 pl-2">
+              <Search className="w-3.5 h-3.5 text-gray-400 shrink-0 mr-1.5 hidden sm:block" />
+              <input 
+                type="text" 
+                placeholder="Search products, services..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent py-1.5 text-xs font-semibold outline-none placeholder-gray-400 text-gray-800 min-w-0"
+              />
+            </div>
+
             <button 
               type="submit"
-              className="bg-[#1f1f1f] hover:bg-black text-white text-xs font-bold px-4 py-2 rounded-full transition-all shadow-md active:scale-95"
+              className="bg-[#1f1f1f] hover:bg-black text-white text-xs font-bold px-4 py-2 rounded-full transition-all shadow-md active:scale-95 shrink-0 cursor-pointer"
             >
               Search
             </button>

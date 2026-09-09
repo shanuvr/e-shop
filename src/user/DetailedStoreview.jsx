@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import UserLayout from '../layout/UserLayout';
 import ProductCard from '../components/ProductCard';
@@ -8,13 +8,25 @@ import {
   Clock,
   Phone,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Search,
   SlidersHorizontal,
   X,
   Truck,
   RotateCcw,
   ShieldCheck,
-  TrendingUp
+  TrendingUp,
+  LayoutGrid,
+  Headphones,
+  Watch,
+  Camera,
+  Laptop,
+  Home,
+  Smartphone,
+  Gamepad2,
+  Tv,
+  Cable
 } from 'lucide-react';
 
 export default function DetailedStoreview() {
@@ -117,12 +129,76 @@ export default function DetailedStoreview() {
       image: 'https://images.unsplash.com/photo-1558089687-f282ffcbc126?auto=format&fit=crop&w=400&h=300',
       tag: 'New',
       category: 'Smart Home'
+    },
+    {
+      id: 'e9',
+      title: 'Titanium 5G Smartphone',
+      price: '₹79,999',
+      location: 'Elite Digital Mall',
+      description: 'Next-gen flagship smartphone with 120Hz OLED display, 200MP camera system, and ultra-fast wireless charging.',
+      image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02560?auto=format&fit=crop&w=400&h=300',
+      tag: 'Bestseller',
+      shipping: 'Free Shipping',
+      category: 'Mobile Phones'
+    },
+    {
+      id: 'e10',
+      title: 'VR Gaming Headset & Haptics',
+      price: '₹44,999',
+      location: 'Elite Digital Mall',
+      description: 'Ultra-immersive virtual reality system with pancake optics, dynamic eye tracking, and spatial 3D audio.',
+      image: 'https://images.unsplash.com/photo-1622979135225-d2ba269bc1df?auto=format&fit=crop&w=400&h=300',
+      tag: 'Trending',
+      category: 'Gaming & VR'
+    },
+    {
+      id: 'e11',
+      title: 'GaN 100W Multi-Port Fast Charger',
+      price: '₹3,499',
+      location: 'Elite Digital Mall',
+      description: 'Compact travel-ready high-speed power adapter with 4 smart ports for laptops, phones, and accessories.',
+      image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=400&h=300',
+      tag: 'Essential',
+      shipping: 'Free Shipping',
+      category: 'Accessories'
+    },
+    {
+      id: 'e12',
+      title: 'Crystal 4K Ultra Slim Smart TV 55"',
+      price: '₹54,999',
+      location: 'Elite Digital Mall',
+      description: 'Frameless 55-inch smart display with dynamic crystal color, HDR10+, and cinema-grade surround audio.',
+      image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=400&h=300',
+      tag: 'Top Rated',
+      shipping: 'Free Shipping',
+      category: 'TV & Displays'
     }
   ];
 
-  const categories = ['All', 'Audio', 'Wearables', 'Cameras', 'Computers', 'Smart Home'];
+  const allStoreCategories = [
+    { name: 'All', icon: LayoutGrid },
+    { name: 'Audio', icon: Headphones },
+    { name: 'Wearables', icon: Watch },
+    { name: 'Cameras', icon: Camera },
+    { name: 'Computers', icon: Laptop },
+    { name: 'Smart Home', icon: Home },
+    { name: 'Mobile Phones', icon: Smartphone },
+    { name: 'Gaming & VR', icon: Gamepad2 },
+    { name: 'Accessories', icon: Cable },
+    { name: 'TV & Displays', icon: Tv }
+  ];
 
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const INITIAL_CATEGORY_COUNT = 5;
+
+  // Auto-expand categories if the selected category is beyond initial count
+  useEffect(() => {
+    const selectedIdx = allStoreCategories.findIndex((c) => c.name === selectedCategory);
+    if (selectedIdx >= INITIAL_CATEGORY_COUNT) {
+      setShowAllCategories(true);
+    }
+  }, [selectedCategory]);
   const [sortBy, setSortBy] = useState('Featured');
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 });
@@ -287,13 +363,13 @@ export default function DetailedStoreview() {
                 </div>
                 <div className="pb-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="bg-white/90 text-gray-900 text-xs font-semibold px-2.5 py-1 rounded">
-                      {store.badge}
+                    <span className="bg-white/95 text-slate-800 text-[11px] font-medium px-2 py-0.5 rounded-md shadow-xs capitalize">
+                      {store.badge?.toLowerCase()}
                     </span>
-                    <span className={`text-xs font-semibold px-2.5 py-1 rounded ${
+                    <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md shadow-xs ${
                       store.isOpen
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-600 text-white'
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-slate-700 text-white'
                     }`}>
                       {store.isOpen ? 'Open Now' : 'Closed'}
                     </span>
@@ -490,22 +566,64 @@ export default function DetailedStoreview() {
 
               {/* Categories */}
               <div className="mt-8 pt-6 border-t border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900 mb-4">Categories</h3>
-                <div className="space-y-1">
-                  {categories.map((cat) => (
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-gray-900">Categories</h3>
+                  {selectedCategory !== 'All' && (
                     <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        selectedCategory === cat
-                          ? 'bg-gray-900 text-white'
-                          : 'text-gray-600 hover:bg-gray-100'
-                      }`}
+                      onClick={() => setSelectedCategory('All')}
+                      className="text-xs font-medium text-[#1a73e8] hover:underline cursor-pointer"
                     >
-                      {cat}
+                      Reset
                     </button>
-                  ))}
+                  )}
                 </div>
+
+                <div className="space-y-1">
+                  {(showAllCategories
+                    ? allStoreCategories
+                    : allStoreCategories.slice(0, INITIAL_CATEGORY_COUNT)
+                  ).map((cat) => {
+                    const IconComponent = cat.icon;
+                    const isSelected = selectedCategory === cat.name;
+
+                    return (
+                      <button
+                        key={cat.name}
+                        onClick={() => setSelectedCategory(cat.name)}
+                        className={`w-full group flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm transition-colors cursor-pointer ${
+                          isSelected
+                            ? 'bg-gray-100 text-gray-900 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        }`}
+                      >
+                        <IconComponent
+                          className={`w-4 h-4 shrink-0 transition-colors ${
+                            isSelected ? 'text-gray-900' : 'text-gray-400 group-hover:text-gray-600'
+                          }`}
+                        />
+                        <span className="truncate">{cat.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* View More / Show Less Button */}
+                {allStoreCategories.length > INITIAL_CATEGORY_COUNT && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllCategories(!showAllCategories)}
+                    className="mt-2 flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+                  >
+                    <span>
+                      {showAllCategories ? 'Show Less' : 'Show all categories'}
+                    </span>
+                    {showAllCategories ? (
+                      <ChevronUp className="w-3.5 h-3.5" />
+                    ) : (
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                )}
               </div>
 
               <div className="mt-8 pt-6 border-t border-gray-200">
@@ -589,24 +707,44 @@ export default function DetailedStoreview() {
                   </div>
 
                   <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="text-sm font-semibold text-gray-900 mb-3">Categories</h4>
-                    <div className="space-y-1">
-                      {categories.map((cat) => (
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-sm font-bold text-gray-900">Categories</h4>
+                      {selectedCategory !== 'All' && (
                         <button
-                          key={cat}
-                          onClick={() => {
-                            setSelectedCategory(cat);
-                            setMobileFilterOpen(false);
-                          }}
-                          className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                            selectedCategory === cat
-                              ? 'bg-gray-900 text-white'
-                              : 'text-gray-600 hover:bg-gray-100'
-                          }`}
+                          onClick={() => setSelectedCategory('All')}
+                          className="text-xs font-medium text-[#1a73e8] hover:underline"
                         >
-                          {cat}
+                          Reset
                         </button>
-                      ))}
+                      )}
+                    </div>
+                    <div className="space-y-1 max-h-[300px] overflow-y-auto pr-0.5">
+                      {allStoreCategories.map((cat) => {
+                        const IconComponent = cat.icon;
+                        const isSelected = selectedCategory === cat.name;
+
+                        return (
+                          <button
+                            key={cat.name}
+                            onClick={() => {
+                              setSelectedCategory(cat.name);
+                              setMobileFilterOpen(false);
+                            }}
+                            className={`w-full group flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
+                              isSelected
+                                ? 'bg-gray-100 text-gray-900 font-medium'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            }`}
+                          >
+                            <IconComponent
+                              className={`w-4 h-4 shrink-0 transition-colors ${
+                                isSelected ? 'text-gray-900' : 'text-gray-400 group-hover:text-gray-600'
+                              }`}
+                            />
+                            <span className="truncate">{cat.name}</span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 

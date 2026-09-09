@@ -256,15 +256,15 @@ export default function Home() {
                   <div className="h-[110px] sm:h-[160px] bg-slate-100 w-full overflow-hidden relative">
                     <img src={shop.image} alt={shop.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
                     
-                    <span className="absolute top-2.5 left-2.5 bg-slate-900/85 text-white text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-md backdrop-blur-md tracking-wider uppercase shadow-xs">
-                      {shop.badge}
+                    <span className="absolute top-2.5 left-2.5 bg-slate-900/80 text-white text-[8px] sm:text-[9px] font-medium px-2 py-0.5 rounded-md backdrop-blur-md shadow-xs capitalize">
+                      {shop.badge?.toLowerCase()}
                     </span>
 
-                    <span className={`absolute bottom-2.5 right-2.5 text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur-md shadow-xs flex items-center gap-1 ${
-                      shop.isOpen ? 'bg-emerald-500/90 text-white' : 'bg-slate-700/90 text-slate-200'
+                    <span className={`absolute bottom-2.5 right-2.5 text-[8px] sm:text-[9px] font-medium px-2 py-0.5 rounded-full backdrop-blur-md shadow-xs flex items-center gap-1 ${
+                      shop.isOpen ? 'bg-emerald-600/90 text-white' : 'bg-slate-700/90 text-slate-200'
                     }`}>
-                      {shop.isOpen && <span className="w-1.5 h-1.5 bg-white rounded-full animate-ping" />}
-                      {shop.isOpen ? 'OPEN' : 'CLOSED'}
+                      {shop.isOpen && <span className="w-1.5 h-1.5 bg-white rounded-full" />}
+                      {shop.isOpen ? 'Open' : 'Closed'}
                     </span>
                   </div>
 
