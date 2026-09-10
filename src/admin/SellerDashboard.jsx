@@ -179,7 +179,7 @@ export default function SellerDashboard() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {sellerListings.slice(0, 3).map((item) => (
-                <ProductCard key={item.id} item={item} linkPrefix="/product" />
+                <ProductCard key={item.id} item={item} linkPrefix="/product" showCompare={false} />
               ))}
             </div>
           </div>
@@ -225,7 +225,7 @@ export default function SellerDashboard() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredListings.map((item) => (
               <div key={item.id} className="relative group">
-                <ProductCard item={item} linkPrefix="/product" />
+                <ProductCard item={item} linkPrefix="/product" showCompare={false} />
                 <button
                   onClick={() => handleDeleteListing(item.id)}
                   className="absolute top-2 right-2 z-20 w-7 h-7 bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md hover:bg-red-700 cursor-pointer"

@@ -767,7 +767,7 @@ export default function DetailedStoreview() {
                   <p className="text-gray-500 text-sm mt-1">Try a different search or category</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
                   {filteredProducts.map((item) => (
                     <ProductCard key={item.id} item={item} linkPrefix="/product" />
                   ))}

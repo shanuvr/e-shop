@@ -41,6 +41,7 @@ import IndividualSellersPage from './superAdmin/pages/IndividualSellersPage'
 import SuperAdminManagersPage from './superAdmin/pages/SuperAdminManagersPage'
 import SuperAdminSettingsPage from './superAdmin/pages/SuperAdminSettingsPage'
 import IndependentStoreRequestsPage from './superAdmin/pages/IndependentStoreRequestsPage'
+import PriorityRegistrationsPage from './superAdmin/pages/PriorityRegistrationsPage'
 import HelpCenter from './user/HelpCenter'
 import OrderTracking from './user/OrderTracking'
 import ReturnsPage from './user/ReturnsPage'
@@ -48,6 +49,7 @@ import ShippingPage from './user/ShippingPage'
 import PrivacyPolicy from './user/PrivacyPolicy'
 import TermsPage from './user/TermsPage'
 import AboutUs from './user/AboutUs'
+import Compare from './user/Compare'
 
 import ScrollToTop from './components/ScrollToTop'
 
@@ -60,6 +62,7 @@ function App() {
       <Route path="/marketplace" element={<Marketplace />} />
       <Route path="/categories" element={<Categories />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/compare" element={<Compare />} />
       <Route path="/login" element={<Login />} />
       <Route path="/account" element={<Account />} />
       <Route path="/seller-login" element={<SellerLogin />} />
@@ -93,6 +96,7 @@ function App() {
       <Route path="/super-admin/categories" element={<SuperAdminCategoriesPage />} />
       <Route path="/super-admin/individual-sellers" element={<IndividualSellersPage />} />
       <Route path="/super-admin/store-requests" element={<IndependentStoreRequestsPage />} />
+      <Route path="/super-admin/priority-registrations" element={<PriorityRegistrationsPage />} />
       <Route path="/super-admin/managers" element={<SuperAdminManagersPage />} />
       <Route path="/super-admin/settings" element={<SuperAdminSettingsPage />} />
       <Route path="/product/:id" element={<DetailedProduct />} />

@@ -2,9 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { 
-  ShieldCheck, 
-  RotateCcw, 
-  Tag,
   Sparkles,
   MapPin,
   Search,
@@ -118,24 +115,10 @@ export default function Hero2() {
         
         {/* Subtitle */}
         <p className="animate-fade-in-up-delay-2 text-slate-600 text-xs sm:text-sm lg:text-[15px] mb-4 leading-relaxed max-w-lg">
-          Shop from trusted businesses, book services, and support local — all in one place.
+          Shop anything, anytime, from anywhere — all in one place.
         </p>
 
-        {/* Badges Row */}
-        <div className="animate-fade-in-up-delay-3 flex flex-wrap items-center gap-y-2 gap-x-2 sm:gap-x-3 mb-5 text-[11px] sm:text-xs font-semibold text-slate-700">
-          <div className="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-slate-200/80 shadow-2xs hover:scale-105 hover:bg-white hover:border-blue-300 transition-all duration-300">
-            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 shrink-0" />
-            <span>Trusted Businesses</span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-slate-200/80 shadow-2xs hover:scale-105 hover:bg-white hover:border-blue-300 transition-all duration-300">
-            <Tag className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 shrink-0" />
-            <span>Best Prices</span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-slate-200/80 shadow-2xs hover:scale-105 hover:bg-white hover:border-blue-300 transition-all duration-300">
-            <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 shrink-0" />
-            <span>Easy Returns</span>
-          </div>
-        </div>
+        
 
         {/* Search Box with Integrated Location Search */}
         <form 
@@ -228,7 +211,7 @@ export default function Hero2() {
             <Search className="w-4 h-4 text-slate-400 shrink-0 mr-2 hidden sm:block" />
             <input 
               type="text" 
-              placeholder="Search products, services, shops..." 
+              placeholder="Search your shop/products..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-transparent py-1.5 text-xs sm:text-sm text-slate-800 outline-none placeholder-slate-400 font-medium min-w-0"

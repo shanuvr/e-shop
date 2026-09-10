@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import UserLayout from '../layout/UserLayout';
 import ProductCard from '../components/ProductCard';
 import StoreCard from '../components/StoreCard';
+import { getRegisteredSellers } from '../lib/seller';
 
 export default function Marketplace() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -362,7 +363,13 @@ export default function Marketplace() {
       location: 'Commercial District',
       rating: '4.9',
       reviews: '340+',
+      phone: '+91 98765 43210',
       image: 'https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=400&h=260',
+      images: [
+        'https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=400&h=260',
+        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&h=260',
+        'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?auto=format&fit=crop&w=400&h=260'
+      ],
       badge: 'VERIFIED STORE',
       isOpen: true,
       distance: '0.8 km',
@@ -377,7 +384,13 @@ export default function Marketplace() {
       location: 'Fashion Arcade',
       rating: '4.8',
       reviews: '510+',
+      phone: '+91 98470 59321',
       image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&h=260',
+      images: [
+        'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&h=260',
+        'https://images.unsplash.com/photo-1525253086316-d0c936c814f8?auto=format&fit=crop&w=400&h=260',
+        'https://images.unsplash.com/photo-1458768077520-1b37b1e17ffb?auto=format&fit=crop&w=400&h=260'
+      ],
       badge: 'TOP SELLER',
       isOpen: true,
       distance: '1.4 km',
@@ -392,7 +405,13 @@ export default function Marketplace() {
       location: 'Green Park Avenue',
       rating: '4.7',
       reviews: '190+',
+      phone: '+91 94002 65874',
       image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&h=260',
+      images: [
+        'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&h=260',
+        'https://images.unsplash.com/photo-1543168256-418811576931?auto=format&fit=crop&w=400&h=260',
+        'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=400&h=260'
+      ],
       badge: 'EXPRESS DELIVERY',
       isOpen: true,
       distance: '2.1 km',
@@ -407,7 +426,13 @@ export default function Marketplace() {
       location: 'Crafts Square',
       rating: '4.9',
       reviews: '280+',
+      phone: '+91 94966 82147',
       image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&h=260',
+      images: [
+        'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&h=260',
+        'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&h=260',
+        'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&h=260'
+      ],
       badge: 'PREMIUM PARTNER',
       isOpen: false,
       distance: '3.0 km',
@@ -553,20 +578,53 @@ export default function Marketplace() {
     return result;
   }, [selectedCategories, priceMin, priceMax, selectedLocation, condition, sortBy, searchQuery]);
 
+  // Registered sellers (from the registration flow) merged into listings
+  const registeredStores = useMemo(() => {
+    return getRegisteredSellers().map((r) => ({
+      id: r.id,
+      name: r.storeName || 'My Store',
+      category: r.category || 'Local Store',
+      location: r.location || 'Thrissur',
+      rating: '4.5',
+      reviews: 'New',
+      phone: r.phone || '',
+      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&h=260',
+      images: ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&h=260'],
+      badge: r.priority ? 'PRIORITY STORE' : 'NEW ON E-SHOP',
+      isOpen: true,
+      distance: '0.5 km',
+      productCount: 1,
+      maxDiscount: r.priority ? '20% OFF' : '10% OFF',
+      description: `${r.ownerName || 'Store owner'} runs "${
+        r.storeName || 'My Store'
+      }" — a newly listed E-SHOP marketplace store${r.priority ? ' with an active Priority listing.' : '.'}`,
+      priority: !!r.priority,
+      registeredAt: r.registeredAt
+    }));
+  }, []);
+
   const filteredStores = useMemo(() => {
     const matchingShopIds = new Set(filteredProducts.map(p => p.shopId));
+    const match = (store) =>
+      store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      store.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (store.description || '').toLowerCase().includes(searchQuery.toLowerCase());
+
     let stores = initialStores.filter(store => matchingShopIds.has(store.id));
     if (searchQuery.trim() !== '') {
-      const q = searchQuery.toLowerCase();
-      stores = stores.filter(
-        store =>
-          store.name.toLowerCase().includes(q) ||
-          store.category.toLowerCase().includes(q) ||
-          (store.description || '').toLowerCase().includes(q)
-      );
+      stores = stores.filter(match);
     }
-    return stores;
-  }, [filteredProducts, searchQuery]);
+
+    // Priority registered stores are pinned to the top (first page).
+    // Standard registered stores appear normally at the end.
+    const registered = registeredStores.filter(
+      (store) => !searchQuery.trim() || match(store)
+    );
+    const priorityStores = registered.filter(s => s.priority);
+    const standardStores = registered.filter(s => !s.priority);
+
+    return [...priorityStores, ...stores, ...standardStores];
+  }, [filteredProducts, searchQuery, registeredStores]);
 
   const renderFilterContent = () => (
     <div className="space-y-6">
@@ -804,10 +862,10 @@ export default function Marketplace() {
         <div className="hidden sm:flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-on-surface">
-              Explore {selectedCategories.length === 1 ? selectedCategories[0] : (searchType === 'products' ? 'Products' : 'Stores')}
+              Explore {selectedCategories.length === 1 ? selectedCategories[0] : (searchType === 'products' ? 'Products' : 'Shops')}
             </h1>
             <p className="text-on-surface-variant font-medium mt-1">
-              Showing {searchType === 'products' ? filteredProducts.length : filteredStores.length} results
+              {searchType === 'products' ? `Showing ${filteredProducts.length} results` : `Showing ${filteredStores.length} shops near you`}
             </p>
           </div>
 
@@ -892,7 +950,7 @@ export default function Marketplace() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-6 bg-transparent border-none">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-5 bg-transparent border-none">
               {filteredProducts.map((item) => {
                 const shopNames = {
                   'shop-1': 'Elite Digital Mall',

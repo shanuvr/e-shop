@@ -1,27 +1,31 @@
 import { useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { 
-  ShieldAlert, 
-  LayoutDashboard, 
-  Zap, 
-  Users, 
+import {
+  ShieldAlert,
+  LayoutDashboard,
+  Zap,
+  Users,
   UserCheck,
-  Grid, 
-  LogOut, 
+  Grid,
+  LogOut,
   ChevronRight,
   Menu,
   X,
   UserRound,
   Settings,
-  Store
+  Store,
+  Crown
 } from 'lucide-react';
 import { useStoreRequests } from '../../lib/independentStoreRequests';
+import { useRegisteredSellers } from '../../lib/seller';
 
 export default function SuperAdminSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const storeRequests = useStoreRequests();
   const pendingStoreRequests = storeRequests.filter((r) => r.status === 'Pending').length;
+  const registeredSellers = useRegisteredSellers();
+  const priorityCount = registeredSellers.filter((s) => s.priority).length;
 
   const menuItems = [
     { to: '/super-admin/dashboard', label: 'Platform Overview', icon: LayoutDashboard },
@@ -29,6 +33,7 @@ export default function SuperAdminSidebar() {
     { to: '/super-admin/sellers', label: 'Managed Sellers', icon: Users },
     { to: '/super-admin/store-requests', label: 'Independent Seller Requests', icon: Store, badge: pendingStoreRequests ? `${pendingStoreRequests} New` : undefined },
     { to: '/super-admin/individual-sellers', label: 'Individual Seller', icon: UserRound },
+    { to: '/super-admin/priority-registrations', label: 'Priority Registrations', icon: Crown, badge: priorityCount ? `${priorityCount}` : undefined },
     { to: '/super-admin/managers', label: 'Account Managers', icon: UserCheck },
     { to: '/super-admin/categories', label: 'Master Categories', icon: Grid },
     { to: '/super-admin/settings', label: 'Platform Settings', icon: Settings }

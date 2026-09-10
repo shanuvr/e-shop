@@ -1,6 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, Heart, Eye } from 'lucide-react';
+import { Star, Heart, Eye, GitCompare, Check } from 'lucide-react';
+import { useCompare, toggleCompare, removeFromCompare, showCompareToast, MAX_COMPARE } from '../lib/compare';
 
 // Custom rounded 5-star rating SVG matching standard high-end e-commerce star designs
 const RoundedStarIcon = ({ fill = "#FF9500", size = 14 }) => (
@@ -21,7 +21,10 @@ const RoundedStarIcon = ({ fill = "#FF9500", size = 14 }) => (
   </svg>
 );
 
-export default function ProductCard({ item, linkPrefix = '/product' }) {
+export default function ProductCard({ item, linkPrefix = '/product', showCompare = true }) {
+  const compareItems = useCompare();
+  const inCompare = compareItems.some((i) => String(i.id) === String(item.id));
+
   if (!item) return null;
 
   const isService = item.category === 'Services' || 
@@ -84,6 +87,22 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
 
   const highlights = getHighlights();
 
+  const handleToggleCompare = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const result = toggleCompare(item);
+    if (result.added) {
+      showCompareToast(`Added "${item.title}" to compare`);
+    } else if (result.alreadyAdded) {
+      removeFromCompare(item.id);
+      showCompareToast(`Removed "${item.title}" from compare`);
+    } else if (result.limit) {
+      showCompareToast(`You can compare up to ${MAX_COMPARE} products at a time`);
+    } else {
+      showCompareToast(`Removed "${item.title}" from compare`);
+    }
+  };
+
   const numericRating = item.rating !== undefined && item.rating !== null ? parseFloat(item.rating) : 4.5;
   const ratingValue = isNaN(numericRating) || numericRating <= 0 ? 4.5 : Math.min(5, numericRating);
   const reviewText = item.reviews || item.reviewCount || null;
@@ -91,7 +110,7 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
   return (
     <Link 
       to={targetLink} 
-      className="bg-white rounded-2xl overflow-hidden shadow-xs hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 transition-all duration-300 ease-out group relative border border-slate-200/80 hover:border-blue-300 flex flex-col justify-between cursor-pointer w-full"
+      className="bg-white rounded-2xl overflow-hidden shadow-xs hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 transition-all duration-300 ease-out group relative border border-slate-200/80 hover:border-blue-300 flex flex-col justify-between cursor-pointer w-full max-w-[220px] mx-auto"
     >
       <div>
         {/* Top Tag Badge (Minimalist Micro-Pill) */}
@@ -116,7 +135,7 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
         </button>
 
         {/* Product Image Container */}
-        <div className="h-32 sm:h-40 bg-slate-50 w-full overflow-hidden relative">
+        <div className="h-28 sm:h-36 bg-slate-50 w-full overflow-hidden relative">
           <img 
             alt={item.title} 
             className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-500 ease-out" 
@@ -141,7 +160,7 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
         </div>
 
         {/* Card Body Content */}
-        <div className="p-3 sm:p-3.5 space-y-1.5">
+        <div className="p-2.5 sm:p-3 space-y-1">
           
           {/* Category Header line */}
           {item.category && (
@@ -151,7 +170,7 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
           )}
 
           {/* Full Title on its own dedicated lines */}
-          <h3 className="font-bold text-xs sm:text-[13px] text-slate-900 group-hover:text-primary transition-colors duration-200 line-clamp-2 leading-snug">
+          <h3 className="font-bold text-[11px] sm:text-xs text-slate-900 group-hover:text-primary transition-colors duration-200 line-clamp-2 leading-snug">
             {item.title}
           </h3>
 
@@ -203,8 +222,8 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
           </div>
 
           {/* Dedicated Price Block */}
-          <div className="pt-1.5 flex items-baseline gap-1.5 flex-wrap">
-            <span className="text-sm sm:text-base font-black text-slate-900 leading-none">
+          <div className="pt-1 flex items-baseline gap-1.5 flex-wrap">
+            <span className="text-[13px] sm:text-sm font-black text-slate-900 leading-none">
               {formattedPrice}
             </span>
             {formattedOriginalPrice && (
@@ -219,12 +238,30 @@ export default function ProductCard({ item, linkPrefix = '/product' }) {
             )}
           </div>
 
+          {/* Compare Toggle */}
+          {showCompare && (
+            <button
+              type="button"
+              onClick={handleToggleCompare}
+              aria-pressed={inCompare}
+              aria-label={inCompare ? `Remove ${item.title} from compare` : `Compare ${item.title}`}
+              className={`w-full flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg border text-[10px] font-semibold transition-all duration-200 cursor-pointer mt-1 ${
+                inCompare
+                  ? 'bg-blue-50 text-[#1a73e8] border-[#1a73e8]/40 shadow-xs'
+                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-blue-50 hover:text-[#1a73e8] hover:border-[#1a73e8]/30'
+              }`}
+            >
+              {inCompare ? <Check className="w-3.5 h-3.5" /> : <GitCompare className="w-3.5 h-3.5" />}
+              <span>{inCompare ? 'Comparing' : 'Compare'}</span>
+            </button>
+          )}
+
         </div>
       </div>
 
       {/* Footer Tag (Shipping / Offer) */}
       {(item.shipping || item.tag2) && (
-        <div className="px-3 pb-2.5 sm:px-3.5 sm:pb-3 pt-0">
+        <div className="px-2.5 pb-2 sm:px-3 sm:pb-2.5 pt-0">
           <span className="text-emerald-700 text-[9px] font-semibold tracking-normal bg-emerald-50/70 border border-emerald-200/40 px-1.5 py-0.5 rounded inline-block leading-none">
             {item.shipping || item.tag2}
           </span>
